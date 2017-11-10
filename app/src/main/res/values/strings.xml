@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Basura_Juan</string>
+    <string name="hint_fname">First Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_mname">Middle Initial</string>
+    <string name="hint_lname">Last Name</string>
+    <string name="hint_uname">Username</string>
+    <string name="hint_pword">Password</string>
+    <string name="hint_go_to_login">Already have an account? <u>Click here to login</u></string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+    <string name="title_toolbar">Basura Juan</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="hint_ip_address">IP address</string>
+    <string name="hint_bin_name">Bin Name</string>
+    <string name="hint_bin_id">Bin ID</string>
+    <string name="action_settings">Settings</string>
+    <string name="err_msg_email">Enter a valid email</string>
+    <string name="err_msg_name">Enter your username</string>
+    <string name="err_msg_password">Enter the password</string>
+
+    <string name="err_msg_fname">Enter your first name</string>
+    <string name="err_msg_lname">Enter your last name</string>
+    <string name="err_msg_minitial">Enter your middle initial</string>
+</resources>

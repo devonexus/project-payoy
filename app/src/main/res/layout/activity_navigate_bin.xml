@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/colorBg"
+    android:layout_height="match_parent"
+    android:id="@+id/container_wrapper"
+    tools:context="com.example.apaodevo.basura_juan.Activities.BinLocationActivity">
+
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+
+        android:background="@drawable/navigate_left"
+        android:layout_below="@+id/btn_up"
+        android:layout_toStartOf="@+id/btn_up" />
+
+    <Button
+        android:id="@+id/btn_up"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:background="@drawable/navigate_up"
+        android:gravity="center"
+        android:layout_below="@+id/button4"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="Pause Automation"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignStart="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Currently connected to: "
+
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="54dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        app:srcCompat="@drawable/google_map"
+        android:layout_marginTop="24dp"
+        android:layout_alignTop="@+id/textView3"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Move to Post"
+        android:layout_alignBaseline="@+id/button4"
+        android:layout_alignBottom="@+id/button4"
+        android:layout_toEndOf="@+id/button4"
+        android:layout_marginStart="16dp" />
+
+    <Button
+        android:id="@+id/button12"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/button11"
+        android:layout_toEndOf="@+id/btn_up"
+        android:background="@drawable/navigate_right" />
+
+</RelativeLayout >

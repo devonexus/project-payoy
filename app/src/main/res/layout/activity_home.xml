@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/home_bg"
+    tools:context="com.example.apaodevo.basura_juan.Activities.HomeActivity">
+
+    <Button
+        android:id="@+id/btn_navigate_bin"
+        android:layout_width="147dp"
+        android:layout_height="176dp"
+        android:layout_marginLeft="190dp"
+        android:layout_marginTop="300dp"
+        android:background="@drawable/navigate_bin"
+        android:padding="0dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="306dp" />
+
+    <Button
+        android:id="@+id/btn_de"
+        android:layout_width="147dp"
+        android:layout_height="176dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/bin_location"
+        android:padding="0dp"
+        tools:layout_editor_absoluteX="205dp"
+        tools:layout_editor_absoluteY="70dp" />
+
+    <Button
+        android:id="@+id/btn_deploy_bin"
+        android:layout_width="147dp"
+        android:layout_height="176dp"
+        android:layout_marginLeft="190dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/deploy_bin"
+        android:padding="0dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="70dp" />
+
+    <Button
+        android:id="@+id/btn_register_bin"
+        android:layout_width="149dp"
+        android:layout_height="176dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="300dp"
+        android:background="@drawable/register_bin"
+        android:padding="0dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="306dp" />
+
+
+</android.support.design.widget.CoordinatorLayout>

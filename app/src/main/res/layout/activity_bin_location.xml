@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/container_wrapper"
+    tools:context="com.example.apaodevo.basura_juan.Activities.BinLocationActivity">
+
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Currently connected to: "
+
+        android:layout_marginBottom="36dp"
+        android:layout_above="@+id/imageView2"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="38dp" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        app:srcCompat="@drawable/google_map"
+        android:layout_centerVertical="true" />
+
+    <Button
+        android:id="@+id/button3"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="39dp"
+        android:text="Bin Location"
+        android:layout_below="@+id/imageView2"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout >

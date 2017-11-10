@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    tools:context="com.example.apaodevo.basura_juan.Activities.LoginActivity">
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="260dp"
+        android:layout_height="45dp"
+        android:textStyle="bold"
+        android:background="@drawable/rounded_edittext"
+        android:text="Register"
+        android:textColor="@color/colorWhite"
+        tools:layout_editor_absoluteX="62dp"
+        tools:layout_editor_absoluteY="496dp"
+        android:layout_marginBottom="36dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/editText2" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="258dp"
+        android:layout_height="251dp"
+        app:srcCompat="@drawable/basurajuan_logo"
+        tools:layout_editor_absoluteX="63dp"
+        tools:layout_editor_absoluteY="37dp"
+
+        android:layout_above="@+id/editText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="260dp"
+        android:layout_height="39dp"
+        android:background="@drawable/rounded_edittext"
+        android:drawableLeft="@drawable/user_icon"
+        android:drawablePadding="@android:dimen/app_icon_size"
+        android:ems="10"
+        android:paddingLeft="5dp"
+        android:hint="Username"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="62dp"
+        tools:layout_editor_absoluteY="324dp"
+        android:layout_marginBottom="13dp"
+        android:layout_above="@+id/editText2"
+        android:layout_alignStart="@+id/editText2" />
+
+    <EditText
+        android:drawableLeft="@drawable/password_icon"
+        android:id="@+id/editText2"
+        android:layout_width="261dp"
+
+        android:layout_height="38dp"
+        android:paddingLeft="5dp"
+        android:drawablePadding="@android:dimen/app_icon_size"
+        android:background="@drawable/rounded_edittext"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        tools:layout_editor_absoluteX="62dp"
+        tools:layout_editor_absoluteY="373dp"
+        android:layout_above="@+id/button"
+        android:layout_alignEnd="@+id/imageView"
+        android:layout_marginBottom="36dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="260dp"
+        android:layout_height="45dp"
+        android:layout_above="@+id/button2"
+        android:layout_alignStart="@+id/button2"
+
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/rounded_edittext"
+        android:text="Login"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="63dp"
+        tools:layout_editor_absoluteY="440dp" />
+</RelativeLayout>
