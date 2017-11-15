@@ -1,7 +1,7 @@
 package com.example.apaodevo.basura_juan.Services;
 
 /**
- * Created by apaodevo on 11/10/2017.
+ * Created by apaodevo on 11/14/2017.
  */
 
 import android.content.ContentUris;
@@ -13,26 +13,19 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
-public class ImageProcess
-{
 
 
-    /**
-     * Method for return file path of Gallery image
-     *
-     * @param context
-     * @param uri
-     * @return path of the selected image file from gallery
-     */
-    public static String getPath(final Context context, final Uri uri)
-    {
+/**
+ * Created by Aki on 1/7/2017.
+ */
 
-        //check here to KITKAT or new version
+public class PathUtil {
+    public static String getPathFromURI(final Context context, final Uri uri) {
+
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
@@ -47,8 +40,7 @@ public class ImageProcess
             else if (isDownloadsDocument(uri)) {
 
                 final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
             }
@@ -77,11 +69,6 @@ public class ImageProcess
         }
         // MediaStore (and general)
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-            // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
-
             return getDataColumn(context, uri, null, null);
         }
         // File
@@ -92,16 +79,6 @@ public class ImageProcess
         return null;
     }
 
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     */
     public static String getDataColumn(Context context, Uri uri, String selection,
                                        String[] selectionArgs) {
 
@@ -115,8 +92,8 @@ public class ImageProcess
             cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
                     null);
             if (cursor != null && cursor.moveToFirst()) {
-                final int index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(index);
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
             }
         } finally {
             if (cursor != null)
@@ -125,35 +102,15 @@ public class ImageProcess
         return null;
     }
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
     public static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
     public static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
-     */
-    public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 }

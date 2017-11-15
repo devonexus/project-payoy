@@ -14,13 +14,13 @@ import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
@@ -40,13 +40,12 @@ public class LoginActivity extends AppCompatActivity {
     GlobalData globalData = new GlobalData();
     private int success;
     public static String LOGIN_URL = "http://132.223.41.121/login.php";
-
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     private static final String TAG_USERNAME = "username";
     private static final String TAG_PASSWORD = "password";
     private static final String TAG_FULLNAME = "fullname";
-
+    private static final String TAG_IMAGE_URL = "image";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,12 +207,16 @@ public class LoginActivity extends AppCompatActivity {
                 else {
                     Log.d("Login Successful!", json.toString());
                      json_response = json.getString(TAG_FULLNAME);
-                    //Delay intent to prolong progress dialog
+                     //final String image_url = json.getString(TAG_IMAGE_URL);
+                     globalData.setSomeVariable(json_response);
+
+                     //globalData.setImageUrl("http://132.223.41.121/"+image_url);
+                   /*  //Delay intent to prolong progress dialog
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
 
-                            globalData.setSomeVariable(json_response);
+
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             // run AsyncTask here.
                             pDialog.dismiss();
@@ -222,8 +225,31 @@ public class LoginActivity extends AppCompatActivity {
 
 
                         }
-                    }, 3000);
+                    }, 3000);*/
+                     Thread thread = new Thread() {
 
+                         @Override
+                         public void run() {
+
+                             // Block this thread for 4 seconds.
+                             try {
+                                 Thread.sleep(4000);
+                             } catch (InterruptedException e) {
+                             }
+
+                             // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                             runOnUiThread(new Runnable() {
+                                 @Override
+                                 public void run() {
+                                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                     pDialog.dismiss();
+                                 }
+                             });
+
+                         }
+
+                     };
+                     thread.start();
 
                     return json.getString(TAG_MESSAGE);
 
@@ -249,7 +275,7 @@ public class LoginActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-    public void showMessage(String title,String Message){
+    /*public void showMessage(String title,String Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
         builder.setTitle(title);
@@ -262,5 +288,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         builder.show();
-    }
+    }*/
 }

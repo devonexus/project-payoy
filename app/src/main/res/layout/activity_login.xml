@@ -22,7 +22,7 @@
         android:layout_alignStart="@+id/editText2" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/img_navigation_user_profile_image"
         android:layout_width="258dp"
         android:layout_height="251dp"
         app:srcCompat="@drawable/basurajuan_logo"
@@ -65,7 +65,7 @@
         tools:layout_editor_absoluteX="62dp"
         tools:layout_editor_absoluteY="373dp"
         android:layout_above="@+id/button"
-        android:layout_alignEnd="@+id/imageView"
+        android:layout_alignEnd="@+id/img_navigation_user_profile_image"
         android:layout_marginBottom="36dp" />
 
     <Button

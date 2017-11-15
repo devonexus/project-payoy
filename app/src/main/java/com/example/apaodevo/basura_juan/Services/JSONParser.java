@@ -53,12 +53,12 @@ public class JSONParser {
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost(url);
                 httpPost.setEntity(new UrlEncodedFormEntity(params));
-               /*  try {
+                 try {
                     Log.e("API123", " " +convertStreamToString(httpPost.getEntity().getContent()));
                     Log.e("API123",httpPost.getURI().toString());
                 } catch (Exception e) {
                     e.printStackTrace();
-                } */
+                }
 
                 HttpResponse httpResponse = httpClient.execute(httpPost);
                 // Log.e("API123",""+httpResponse.getStatusLine().getStatusCode());

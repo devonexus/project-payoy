@@ -1,20 +1,20 @@
 package com.example.apaodevo.basura_juan.Activities;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.database.Cursor;
 import android.graphics.Color;
+
 import android.graphics.drawable.GradientDrawable;
+
+
 import android.net.Uri;
 import android.os.AsyncTask;
-
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.os.Build;
+import android.provider.OpenableColumns;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,7 +24,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,9 +33,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
-import com.example.apaodevo.basura_juan.Services.ImageProcess;
 import com.example.apaodevo.basura_juan.Services.JSONParser;
+import com.example.apaodevo.basura_juan.Services.PathUtil;
+import com.kosalgeek.android.imagebase64encoder.ImageBase64;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.NameValuePair;
@@ -44,12 +45,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class RegisterUserActivity extends AppCompatActivity {
@@ -63,38 +61,28 @@ public class RegisterUserActivity extends AppCompatActivity {
     private EditText etFname, etMinitial, etLname, etEmail, etUsername, etPassword;
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
     private ProgressDialog pDialog;
-    private String selectedImagePath;
     public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
-
-
-    //Images
-    private String encoded_string, image_name;
-    private Bitmap bitmap;
-    private File file;
-    private Uri selectedImageURI;
-    private Uri file_uri;
+    private Uri uri;
+    private String displayName;
 
     private int success; //JSON Result
-    JSONParser jsonParser = new JSONParser(); //JSON Parser Class to make HTTP Request...
+    private JSONParser jsonParser = new JSONParser(); //JSON Parser Class to make HTTP Request...
     private static int RESULT_LOAD_IMAGE = 1;
     //Post data variables
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
-    private static final String TAG_USERNAME = "username";
-    private static final String TAG_PASSWORD = "password";
-    private static final String TAG_FIRSTNAME = "fname";
-    private static final String TAG_LASTNAME = "lname";
-    private static final String TAG_MIDDLE_INITIAL = "minitial";
-    private static final String TAG_EMAIL = "email";
-    private static final String TAG_USER_IMAGE = "encoded_string";
-    private static final String TAG_USER_IMAGE_NAME = "image_name";
+    private static String image_path;
+    private static String encodedImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
         //inputUsername = (TextInputLayout) findViewById(R.id.input_layout_username);
-
+        if (shouldAskPermissions()) {
+            askPermissions();
+        }
         //Cast objects
         bregister   = (Button) findViewById(R.id.btn_submit);
         tv1         = (TextView) findViewById(R.id.et_go_to_login);
@@ -172,50 +160,46 @@ public class RegisterUserActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == RESULT_LOAD_IMAGE) {
 
+                uri = data.getData();
+                image_path = PathUtil.getPathFromURI(RegisterUserActivity.this, uri);
+                File f = new File(uri.getPath());
 
-/*
-                selectedImageURI  = data.getData();
 
-                //Fetch image path from SD card or device
-                selectedImagePath = ImageProcess.getPath(getApplicationContext(), selectedImageURI);
 
-                //Fetch filename
-                File f = new File(selectedImagePath);
-                image_name = f.getName();
-                Picasso.with(RegisterUserActivity.this).load(""+selectedImageURI).noPlaceholder().centerCrop().fit()
-                        .into((ImageView) findViewById(R.id.imgUserProfile));
-                Toast.makeText(this, ""+selectedImagePath, Toast.LENGTH_SHORT).show();*/
+                displayName = null;
+                Picasso.with(this).load(uri).into(img_user_profile);
+                if (uri.toString().startsWith("content://")) {
+                    Cursor cursor = null;
+                    try {
+                        cursor = this.getContentResolver().query(uri, null, null, null, null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                } else if (uri.toString().startsWith("file://")) {
+                    displayName = f.getName();
+                }
+
             }
 
         }
 
 
     }
-    private void getFileUri() {
 
-        image_name = "IMG20171105164302.jpg";
-        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                + File.separator + image_name
-        );
 
-        file_uri = Uri.fromFile(file);
-        Toast.makeText(this, ""+file_uri, Toast.LENGTH_SHORT).show();
-    }
+
     private void getImageFromAlbum(){
         try{
-            /*Intent i = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);*/
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, RESULT_LOAD_IMAGE);
 
-            /*Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(i, RESULT_LOAD_IMAGE);*/
-
-            Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            getFileUri();
-
-            startActivityForResult(i, RESULT_LOAD_IMAGE);
-
-        }catch(Exception exp){
-            Log.i("Error",exp.toString());
+        }catch(Exception e){
+            Log.i("Error", e.toString());
         }
     }
     //Submit form
@@ -226,8 +210,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         String userEmail        = etEmail.getText().toString();
         String userUsername     = etUsername.getText().toString();
         String userPassword     = etPassword.getText().toString();
-        String imagePath        = encoded_string;
-        String imageName        = image_name;
+
         if(!validateFirstname()){
             return;
         }
@@ -248,12 +231,26 @@ public class RegisterUserActivity extends AppCompatActivity {
             return;
         }
 
+        try {
+            encodedImage = ImageBase64
+                    .with(getApplicationContext())
+                    .requestSize(60, 60)
+                    .encodeFile(image_path);
+        } catch (FileNotFoundException e) {
+            Log.d("Error:", e.getMessage());
+            e.printStackTrace();
+        }
 
 
+        //Toast.makeText(this, encodedImage+"", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, encodedImage+"", Toast.LENGTH_LONG).show();
         AttemptRegister ar = new AttemptRegister();
-        ar.execute(lastName, firstName, middleInitial, userEmail, userUsername, userPassword, imagePath, imageName);
-        //Toast.makeText(getApplicationContext(), "Thank You!", Toast.LENGTH_SHORT).show();
+
+        ar.execute(lastName, firstName, middleInitial, userEmail, userUsername, userPassword, encodedImage, displayName);
+//        ar.execute(lastName, firstName, middleInitial, userEmail, userUsername, userPassword, encodedImage, displayName);
+         /*  ar.execute(encodedImage, displayName);*/
     }
+
 
 
     private boolean validatePasssword(){
@@ -292,7 +289,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             requestFocus(etFname);
             return false;
         } else {
-          etFname.setError(null);
+            etFname.setError(null);
         }
 
         return true;
@@ -375,7 +372,7 @@ public class RegisterUserActivity extends AppCompatActivity {
                     validateEmail();
                     break;
                 case R.id.et_pword:
-                   validatePasssword();
+                    validatePasssword();
                     break;
                 case R.id.et_fname:
                     validateFirstname();
@@ -391,30 +388,36 @@ public class RegisterUserActivity extends AppCompatActivity {
 
 
     }
+
+    private void clearRegistrationActivity(){
+        etFname.setText(null);
+        etLname.setText(null);
+        etEmail.setText(null);
+        etEmail.setText(null);
+        etUsername.setText(null);
+        etPassword.setText(null);
+        etUsername.setError(null);
+        etPassword.setError(null);
+        img_user_profile.setImageResource(android.R.color.transparent);
+    }
     //Background Worker for Login
     private class AttemptRegister extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             pDialog = new ProgressDialog(RegisterUserActivity.this);
             pDialog.setMessage("Registering accounts...");
+
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
+
         }
 
         @Override
         protected String doInBackground(String... args) {
-            //return null;
 
-           /* bitmap = BitmapFactory.decodeFile(file_uri.getPath());
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            bitmap.recycle();
-
-            byte[] array = stream.toByteArray();
-            encoded_string = Base64.encodeToString(array, 0);
-*/
 
             String last_name        = args[0];
             String first_name       = args[1];
@@ -425,55 +428,80 @@ public class RegisterUserActivity extends AppCompatActivity {
             String user_image       = args[6];
             String user_image_name  = args[7];
             try {
-
                 //Put the argument to the array list.
                 ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair(TAG_LASTNAME, last_name));
-                params.add(new BasicNameValuePair(TAG_FIRSTNAME, first_name));
-                params.add(new BasicNameValuePair(TAG_MIDDLE_INITIAL, middle_initial));
-                params.add(new BasicNameValuePair(TAG_EMAIL, user_email));
-                params.add(new BasicNameValuePair(TAG_USERNAME, user_username));
-                params.add(new BasicNameValuePair(TAG_PASSWORD, user_password));
-                params.add(new BasicNameValuePair(TAG_USER_IMAGE, user_image));
-                params.add(new BasicNameValuePair(TAG_USER_IMAGE_NAME, user_image_name));
+                params.add(new BasicNameValuePair(Keys.TAG_LASTNAME, last_name));
+                params.add(new BasicNameValuePair(Keys.TAG_FIRSTNAME, first_name));
+                params.add(new BasicNameValuePair(Keys.TAG_MIDDLE_INITIAL, middle_initial));
+                params.add(new BasicNameValuePair(Keys.TAG_EMAIL, user_email));
+                params.add(new BasicNameValuePair(Keys.TAG_USERNAME, user_username));
+                params.add(new BasicNameValuePair(Keys.TAG_PASSWORD, user_password));
+                params.add(new BasicNameValuePair(Keys.TAG_USER_IMAGE, user_image));
+                params.add(new BasicNameValuePair(Keys.TAG_USER_IMAGE_NAME, user_image_name));
                 //Send post data request to web server through the web service
                 JSONObject json = jsonParser.makeHttpRequest(REGISTER_URL, "POST",	params);
-                Log.d("request!", "starting");
-
-
+                Log.d("request!", "starting"+json.toString());
                 Log.d("Login attempt", json.toString());
 
                 //Fetch json response from web service
                 success = json.getInt(TAG_SUCCESS);
                 if(success == 0){
                     //Dismiss progress dialog and show alert dialog.
-                    new Timer().schedule(new TimerTask() {
+                    Thread thread = new Thread() {
+
                         @Override
                         public void run() {
-                            pDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                            // Block this thread for 4 seconds.
+                            try {
+                                Thread.sleep(4000);
+                            } catch (InterruptedException e) {
+                            }
+
+                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                            runOnUiThread(new Runnable() {
                                 @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    showMessage("ERROR", "Username already exists");
+                                public void run() {
+                                    etUsername.setError("Username already exists");
+                                    pDialog.dismiss();
                                 }
                             });
-                            pDialog.cancel();
-
 
                         }
-                    }, 3000);
+
+                    };
+                    thread.start();
                     return json.getString(TAG_MESSAGE);
+
                 } else{
-                    new Timer().schedule(new TimerTask() {
+
+                    Thread thread = new Thread() {
+
                         @Override
                         public void run() {
 
-                            startActivity(new Intent(RegisterUserActivity.this, LoginActivity.class));
-                            // run AsyncTask here.
-                            pDialog.dismiss();
+                            // Block this thread for 4 seconds.
+                            try {
+                                Thread.sleep(4000);
+                            } catch (InterruptedException e) {
+                            }
 
+                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(),
+                                            "Successfully registered",
+                                            Toast.LENGTH_LONG).show();
+                                    clearRegistrationActivity();
+                                    pDialog.dismiss();
+                                }
+                            });
 
                         }
-                    }, 3000);
+
+                    };
+                    thread.start();
                     return json.getString(TAG_MESSAGE);
                 }
 
@@ -482,21 +510,27 @@ public class RegisterUserActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return null;
+            return  null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
         }
     }
-    public void showMessage(String title,String Message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(Message);
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
 
-            }
-        });
-        builder.show();
+    protected boolean shouldAskPermissions() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    @TargetApi(23)
+    protected void askPermissions() {
+        String[] permissions = {
+                "android.permission.READ_EXTERNAL_STORAGE",
+                "android.permission.WRITE_EXTERNAL_STORAGE"
+        };
+        int requestCode = 200;
+        requestPermissions(permissions, requestCode);
     }
 }

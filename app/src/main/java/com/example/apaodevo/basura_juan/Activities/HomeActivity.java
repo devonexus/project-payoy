@@ -1,20 +1,20 @@
 package com.example.apaodevo.basura_juan.Activities;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.os.Bundle;
 
-import com.example.apaodevo.basura_juan.R;
-import com.example.apaodevo.basura_juan.Services.GlobalData;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.widget.Button;
+
+
+        import com.example.apaodevo.basura_juan.R;
 
 
 public class HomeActivity extends NavigationDrawerActivity{
     private Button btn_bin_location, btn_deploy_bin, btn_register_bin, btn_navigate_bin;
-    GlobalData globalData = new GlobalData();
+
 
     @Override
 
@@ -66,9 +66,8 @@ public class HomeActivity extends NavigationDrawerActivity{
             }
         });
 
-        String s = globalData.getSomeVariable();
 
-        Toast.makeText(HomeActivity.this, ""+s.toString(), Toast.LENGTH_SHORT).show();
+
     }
 
 
