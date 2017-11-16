@@ -38,6 +38,7 @@
         <activity android:name=".Activities.DeployBinActivity" />
         <activity android:name=".Activities.RegisterBin"></activity>
         <activity android:name=".Activities.NavigateBin"></activity>
+        <activity android:name=".Activities.UserProfileActivity"></activity>
     </application>
 
 </manifest>

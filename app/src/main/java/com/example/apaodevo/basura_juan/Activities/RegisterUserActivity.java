@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.JSONParser;
 import com.example.apaodevo.basura_juan.Services.PathUtil;
 import com.kosalgeek.android.imagebase64encoder.ImageBase64;
@@ -61,7 +62,8 @@ public class RegisterUserActivity extends AppCompatActivity {
     private EditText etFname, etMinitial, etLname, etEmail, etUsername, etPassword;
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
     private ProgressDialog pDialog;
-    public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
+    //public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
+    public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
     private Uri uri;
     private String displayName;
 
@@ -69,20 +71,24 @@ public class RegisterUserActivity extends AppCompatActivity {
     private JSONParser jsonParser = new JSONParser(); //JSON Parser Class to make HTTP Request...
     private static int RESULT_LOAD_IMAGE = 1;
     //Post data variables
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_MESSAGE = "message";
+
     private static String image_path;
     private static String encodedImage;
-
+    private String response;
+    GlobalData globalData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_register_user);
+
         //inputUsername = (TextInputLayout) findViewById(R.id.input_layout_username);
-        if (shouldAskPermissions()) {
+       /* if (shouldAskPermissions()) {
             askPermissions();
         }
+      */
+
         //Cast objects
         bregister   = (Button) findViewById(R.id.btn_submit);
         tv1         = (TextView) findViewById(R.id.et_go_to_login);
@@ -149,9 +155,6 @@ public class RegisterUserActivity extends AppCompatActivity {
                     }
                 }
         );  //Register user
-
-
-
     }
 
     @Override
@@ -444,7 +447,7 @@ public class RegisterUserActivity extends AppCompatActivity {
                 Log.d("Login attempt", json.toString());
 
                 //Fetch json response from web service
-                success = json.getInt(TAG_SUCCESS);
+                success = json.getInt(Keys.TAG_SUCCESS);
                 if(success == 0){
                     //Dismiss progress dialog and show alert dialog.
                     Thread thread = new Thread() {
@@ -471,7 +474,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
                     };
                     thread.start();
-                    return json.getString(TAG_MESSAGE);
+                    return json.getString(Keys.TAG_MESSAGE);
 
                 } else{
 
@@ -502,7 +505,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
                     };
                     thread.start();
-                    return json.getString(TAG_MESSAGE);
+                    return json.getString(Keys.TAG_MESSAGE);
                 }
 
 

@@ -20,8 +20,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
+import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.JSONParser;
@@ -29,23 +28,20 @@ import com.example.apaodevo.basura_juan.Services.JSONParser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    //Declare objects
-
-    public static String json_response;
+    //Declare objects static String json_response;
     private Button bregister, blogin;
     private EditText user, pass;
     private ProgressDialog pDialog;
     protected String enteredUsername, enteredPassword;
-    JSONParser jsonParser = new JSONParser();
-    GlobalData globalData = new GlobalData();
+    private String json_response;
+    private JSONParser jsonParser = new JSONParser();
+
+
+    //JSON Responses
     private int success;
-    public static String LOGIN_URL = "http://132.223.41.121/login.php";
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_MESSAGE = "message";
-    private static final String TAG_USERNAME = "username";
-    private static final String TAG_PASSWORD = "password";
-    private static final String TAG_FULLNAME = "fullname";
-    private static final String TAG_IMAGE_URL = "image";
+    private String image_url, email, response, username, pword, firstName, lastName, middleInitial;
+    //public static String LOGIN_URL = "http://132.223.41.121/login.php";
+    public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         sd3.setColor(Color.WHITE);
 
 
-        //Redirect to register UI
+
         bregister.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -81,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 }
-        );
+        );//Redirects to user registration activity
         blogin.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -127,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... args) {
-            // TODO Auto-generated method stub
+
 
 
 
@@ -139,8 +135,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 //Put the argument to the array list.
                 ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair(TAG_USERNAME, name));
-                params.add(new BasicNameValuePair(TAG_PASSWORD, password));
+                params.add(new BasicNameValuePair(Keys.TAG_USERNAME, name));
+                params.add(new BasicNameValuePair(Keys.TAG_PASSWORD, password));
 
 
                 //Send post data request to web server through the web service
@@ -151,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("Login attempt", json.toString());
 
                 //Fetch json response from web service
-                success = json.getInt(TAG_SUCCESS);
+                success = json.getInt(Keys.TAG_SUCCESS);
 
                  //Check json response and perform based on conditions met
                  if (success == 0){
@@ -177,8 +173,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-                     Log.d("Login Failure!", json.getString(TAG_MESSAGE));
-                     return json.getString(TAG_MESSAGE);
+                     Log.d("Login Failure!", json.getString(Keys.TAG_MESSAGE));
+                     return json.getString(Keys.TAG_MESSAGE);
 
 
                 } else if(success == 2){
@@ -188,7 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                              pDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                                  @Override
                                  public void onCancel(DialogInterface dialog) {
-                                     //showMessage("ERROR", "Incorrect username and password");
+
                                      user.setError("Invalid username");
                                      pass.setError("Invalid password");
                                  }
@@ -201,47 +197,53 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-                     Log.d("Login Failure!", json.getString(TAG_MESSAGE));
-                     return json.getString(TAG_MESSAGE);
+                     Log.d("Login Failure!", json.getString(Keys.TAG_MESSAGE));
+                     return json.getString(Keys.TAG_MESSAGE);
                  }
                 else {
                     Log.d("Login Successful!", json.toString());
-                     json_response = json.getString(TAG_FULLNAME);
-                     //final String image_url = json.getString(TAG_IMAGE_URL);
+                     json_response  = json.getString(Keys.TAG_FULLNAME);
+                     image_url      = json.getString(Keys.TAG_IMAGE_URL);
+                     email          = json.getString(Keys.TAG_USER_EMAIL);
+                     response       = json.getString(Keys.TAG_SUCCESS);
+                     username       = json.getString(Keys.TAG_USERNAME);
+                     firstName      = json.getString(Keys.TAG_FNAME);
+                     lastName       = json.getString(Keys.TAG_LNAME);
+                     middleInitial  = json.getString(Keys.TAG_MINITIAL);
+                     pword     = json.getString(Keys.TAG_PWORD);
+                     Log.d("Login Successful!", image_url.toString());
+                     final GlobalData globalData = (GlobalData) getApplicationContext();
                      globalData.setSomeVariable(json_response);
-
-                     //globalData.setImageUrl("http://132.223.41.121/"+image_url);
-                   /*  //Delay intent to prolong progress dialog
-                    new Timer().schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-
-
-                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                            // run AsyncTask here.
-                            pDialog.dismiss();
-
-                            // set
-
-
-                        }
-                    }, 3000);*/
+                     globalData.setImageUrl(image_url);
+                     globalData.setEmailAddress(email);
+                     globalData.setLoginStatus(response);
+                     globalData.setUsername(username);
+                     globalData.setMiddleInitial(middleInitial);
+                     globalData.setFirstname(firstName);
+                     globalData.setLastname(lastName);
+                     globalData.setPassword(pword);
                      Thread thread = new Thread() {
 
                          @Override
                          public void run() {
 
-                             // Block this thread for 4 seconds.
+                             // Block this thread for 4 seconds.al
                              try {
                                  Thread.sleep(4000);
                              } catch (InterruptedException e) {
+                                 e.printStackTrace();
                              }
 
                              // After sleep finished blocking, create a Runnable to run on the UI Thread.
                              runOnUiThread(new Runnable() {
                                  @Override
                                  public void run() {
-                                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                     Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                                     i.putExtra("LOGIN_STATUS", response);
+                                     startActivity(i);
+                                     //startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                     //finish();
+
                                      pDialog.dismiss();
                                  }
                              });
@@ -251,7 +253,7 @@ public class LoginActivity extends AppCompatActivity {
                      };
                      thread.start();
 
-                    return json.getString(TAG_MESSAGE);
+                    return json.getString(Keys.TAG_MESSAGE);
 
                 }
 
@@ -274,19 +276,6 @@ public class LoginActivity extends AppCompatActivity {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
-    }
-    /*public void showMessage(String title,String Message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(Message);
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+    }//Focus the cursor to where the error originated
 
-            }
-        });
-        builder.show();
-    }*/
 }

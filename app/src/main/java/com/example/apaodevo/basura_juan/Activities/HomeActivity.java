@@ -12,6 +12,7 @@ package com.example.apaodevo.basura_juan.Activities;
         import com.example.apaodevo.basura_juan.R;
 
 
+
 public class HomeActivity extends NavigationDrawerActivity{
     private Button btn_bin_location, btn_deploy_bin, btn_register_bin, btn_navigate_bin;
 
@@ -65,7 +66,6 @@ public class HomeActivity extends NavigationDrawerActivity{
                 startActivity(new Intent(getApplicationContext(), NavigateBin.class));
             }
         });
-
 
 
     }
