@@ -22,8 +22,7 @@ import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.squareup.picasso.Picasso;
 
-public class NavigationDrawerActivity extends ActionBarActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class NavigationDrawerActivity extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
     protected DrawerLayout drawer;
