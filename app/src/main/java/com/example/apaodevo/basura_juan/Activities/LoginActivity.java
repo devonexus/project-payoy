@@ -20,6 +20,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
@@ -82,8 +84,8 @@ public class LoginActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        enteredUsername = user.getText().toString();
-                        enteredPassword = pass.getText().toString();
+                        enteredUsername = user.getText().toString().trim();
+                        enteredPassword = pass.getText().toString().trim();
 
                         if (enteredUsername.equals("") && enteredPassword.equals("")) {
                             user.setError("Enter username");
@@ -123,10 +125,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... args) {
-
-
-
-
             //Declare variable to store post data arguments
             String name= args[0];
             String password = args[1];
@@ -137,126 +135,129 @@ public class LoginActivity extends AppCompatActivity {
                 ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair(Keys.TAG_USERNAME, name));
                 params.add(new BasicNameValuePair(Keys.TAG_PASSWORD, password));
-
-
                 //Send post data request to web server through the web service
                 JSONObject json = jsonParser.makeHttpRequest(LOGIN_URL, "POST",	params);
                 Log.d("request!", "starting");
 
 
                 Log.d("Login attempt", json.toString());
+                if(json.toString() != null) {
+                    //Fetch json response from web service
+                    success = json.getInt(Keys.TAG_SUCCESS);
 
-                //Fetch json response from web service
-                success = json.getInt(Keys.TAG_SUCCESS);
-
-                 //Check json response and perform based on conditions met
-                 if (success == 0){
-
-
-                     //Dismiss progress dialog and show alert dialog.
-                     new Timer().schedule(new TimerTask() {
-                         @Override
-                         public void run() {
-                              pDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                 @Override
-                                 public void onCancel(DialogInterface dialog) {
-                                     //showMessage("ERROR", "Invalid password");
-                                     pass.setError("Invalid password");
-
-                                 }
-                             });
-                             pDialog.cancel();
+                    //Check json response and perform based on conditions met
+                    if (success == 0) {
 
 
-                         }
-                     }, 3000);
+                        //Dismiss progress dialog and show alert dialog.
+                        new Timer().schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                pDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialog) {
+                                        //showMessage("ERROR", "Invalid password");
+                                        pass.setError("Invalid password");
+
+                                    }
+                                });
+                                pDialog.cancel();
 
 
-
-                     Log.d("Login Failure!", json.getString(Keys.TAG_MESSAGE));
-                     return json.getString(Keys.TAG_MESSAGE);
-
-
-                } else if(success == 2){
-                     new Timer().schedule(new TimerTask() {
-                         @Override
-                         public void run() {
-                             pDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                 @Override
-                                 public void onCancel(DialogInterface dialog) {
-
-                                     user.setError("Invalid username");
-                                     pass.setError("Invalid password");
-                                 }
-                             });
-                             pDialog.cancel();
+                            }
+                        }, 3000);
 
 
-                         }
-                     }, 3000);
+                        Log.d("Login Failure!", json.getString(Keys.TAG_MESSAGE));
+                        return json.getString(Keys.TAG_MESSAGE);
 
 
+                    } else if (success == 2) {
+                        new Timer().schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                pDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialog) {
 
-                     Log.d("Login Failure!", json.getString(Keys.TAG_MESSAGE));
-                     return json.getString(Keys.TAG_MESSAGE);
-                 }
-                else {
-                    Log.d("Login Successful!", json.toString());
-                     json_response  = json.getString(Keys.TAG_FULLNAME);
-                     image_url      = json.getString(Keys.TAG_IMAGE_URL);
-                     email          = json.getString(Keys.TAG_USER_EMAIL);
-                     response       = json.getString(Keys.TAG_SUCCESS);
-                     username       = json.getString(Keys.TAG_USERNAME);
-                     firstName      = json.getString(Keys.TAG_FNAME);
-                     lastName       = json.getString(Keys.TAG_LNAME);
-                     middleInitial  = json.getString(Keys.TAG_MINITIAL);
-                     pword     = json.getString(Keys.TAG_PWORD);
-                     Log.d("Login Successful!", image_url.toString());
-                     final GlobalData globalData = (GlobalData) getApplicationContext();
-                     globalData.setSomeVariable(json_response);
-                     globalData.setImageUrl(image_url);
-                     globalData.setEmailAddress(email);
-                     globalData.setLoginStatus(response);
-                     globalData.setUsername(username);
-                     globalData.setMiddleInitial(middleInitial);
-                     globalData.setFirstname(firstName);
-                     globalData.setLastname(lastName);
-                     globalData.setPassword(pword);
-                     Thread thread = new Thread() {
+                                        user.setError("Invalid username");
+                                        pass.setError("Invalid password");
+                                    }
+                                });
+                                pDialog.cancel();
 
-                         @Override
-                         public void run() {
 
-                             // Block this thread for 4 seconds.al
-                             try {
-                                 Thread.sleep(4000);
-                             } catch (InterruptedException e) {
-                                 e.printStackTrace();
-                             }
+                            }
+                        }, 3000);
 
-                             // After sleep finished blocking, create a Runnable to run on the UI Thread.
-                             runOnUiThread(new Runnable() {
-                                 @Override
-                                 public void run() {
-                                     Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-                                     i.putExtra("LOGIN_STATUS", response);
-                                     startActivity(i);
-                                     //startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                                     //finish();
 
-                                     pDialog.dismiss();
-                                 }
-                             });
+                        Log.d("Login Failure!", json.getString(Keys.TAG_MESSAGE));
+                        return json.getString(Keys.TAG_MESSAGE);
+                    } else {
+                        Log.d("Login Successful!", json.toString());
+                        json_response = json.getString(Keys.TAG_FULLNAME);
+                        image_url = json.getString(Keys.TAG_IMAGE_URL);
+                        email = json.getString(Keys.TAG_USER_EMAIL);
+                        response = json.getString(Keys.TAG_SUCCESS);
+                        username = json.getString(Keys.TAG_USERNAME);
+                        firstName = json.getString(Keys.TAG_FNAME);
+                        lastName = json.getString(Keys.TAG_LNAME);
+                        middleInitial = json.getString(Keys.TAG_MINITIAL);
+                        pword = json.getString(Keys.TAG_PWORD);
+                        Log.d("Login Successful!", image_url.toString());
+                        final GlobalData globalData = (GlobalData) getApplicationContext();
+                        globalData.setSomeVariable(json_response);
+                        globalData.setImageUrl(image_url);
+                        globalData.setEmailAddress(email);
+                        globalData.setLoginStatus(response);
+                        globalData.setUsername(username);
+                        globalData.setMiddleInitial(middleInitial);
+                        globalData.setFirstname(firstName);
+                        globalData.setLastname(lastName);
+                        globalData.setPassword(pword);
+                        Thread thread = new Thread() {
 
-                         }
+                            @Override
+                            public void run() {
 
-                     };
-                     thread.start();
+                                // Block this thread for 4 seconds.al
+                                try {
+                                    Thread.sleep(4000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
 
-                    return json.getString(Keys.TAG_MESSAGE);
+                                // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                                        startActivity(i);
+                                        //startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                        //finish();
 
+                                        pDialog.dismiss();
+                                    }
+                                });
+
+                            }
+
+                        };
+                        thread.start();
+
+                        return json.getString(Keys.TAG_MESSAGE);
+
+                    }
+                }else{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Could get data from server!",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
-
 
             } catch (JSONException e) {
                 e.printStackTrace();
