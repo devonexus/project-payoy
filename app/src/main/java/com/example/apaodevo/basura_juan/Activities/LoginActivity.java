@@ -1,18 +1,16 @@
 package com.example.apaodevo.basura_juan.Activities;
 
-import java.util.ArrayList;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,10 +20,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.JSONParser;
+import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -41,9 +45,9 @@ public class LoginActivity extends AppCompatActivity {
 
     //JSON Responses
     private int success;
-    private String image_url, email, response, username, pword, firstName, lastName, middleInitial;
-    //public static String LOGIN_URL = "http://132.223.41.121/login.php";
-    public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
+    private String image_url, email, response, username, password, firstName, lastName, middleInitial;
+    public static String LOGIN_URL = "http://132.223.41.121/login.php";
+//    public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +73,9 @@ public class LoginActivity extends AppCompatActivity {
         GradientDrawable sd3 = (GradientDrawable) pass.getBackground();
         sd3.setColor(Color.WHITE);
 
-
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Signing in, Please wait...");
+        pDialog.setCancelable(false);
 
         bregister.setOnClickListener(
                 new View.OnClickListener() {
@@ -99,8 +105,9 @@ public class LoginActivity extends AppCompatActivity {
                             pass.setError("Enter password");
                             requestFocus(pass);
                         }else {
-                            AttemptLogin attemptLogin = new AttemptLogin();
-                            attemptLogin.execute(enteredUsername, enteredPassword);
+                            /*AttemptLogin attemptLogin = new AttemptLogin();
+                            attemptLogin.execute(enteredUsername, enteredPassword);*/
+                            loginUser(enteredUsername, enteredPassword);
                         }
 
                     }
@@ -109,174 +116,142 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void loginUser(final String uname , final String pword){
+        showpDialog();
+        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, LOGIN_URL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(final JSONObject response) {
 
-    //Background Worker for Login
-    private class AttemptLogin extends AsyncTask<String, String, String> {
+                        String response_success = null;
+                        try {
+                            response_success = response.getString(Keys.TAG_SUCCESS);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if(response_success.equals("0")){
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(LoginActivity.this);
-            pDialog.setMessage("Logging in ...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
-        }
+                            Thread thread = new Thread() {
 
-        @Override
-        protected String doInBackground(String... args) {
-            //Declare variable to store post data arguments
-            String name= args[0];
-            String password = args[1];
+                                @Override
+                                public void run() {
 
-            try {
-
-                //Put the argument to the array list.
-                ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair(Keys.TAG_USERNAME, name));
-                params.add(new BasicNameValuePair(Keys.TAG_PASSWORD, password));
-                //Send post data request to web server through the web service
-                JSONObject json = jsonParser.makeHttpRequest(LOGIN_URL, "POST",	params);
-                Log.d("request!", "starting");
-
-
-                Log.d("Login attempt", json.toString());
-                if(json.toString() != null) {
-                    //Fetch json response from web service
-                    success = json.getInt(Keys.TAG_SUCCESS);
-
-                    //Check json response and perform based on conditions met
-                    if (success == 0) {
-
-
-                        //Dismiss progress dialog and show alert dialog.
-                        new Timer().schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                pDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                    @Override
-                                    public void onCancel(DialogInterface dialog) {
-                                        //showMessage("ERROR", "Invalid password");
-                                        pass.setError("Invalid password");
-
+                                    // Block this thread for 4 seconds.al
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
                                     }
-                                });
-                                pDialog.cancel();
 
+                                    // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            pass.setError("Invalid password");
+                                            hidepDialog();
+                                        }
+                                    });
 
-                            }
-                        }, 3000);
-
-
-                        Log.d("Login Failure!", json.getString(Keys.TAG_MESSAGE));
-                        return json.getString(Keys.TAG_MESSAGE);
-
-
-                    } else if (success == 2) {
-                        new Timer().schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                pDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                    @Override
-                                    public void onCancel(DialogInterface dialog) {
-
-                                        user.setError("Invalid username");
-                                        pass.setError("Invalid password");
-                                    }
-                                });
-                                pDialog.cancel();
-
-
-                            }
-                        }, 3000);
-
-
-                        Log.d("Login Failure!", json.getString(Keys.TAG_MESSAGE));
-                        return json.getString(Keys.TAG_MESSAGE);
-                    } else {
-                        Log.d("Login Successful!", json.toString());
-                        json_response = json.getString(Keys.TAG_FULLNAME);
-                        image_url = json.getString(Keys.TAG_IMAGE_URL);
-                        email = json.getString(Keys.TAG_USER_EMAIL);
-                        response = json.getString(Keys.TAG_SUCCESS);
-                        username = json.getString(Keys.TAG_USERNAME);
-                        firstName = json.getString(Keys.TAG_FNAME);
-                        lastName = json.getString(Keys.TAG_LNAME);
-                        middleInitial = json.getString(Keys.TAG_MINITIAL);
-                        pword = json.getString(Keys.TAG_PWORD);
-                        Log.d("Login Successful!", image_url.toString());
-                        final GlobalData globalData = (GlobalData) getApplicationContext();
-                        globalData.setSomeVariable(json_response);
-                        globalData.setImageUrl(image_url);
-                        globalData.setEmailAddress(email);
-                        globalData.setLoginStatus(response);
-                        globalData.setUsername(username);
-                        globalData.setMiddleInitial(middleInitial);
-                        globalData.setFirstname(firstName);
-                        globalData.setLastname(lastName);
-                        globalData.setPassword(pword);
-                        Thread thread = new Thread() {
-
-                            @Override
-                            public void run() {
-
-                                // Block this thread for 4 seconds.al
-                                try {
-                                    Thread.sleep(4000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
                                 }
 
-                                // After sleep finished blocking, create a Runnable to run on the UI Thread.
-                                runOnUiThread(new Runnable() {
+                            };
+                            thread.start();
+
+                        }else if(response_success.equals("1")){
+
+                                new Timer().schedule(new TimerTask() {
                                     @Override
                                     public void run() {
-                                        Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-                                        startActivity(i);
-                                        //startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                                        //finish();
+                                        try {
+                                            json_response = response.getString(Keys.TAG_FULLNAME);
+                                            image_url = response.getString(Keys.TAG_IMAGE_URL);
+                                            email = response.getString(Keys.TAG_USER_EMAIL);
+                                            username = response.getString(Keys.TAG_USERNAME);
+                                            firstName = response.getString(Keys.TAG_FNAME);
+                                            lastName = response.getString(Keys.TAG_LNAME);
+                                            middleInitial = response.getString(Keys.TAG_MINITIAL);
+                                            password = response.getString(Keys.TAG_PWORD);
 
-                                        pDialog.dismiss();
+                                            final GlobalData globalData = (GlobalData) getApplicationContext();
+                                            globalData.setSomeVariable(json_response);
+                                            globalData.setImageUrl(image_url);
+                                            globalData.setEmailAddress(email);
+
+                                            globalData.setUsername(username);
+                                            globalData.setMiddleInitial(middleInitial);
+                                            globalData.setFirstname(firstName);
+                                            globalData.setLastname(lastName);
+                                            globalData.setPassword(pword);
+                                            Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                                            startActivity(i);
+                                            hidepDialog();
+                                        }catch(JSONException e){
+                                            e.printStackTrace();
+                                        }
+
                                     }
-                                });
+                                }, 1500);
 
-                            }
 
-                        };
-                        thread.start();
+                        }else{
+                            Thread thread = new Thread() {
 
-                        return json.getString(Keys.TAG_MESSAGE);
+                                @Override
+                                public void run() {
 
-                    }
-                }else{
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Could get data from server!",
-                                    Toast.LENGTH_LONG).show();
+                                    // Block this thread for 4 seconds.al
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            user.setError("Invalid username");
+                                            pass.setError("Invalid password");
+                                            hidepDialog();
+                                        }
+                                    });
+
+                                }
+
+                            };
+                            thread.start();
+
                         }
-                    });
-                }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-
-            return null;
-
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-        }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_USERNAME, uname);
+                params.put(Keys.TAG_PASSWORD, pword);
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
     }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }//Focus the cursor to where the error originated
+    private void showpDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }//Display progress dialog
 
+    private void hidepDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }//Dismiss progressDialog
 }

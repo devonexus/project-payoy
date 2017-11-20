@@ -11,7 +11,6 @@ import android.graphics.drawable.GradientDrawable;
 
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.OpenableColumns;
 import android.support.design.widget.TextInputLayout;
@@ -33,22 +32,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
-import com.example.apaodevo.basura_juan.Services.GlobalData;
+import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.JSONParser;
 import com.example.apaodevo.basura_juan.Services.PathUtil;
+import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.kosalgeek.android.imagebase64encoder.ImageBase64;
 import com.squareup.picasso.Picasso;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RegisterUserActivity extends AppCompatActivity {
@@ -62,8 +66,8 @@ public class RegisterUserActivity extends AppCompatActivity {
     private EditText etFname, etMinitial, etLname, etEmail, etUsername, etPassword;
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
     private ProgressDialog pDialog;
-    //public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
-    public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
+    public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
+//    public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
     private Uri uri;
     private String displayName;
 
@@ -75,7 +79,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     private static String image_path;
     private static String encodedImage;
     private String response;
-    GlobalData globalData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -84,10 +88,9 @@ public class RegisterUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_user);
 
         //inputUsername = (TextInputLayout) findViewById(R.id.input_layout_username);
-       /* if (shouldAskPermissions()) {
+        if (shouldAskPermissions()) {
             askPermissions();
         }
-      */
 
         //Cast objects
         bregister   = (Button) findViewById(R.id.btn_submit);
@@ -102,7 +105,9 @@ public class RegisterUserActivity extends AppCompatActivity {
         GradientDrawable sd = (GradientDrawable) bregister.getBackground();
         sd.setColor(Color.rgb(199, 0, 57));
 
-
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Registering account...");
+        pDialog.setCancelable(false);
 
         inputFname      = (TextInputLayout) findViewById(R.id.input_layout_fname);
         inputLname      = (TextInputLayout) findViewById(R.id.input_layout_lname);
@@ -157,6 +162,8 @@ public class RegisterUserActivity extends AppCompatActivity {
         );  //Register user
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -192,7 +199,95 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     }
 
+    private void registerUser(final String lastName, final String firstName, final String middleInitial, final String email, final String uName, final String pWord, final String imagePath, final String imageName){
+        showpDialog();
+        final CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, REGISTER_URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String server_response;
+                try {
+                    server_response = response.getString(Keys.TAG_SUCCESS);
 
+                if(server_response.equals("0")){
+                    Thread thread = new Thread() {
+                        @Override
+                        public void run() {
+                            // Block this thread for 1.5 seconds.
+                            try {
+                                Thread.sleep(1500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    etUsername.setError("Username already exists");
+                                    hidepDialog();
+                                }
+                            });
+
+                        }
+
+                    };
+                    thread.start();
+                } else if(server_response.equals("1")){
+                    Thread thread = new Thread() {
+
+                        @Override
+                        public void run() {
+
+                            // Block this thread for 1.5 seconds.
+                            try {
+                                Thread.sleep(1500);
+                            } catch (InterruptedException e) {
+                            }
+
+                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(),
+                                            "User successfully registered",
+                                            Toast.LENGTH_LONG).show();
+                                    clearRegistrationActivity();
+                                    hidepDialog();
+                                }
+                            });
+
+                        }
+
+                    };
+                    thread.start();
+                }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(RegisterUserActivity.this, "Could not get data from server.", Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_LASTNAME, lastName);
+                params.put(Keys.TAG_FIRSTNAME, firstName);
+                params.put(Keys.TAG_MIDDLE_INITIAL, middleInitial);
+                params.put(Keys.TAG_EMAIL, email);
+                params.put(Keys.TAG_USERNAME, uName);
+                params.put(Keys.TAG_PASSWORD, pWord);
+                params.put(Keys.TAG_USER_IMAGE, imagePath);
+                params.put(Keys.TAG_USER_IMAGE_NAME, imageName);
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
+    }
 
     private void getImageFromAlbum(){
         try{
@@ -243,15 +338,10 @@ public class RegisterUserActivity extends AppCompatActivity {
             Log.d("Error:", e.getMessage());
             e.printStackTrace();
         }
+//        Toast.makeText(getApplicationContext(), ""+displayName.toString(), Toast.LENGTH_LONG).show();
+        registerUser(lastName, firstName, middleInitial, userEmail, userUsername, userPassword, encodedImage, displayName);
 
 
-        //Toast.makeText(this, encodedImage+"", Toast.LENGTH_LONG).show();
-//        Toast.makeText(this, encodedImage+"", Toast.LENGTH_LONG).show();
-        AttemptRegister ar = new AttemptRegister();
-
-        ar.execute(lastName, firstName, middleInitial, userEmail, userUsername, userPassword, encodedImage, displayName);
-//        ar.execute(lastName, firstName, middleInitial, userEmail, userUsername, userPassword, encodedImage, displayName);
-         /*  ar.execute(encodedImage, displayName);*/
     }
 
 
@@ -393,135 +483,24 @@ public class RegisterUserActivity extends AppCompatActivity {
     }
 
     private void clearRegistrationActivity(){
-        etFname.setText(null);
-        etLname.setText(null);
-        etEmail.setText(null);
-        etEmail.setText(null);
-        etUsername.setText(null);
-        etPassword.setText(null);
+        etFname.setText("");
+        etLname.setText("");
+        etEmail.setText("");
+        etPassword.setText("");
+
+
+        etUsername.setText("");
+        etMinitial.setText("");
+
         etUsername.setError(null);
         etPassword.setError(null);
+        etEmail.setError(null);
+        etMinitial.setError(null);
+        etFname.setError(null);
+        etLname.setError(null);
         img_user_profile.setImageResource(android.R.color.transparent);
     }
-    //Background Worker for Login
-    private class AttemptRegister extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
 
-            pDialog = new ProgressDialog(RegisterUserActivity.this);
-            pDialog.setMessage("Registering accounts...");
-
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
-
-        }
-
-        @Override
-        protected String doInBackground(String... args) {
-
-
-            String last_name        = args[0];
-            String first_name       = args[1];
-            String middle_initial   = args[2];
-            String user_email       = args[3];
-            String user_username    = args[4];
-            String user_password    = args[5];
-            String user_image       = args[6];
-            String user_image_name  = args[7];
-            try {
-                //Put the argument to the array list.
-                ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair(Keys.TAG_LASTNAME, last_name));
-                params.add(new BasicNameValuePair(Keys.TAG_FIRSTNAME, first_name));
-                params.add(new BasicNameValuePair(Keys.TAG_MIDDLE_INITIAL, middle_initial));
-                params.add(new BasicNameValuePair(Keys.TAG_EMAIL, user_email));
-                params.add(new BasicNameValuePair(Keys.TAG_USERNAME, user_username));
-                params.add(new BasicNameValuePair(Keys.TAG_PASSWORD, user_password));
-                params.add(new BasicNameValuePair(Keys.TAG_USER_IMAGE, user_image));
-                params.add(new BasicNameValuePair(Keys.TAG_USER_IMAGE_NAME, user_image_name));
-                //Send post data request to web server through the web service
-                JSONObject json = jsonParser.makeHttpRequest(REGISTER_URL, "POST",	params);
-                Log.d("request!", "starting"+json.toString());
-                Log.d("Login attempt", json.toString());
-
-                //Fetch json response from web service
-                success = json.getInt(Keys.TAG_SUCCESS);
-                if(success == 0){
-                    //Dismiss progress dialog and show alert dialog.
-                    Thread thread = new Thread() {
-
-                        @Override
-                        public void run() {
-
-                            // Block this thread for 4 seconds.
-                            try {
-                                Thread.sleep(4000);
-                            } catch (InterruptedException e) {
-                            }
-
-                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    etUsername.setError("Username already exists");
-                                    pDialog.dismiss();
-                                }
-                            });
-
-                        }
-
-                    };
-                    thread.start();
-                    return json.getString(Keys.TAG_MESSAGE);
-
-                } else{
-
-                    Thread thread = new Thread() {
-
-                        @Override
-                        public void run() {
-
-                            // Block this thread for 4 seconds.
-                            try {
-                                Thread.sleep(4000);
-                            } catch (InterruptedException e) {
-                            }
-
-                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(),
-                                            "Successfully registered",
-                                            Toast.LENGTH_LONG).show();
-                                    clearRegistrationActivity();
-                                    pDialog.dismiss();
-                                }
-                            });
-
-                        }
-
-                    };
-                    thread.start();
-                    return json.getString(Keys.TAG_MESSAGE);
-                }
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return  null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-        }
-    }
 
     protected boolean shouldAskPermissions() {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
@@ -535,5 +514,15 @@ public class RegisterUserActivity extends AppCompatActivity {
         };
         int requestCode = 200;
         requestPermissions(permissions, requestCode);
+    }
+
+    private void showpDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hidepDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 }

@@ -27,4 +27,10 @@ public class Keys{
     public static final String TAG_LNAME = "lastName";
     public static final String TAG_MINITIAL = "middleInitial";
     public static final String TAG_PWORD = "password";
+    public static final String TAG_ERRORS = "error";
+
+    /* Bin Registration Tags*/
+    public static final String TAG_IP_ADDRESS = "ipAddress";
+    public static final String TAG_BIN_NAME = "binName";
+
 }

@@ -22,4 +22,7 @@
     <string name="err_msg_fname">Enter your first name</string>
     <string name="err_msg_lname">Enter your last name</string>
     <string name="err_msg_minitial">Enter your middle initial</string>
+    <string name="err_msg_ip_address">Enter IP address</string>
+    <string name="err_msg_bin_name">Enter bin name</string>
+
 </resources>

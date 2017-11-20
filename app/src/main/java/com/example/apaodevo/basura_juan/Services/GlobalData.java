@@ -28,9 +28,6 @@ public class GlobalData extends Application {
 
         this.image_url = image_url;
     }
-    public void setLoginStatus(String login_status){
-        this.login_status = login_status;
-    }
 
     public void setUsername(String username){
         this.username = username;
