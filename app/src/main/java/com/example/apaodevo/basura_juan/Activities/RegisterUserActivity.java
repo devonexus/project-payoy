@@ -54,6 +54,8 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 
 public class RegisterUserActivity extends AppCompatActivity {
 
@@ -177,7 +179,10 @@ public class RegisterUserActivity extends AppCompatActivity {
 
 
                 displayName = null;
-                Picasso.with(this).load(uri).into(img_user_profile);
+                Picasso.with(this)
+                        .load(uri)
+                        .transform(new CropCircleTransformation())
+                        .into(img_user_profile);
                 if (uri.toString().startsWith("content://")) {
                     Cursor cursor = null;
                     try {
@@ -270,6 +275,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(RegisterUserActivity.this, "Could not get data from server.", Toast.LENGTH_SHORT).show();
                 error.printStackTrace();
+                hidepDialog();
             }
         }){
             @Override

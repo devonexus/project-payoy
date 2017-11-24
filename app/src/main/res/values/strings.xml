@@ -24,5 +24,13 @@
     <string name="err_msg_minitial">Enter your middle initial</string>
     <string name="err_msg_ip_address">Enter IP address</string>
     <string name="err_msg_bin_name">Enter bin name</string>
+    <string name="hotlist">Notification here</string>
+    
+    <string-array name="nav_item_activity_titles">
+        <item>Account Settings</item>
+        <item>List of Registered Bins</item>
+        <item>Deployment History</item>
+        <item>Logout</item>
+    </string-array>
 
 </resources>

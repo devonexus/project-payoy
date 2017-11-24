@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -226,7 +225,9 @@ public class LoginActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(LoginActivity.this, "Could not get data from the server.", Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+                hidepDialog();
             }
         }){
             @Override

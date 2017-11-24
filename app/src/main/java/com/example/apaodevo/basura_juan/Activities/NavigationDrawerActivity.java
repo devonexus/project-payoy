@@ -22,15 +22,24 @@ import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.squareup.picasso.Picasso;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class NavigationDrawerActivity extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    private int navItemIndex = 0;
     protected DrawerLayout drawer;
     protected FloatingActionButton fab;
+    private NavigationView navigationView;
     private TextView tv_fullname, tv_email;
     private String fullName, imageUrl, emailAddress;    //Navigation Header data
     private ImageView img_login_user_image;
+
+    private static final String TAG_HOME = "home";
+    public static String CURRENT_TAG = TAG_HOME;    
+
+
     GlobalData globalData;
+    private ActionBarDrawerToggle toggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +54,7 @@ public class NavigationDrawerActivity extends ActionBarActivity implements Navig
 
 
         // /Set text in navigation drawer header
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header=navigationView.getHeaderView(0);
         img_login_user_image    = (ImageView) header.findViewById(R.id.img_navigation_user_profile_image);
@@ -57,6 +66,7 @@ public class NavigationDrawerActivity extends ActionBarActivity implements Navig
 
         Picasso.with(this)
                 .load(imageUrl)
+                .transform(new CropCircleTransformation())
                 .placeholder(R.drawable.basurajuan_logo)    /* This loads the image from the server */
                 .error(R.drawable.bin_list)
                 .into(img_login_user_image);
@@ -74,14 +84,19 @@ public class NavigationDrawerActivity extends ActionBarActivity implements Navig
         });
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
 
-
-
+        if (savedInstanceState == null) {
+            navItemIndex = 0;
+            CURRENT_TAG = TAG_HOME;
+            //loadHomeFragment();
+        }
 
     }
     private void castObjects(){
@@ -135,6 +150,7 @@ public class NavigationDrawerActivity extends ActionBarActivity implements Navig
         } else if (id == R.id.nav_bin_list) {
 
         } else if (id == R.id.nav_deployment_history) {
+            navItemIndex = 2;
             startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
         } else if (id == R.id.nav_logout) {
             signOut();
@@ -175,4 +191,10 @@ public class NavigationDrawerActivity extends ActionBarActivity implements Navig
         });
         builder.show();
     }
+    private void selectNavMenu(){
+        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+    }//Selecting navigation drawer item
+
+
+
 }
