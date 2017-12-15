@@ -27,7 +27,6 @@ import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
-import com.example.apaodevo.basura_juan.Services.JSONParser;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 
 
@@ -39,14 +38,14 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     protected String enteredUsername, enteredPassword;
     private String json_response;
-    private JSONParser jsonParser = new JSONParser();
+
 
 
     //JSON Responses
     private int success;
     private String image_url, email, response, username, password, firstName, lastName, middleInitial;
-    public static String LOGIN_URL = "http://132.223.41.121/login.php";
-//    public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
+//    public static String LOGIN_URL = "http://132.223.41.121/login.php";
+    public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

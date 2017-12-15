@@ -22,13 +22,13 @@ public class DeployBinActivity extends NavigationDrawerActivity{
         drawer.addView(contentView, 0);
     
         //get the spinner from the xml.
-            Spinner dropdown = (Spinner)findViewById(R.id.spinner1);
-    //create a list of items for the spinner.
-            String[] items = new String[]{"Bin 1", "Bin 2", "Bin 3"};
-    //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-    //There are multiple variations of this, but this is the basic variant.
+        Spinner dropdown = (Spinner)findViewById(R.id.spinner1);
+        //create a list of items for the spinner.
+        String[] items = new String[]{"Bin 1", "Bin 2", "Bin 3"};
+        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
+        //There are multiple variations of this, but this is the basic variant.
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
-    //set the spinners adapter to the previously created one.
+        //set the spinners adapter to the previously created one.
             dropdown.setAdapter(adapter);
         fab.setImageResource(R.drawable.deploy);
     }

@@ -8,4 +8,10 @@
     <color name="colorMediumSeaGreen">#3CB371</color>
     <color name="colorAquamartine">#458b74</color>
     <color name="colorDarkGray">#696969</color>
+
+    <!--This is for the bin list-->
+
+    <color name="bg_row_background">#fa315b</color>
+    <color name="colorBinName">#535353</color>
+    <color name="colorBinIpAddress">#a9a9a9</color>
 </resources>

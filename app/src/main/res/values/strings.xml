@@ -25,7 +25,8 @@
     <string name="err_msg_ip_address">Enter IP address</string>
     <string name="err_msg_bin_name">Enter bin name</string>
     <string name="hotlist">Notification here</string>
-    
+    <string name="binlist_activity">List of Bins</string>
+    <string name="delete">DELETE</string>
     <string-array name="nav_item_activity_titles">
         <item>Account Settings</item>
         <item>List of Registered Bins</item>
