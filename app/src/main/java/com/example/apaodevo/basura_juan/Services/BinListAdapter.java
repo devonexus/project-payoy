@@ -59,11 +59,11 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
     public void onBindViewHolder(BinListAdapter.MyViewHolder holder, int position) {
         BinModel binModel = binList.get(position);
         holder.textViewBinName.setText(binModel.getBinName());
-        holder.textViewBinIpAddress.setText(binModel.getBinIpAdrress());
+        holder.textViewBinIpAddress.setText(binModel.getBinIpAddress());
         holder.textViewBinId.setText(binModel.getBinId());
 
         Picasso.with(context)
-                .load(R.drawable.bin_list)
+                .load(R.drawable.bin_list_icon)
                 .transform(new CropCircleTransformation())
                 .into(holder.thumbNail);
     }

@@ -55,9 +55,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
     private Button btn_update;
     private ImageView imageView;
     private Uri uri;
-
     public static String UPDATE_USER_URL= "http://132.223.41.121/update-user.php"; //WEB Service URL
-
     private static int RESULT_LOAD_IMAGE = 1;
     private String image_path, displayName, encodedImage;
     private static String lastName, firstName, middleInitial, email, userName, passWord, imageUrl; /*Store user profile data*/
@@ -110,7 +108,9 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         etuname.setText(userName);
         etpword.setText(passWord);
 
-        Picasso.with(this).load(imageUrl).into(imageView);
+        Picasso.with(this).load(imageUrl)
+                .transform(new CropCircleTransformation())
+                .into(imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

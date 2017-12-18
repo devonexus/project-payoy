@@ -13,5 +13,5 @@
 
     <color name="bg_row_background">#fa315b</color>
     <color name="colorBinName">#535353</color>
-    <color name="colorBinIpAddress">#a9a9a9</color>
+    <color name="colorBinIpAddress">#006400</color>
 </resources>

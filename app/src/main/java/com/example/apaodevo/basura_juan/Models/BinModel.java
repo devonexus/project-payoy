@@ -5,12 +5,12 @@ package com.example.apaodevo.basura_juan.Models;
  */
 
 public class BinModel {
-    private String binName, binIpAdrress, binId;
+    private String binName, binIpAddress, binId;
 
 
     public BinModel(String name, String address, String id) {
         this.binName = name;
-        this.binIpAdrress = address;
+        this.binIpAddress = address;
         this.binId = id;
     }
     public String getBinName() {
@@ -21,12 +21,14 @@ public class BinModel {
         this.binName = binName;
     }
 
-    public String getBinIpAdrress() {
-        return binIpAdrress;
+    public String getBinIpAddress()
+    {
+        return binIpAddress;
     }
 
-    public void setBinIpAdrress(String binIpAdrress) {
-        this.binIpAdrress = binIpAdrress;
+    public void setBinIpAdrress(String binIpAddress) {
+
+        this.binIpAddress = binIpAddress;
     }
 
     public String getBinId() {

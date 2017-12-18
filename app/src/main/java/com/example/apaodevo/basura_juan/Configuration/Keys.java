@@ -7,6 +7,8 @@ package com.example.apaodevo.basura_juan.Configuration;
 
 public class Keys{
      /* Post Data*/
+
+
      public static final String TAG_USERNAME = "username";
      public static final String TAG_PASSWORD = "password";
      public  static final String TAG_FIRSTNAME = "fname";
@@ -27,10 +29,13 @@ public class Keys{
     public static final String TAG_LNAME = "lastName";
     public static final String TAG_MINITIAL = "middleInitial";
     public static final String TAG_PWORD = "password";
-    public static final String TAG_ERRORS = "error";
+
 
     /* Bin Registration Tags*/
     public static final String TAG_IP_ADDRESS = "ipAddress";
     public static final String TAG_BIN_NAME = "binName";
 
+
+    /*Error log tag*/
+    public static final String TAG_ERRORS = "error";
 }
