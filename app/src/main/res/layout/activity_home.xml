@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< HEAD
-    android:background="@drawable/hom_bg"
-=======
+
+
+
     android:background="@color/colorBg"
->>>>>>> 5a9f060a90ea8ac5ea273a9b3e21c7e5934029e8
+
     tools:context="com.example.apaodevo.basura_juan.Activities.HomeActivity">
 
     <Button

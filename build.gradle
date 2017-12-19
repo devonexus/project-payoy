@@ -13,15 +13,14 @@ buildscript {
 }
 allprojects {
     repositories {
-<<<<<<< HEAD
+
         jcenter()
         maven {
             url "http://dl.bintray.com/macroyau/maven"
         }
-=======
+
         maven { url "http://jcenter.bintray.com"}
 
->>>>>>> 5a9f060a90ea8ac5ea273a9b3e21c7e5934029e8
     }
 }
 task clean(type: Delete) {

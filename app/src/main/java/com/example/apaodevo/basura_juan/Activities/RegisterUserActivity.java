@@ -67,11 +67,11 @@ public class RegisterUserActivity extends AppCompatActivity {
     private EditText etFname, etMinitial, etLname, etEmail, etUsername, etPassword;
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
     private ProgressDialog pDialog;
-<<<<<<< HEAD
+
     //public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
-=======
+
 //    public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
->>>>>>> 5a9f060a90ea8ac5ea273a9b3e21c7e5934029e8
+
     public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
     private Uri uri;
     private String displayName;

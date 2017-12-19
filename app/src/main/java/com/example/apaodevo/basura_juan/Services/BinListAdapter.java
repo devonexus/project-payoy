@@ -72,6 +72,7 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
     public void onBindViewHolder(BinListAdapter.MyViewHolder holder, int position) {
         BinModel binModel = binList.get(position);
         holder.textViewBinName.setText(binModel.getBinName());
+        holder.textViewBinId.setVisibility(View.GONE);
         holder.textViewBinIpAddress.setText(binModel.getBinIpAddress());
         holder.textViewBinId.setText(binModel.getBinId());
 

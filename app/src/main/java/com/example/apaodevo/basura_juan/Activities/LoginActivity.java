@@ -44,11 +44,11 @@ public class LoginActivity extends AppCompatActivity {
     //JSON Responses
     private int success;
     private String image_url, email, response, username, password, firstName, lastName, middleInitial;
-<<<<<<< HEAD
+
    // public static String LOGIN_URL = "http://132.223.41.121/login.php";
-=======
+
 //    public static String LOGIN_URL = "http://132.223.41.121/login.php";
->>>>>>> 5a9f060a90ea8ac5ea273a9b3e21c7e5934029e8
+
     public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
 
     @Override
