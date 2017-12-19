@@ -438,7 +438,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         return true;
     }   //Validate email format
 
-
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

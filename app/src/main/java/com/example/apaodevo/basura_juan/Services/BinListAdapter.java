@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
@@ -25,11 +28,21 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
     private Context context;
     private List<BinModel> binList;
 
+
+
     public BinListAdapter(Context context, List<BinModel> binList) {
         this.context = context;
         this.binList = binList;
+
     }
 
+
+
+
+
+    public interface BinListAdapterListener {
+        void onBinSelected(BinModel binModel);
+    }
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView textViewBinName, textViewBinIpAddress, textViewBinId;
         public ImageView thumbNail;
@@ -70,6 +83,7 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
 
     @Override
     public int getItemCount() {
+
         return binList.size();
     }
 
@@ -87,4 +101,9 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
         // notify item added by position
         notifyItemInserted(position);
     }
+    public void updateList(List<BinModel> list){
+        binList = list;
+        notifyDataSetChanged();
+    }//This is used to update the list after triggering edit text
+
 }

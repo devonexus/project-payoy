@@ -34,7 +34,7 @@ public class Keys{
     /* Bin Registration Tags*/
     public static final String TAG_IP_ADDRESS = "ipAddress";
     public static final String TAG_BIN_NAME = "binName";
-
+    public static final String TAG_BIN_ID = "binId";
 
     /*Error log tag*/
     public static final String TAG_ERRORS = "error";

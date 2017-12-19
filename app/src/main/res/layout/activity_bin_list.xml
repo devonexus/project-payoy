@@ -22,5 +22,6 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_bin_list"></include>
+    <include layout="@layout/content_bin_list"
+        android:layout_height="471dp"></include>
 </android.support.design.widget.CoordinatorLayout>

@@ -28,6 +28,7 @@
     <string name="hotlist">Notification here</string>
     <string name="binlist_activity">List of Bins</string>
     <string name="delete">DELETE</string>
+    <string name="search_placeholder">Search Bin Name</string>
     <string-array name="nav_item_activity_titles">
         <item>Account Settings</item>
         <item>List of Registered Bins</item>
