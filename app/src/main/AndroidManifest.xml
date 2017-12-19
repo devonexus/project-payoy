@@ -26,16 +26,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.BinListActivity"
+            android:launchMode="singleTask"
+            android:label="@string/binlist_activity">
 
+        </activity>
         <activity android:name=".Activities.HomeActivity">
 
         </activity>
         <activity
             android:name=".Activities.NavigationDrawerActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme"/>
         <!--android:label="@string/title_toolbar"-->
         <activity android:name=".Activities.BinLocationActivity" />
         <activity android:name=".Activities.DeployBinActivity"
+            android:label="@string/deployment_history_activity"
             android:launchMode="singleTask">
         </activity>
         <activity android:name=".Activities.RegisterBin"></activity>
@@ -43,6 +49,7 @@
         </activity>
         <activity android:name=".Activities.NavigateBin"></activity>
         <activity android:name=".Activities.UserProfileActivity"
+            android:label="@string/user_profile_activity"
             android:launchMode="singleTask">
         </activity>
 

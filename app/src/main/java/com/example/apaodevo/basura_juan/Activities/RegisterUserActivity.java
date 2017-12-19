@@ -39,7 +39,6 @@ import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
-import com.example.apaodevo.basura_juan.Services.JSONParser;
 import com.example.apaodevo.basura_juan.Services.PathUtil;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.kosalgeek.android.imagebase64encoder.ImageBase64;
@@ -68,13 +67,17 @@ public class RegisterUserActivity extends AppCompatActivity {
     private EditText etFname, etMinitial, etLname, etEmail, etUsername, etPassword;
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
     private ProgressDialog pDialog;
+<<<<<<< HEAD
     //public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
+=======
+//    public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
+>>>>>>> 5a9f060a90ea8ac5ea273a9b3e21c7e5934029e8
     public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
     private Uri uri;
     private String displayName;
 
     private int success; //JSON Result
-    private JSONParser jsonParser = new JSONParser(); //JSON Parser Class to make HTTP Request...
+
     private static int RESULT_LOAD_IMAGE = 1;
     //Post data variables
 
@@ -438,7 +441,6 @@ public class RegisterUserActivity extends AppCompatActivity {
 
         return true;
     }   //Validate email format
-
 
     private void requestFocus(View view) {
         if (view.requestFocus()) {

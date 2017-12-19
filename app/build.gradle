@@ -27,13 +27,15 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.android.gms:play-services-maps:10.2.4'
-    compile 'org.apache.httpcomponents:httpcore:4.4.1'
-    compile 'org.apache.httpcomponents:httpclient:4.5'
+    compile 'com.google.code.gson:gson:2.8.2'
     compile 'jp.wasabeef:picasso-transformations:2.1.2'
     compile 'com.android.volley:volley:1.0.0'
     testCompile 'junit:junit:4.12'
     compile files('libs/ImageBase64Encoder.jar')
+<<<<<<< HEAD
     compile 'com.macroyau:blue2serial:0.1.5'
+=======
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+>>>>>>> 5a9f060a90ea8ac5ea273a9b3e21c7e5934029e8
 }

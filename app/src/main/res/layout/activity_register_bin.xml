@@ -45,18 +45,21 @@
             android:singleLine="true" />
     </android.support.design.widget.TextInputLayout>
     <TextView
+
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="62dp"
-        android:layout_marginTop="62dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="70dp"
         android:text="Currently connected to: "
         android:textStyle="bold" />
     <Button
         android:id="@+id/btn_reg_bin"
-
+        android:backgroundTint="@color/colorMaroon"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/rounded_edittext"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

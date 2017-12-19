@@ -6,4 +6,10 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">0dp</dimen>
     <dimen tools:override="true" name="design_fab_image_size">56dp</dimen>
+
+    <!--This is for the bin list-->
+    <dimen name="activity_padding_horizontal">16dp</dimen>
+    <dimen name="padd_10">10dp</dimen>
+    <dimen name="ic_delete">30dp</dimen>
+    <dimen name="thumbnail">60dp</dimen>
 </resources>

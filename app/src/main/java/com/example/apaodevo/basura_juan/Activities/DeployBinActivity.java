@@ -1,16 +1,21 @@
 package com.example.apaodevo.basura_juan.Activities;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.example.apaodevo.basura_juan.R;
 
 public class DeployBinActivity extends NavigationDrawerActivity{
 
+
+    private Button btnDeploy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,14 +27,18 @@ public class DeployBinActivity extends NavigationDrawerActivity{
         drawer.addView(contentView, 0);
     
         //get the spinner from the xml.
-            Spinner dropdown = (Spinner)findViewById(R.id.spinner1);
-    //create a list of items for the spinner.
-            String[] items = new String[]{"Bin 1", "Bin 2", "Bin 3"};
-    //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-    //There are multiple variations of this, but this is the basic variant.
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
-    //set the spinners adapter to the previously created one.
-            dropdown.setAdapter(adapter);
+        Spinner dropdown = (Spinner)findViewById(R.id.spinner1);
+        btnDeploy   = (Button) findViewById(R.id.btn_deploy);
+        //create a list of items for the spinner.
+        String[] items = new String[]{"Bin 1", "Bin 2", "Bin 3"};
+        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
+        //There are multiple variations of this, but this is the basic variant.
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        //set the spinners adapter to the previously created one.
+        dropdown.setAdapter(adapter);
         fab.setImageResource(R.drawable.deploy);
+
+        GradientDrawable sd = (GradientDrawable) btnDeploy.getBackground();
+        sd.setColor(Color.rgb(199, 0, 57));
     }
 }

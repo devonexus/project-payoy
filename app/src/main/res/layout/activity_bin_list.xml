@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    tools:context="com.example.apaodevo.basura_juan.Activities.BinListActivity"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar android:layout_height="wrap_content"
+            android:id="@+id/binlistToolBar"
+            android:layout_width="match_parent"
+            android:background="@android:color/white"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_bin_list"
+        android:layout_height="471dp"></include>
+</android.support.design.widget.CoordinatorLayout>

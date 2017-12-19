@@ -19,18 +19,25 @@
     <string name="err_msg_email">Enter a valid email</string>
     <string name="err_msg_name">Enter your username</string>
     <string name="err_msg_password">Enter the password</string>
-
+    <string name="deployment_history_activity">Deployment History</string>
+    <string name="user_profile_activity">Account Settings</string>
     <string name="err_msg_fname">Enter your first name</string>
     <string name="err_msg_lname">Enter your last name</string>
     <string name="err_msg_minitial">Enter your middle initial</string>
     <string name="err_msg_ip_address">Enter IP address</string>
     <string name="err_msg_bin_name">Enter bin name</string>
     <string name="hotlist">Notification here</string>
+<<<<<<< HEAD
     <string name="none_paired">No pair device</string>
     <string name="scanning">Scanning device</string>
     <string name="select_device">Selected Device</string>
     <string name="none_found">No Device found</string>
     <string name="paired_devices">Choose a paired Bluetooth device</string>
+=======
+    <string name="binlist_activity">List of Bins</string>
+    <string name="delete">DELETE</string>
+    <string name="search_placeholder">Search Bin Name</string>
+>>>>>>> 5a9f060a90ea8ac5ea273a9b3e21c7e5934029e8
     <string-array name="nav_item_activity_titles">
         <item>Account Settings</item>
         <item>List of Registered Bins</item>

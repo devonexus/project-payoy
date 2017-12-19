@@ -11,6 +11,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
-public class NavigationDrawerActivity extends ActionBarActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class NavigationDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private int navItemIndex = 0;
     protected DrawerLayout drawer;
@@ -67,7 +68,7 @@ public class NavigationDrawerActivity extends ActionBarActivity implements Navig
         Picasso.with(this)
                 .load(imageUrl)
                 .transform(new CropCircleTransformation())
-                .placeholder(R.drawable.basurajuan_logo)    /* This loads the image from the server */
+                .placeholder(R.drawable.basurajuan_logo)     //This loads the image from the server
                 .error(R.drawable.bin_list)
                 .into(img_login_user_image);
 
@@ -148,7 +149,7 @@ public class NavigationDrawerActivity extends ActionBarActivity implements Navig
             startActivity(new Intent(getApplicationContext(), UserProfileActivity.class));
             // Handle the camera action
         } else if (id == R.id.nav_bin_list) {
-
+            startActivity(new Intent(getApplicationContext(), BinListActivity.class));
         } else if (id == R.id.nav_deployment_history) {
             navItemIndex = 2;
             startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
