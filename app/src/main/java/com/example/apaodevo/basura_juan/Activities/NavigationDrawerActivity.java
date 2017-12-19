@@ -94,13 +94,13 @@ public class NavigationDrawerActivity extends ActionBarActivity implements Navig
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
-            CURRENT_TAG = TAG_HOME;
+            CURRENT_TAG  = TAG_HOME;
             //loadHomeFragment();
         }
 
     }
     private void castObjects(){
-        tv_fullname                     = (TextView) findViewById(R.id.tvFullName);
+        tv_fullname             = (TextView) findViewById(R.id.tvFullName);
         fab                     = (FloatingActionButton) findViewById(R.id.fab);
 
     }//Cast objects and point it to the object name

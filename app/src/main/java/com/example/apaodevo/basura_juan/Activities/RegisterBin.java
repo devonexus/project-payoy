@@ -28,8 +28,8 @@ import java.util.Map;
 
 public class RegisterBin extends NavigationDrawerActivity {
 
-    public static String BIN_REG_URL = "http://132.223.41.121/bin-registration.php";
-    //public static String BIN_REG_URL = "http://basurajuan.x10host.com/bin-registration.php";
+    //public static String BIN_REG_URL = "http://132.223.41.121/bin-registration.php";
+    public static String BIN_REG_URL = "http://basurajuan.x10host.com/bin-registration.php";
     private TextView etIpAddress, etBinName;
     private Button btn_register_bin;
     private ProgressDialog pDialog;

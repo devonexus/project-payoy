@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
 
 
     <application
@@ -17,7 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.RegisterUserActivity"></activity>
-
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,18 +34,19 @@
             android:name=".Activities.NavigationDrawerActivity"
             android:theme="@style/AppTheme"/>
         <!--android:label="@string/title_toolbar"-->
-
         <activity android:name=".Activities.BinLocationActivity" />
         <activity android:name=".Activities.DeployBinActivity"
             android:launchMode="singleTask">
-
         </activity>
         <activity android:name=".Activities.RegisterBin"></activity>
+        <activity android:name=".Activities.DeviceList">
+        </activity>
         <activity android:name=".Activities.NavigateBin"></activity>
         <activity android:name=".Activities.UserProfileActivity"
             android:launchMode="singleTask">
-
         </activity>
+
+        <activity android:name=".Activities.BinNavigation"></activity>
     </application>
 
 </manifest>

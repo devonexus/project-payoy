@@ -64,7 +64,7 @@ public class HomeActivity extends NavigationDrawerActivity{
         btn_navigate_bin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), NavigateBin.class));
+                startActivity(new Intent(getApplicationContext(), DeviceList.class));
             }
         });
 
