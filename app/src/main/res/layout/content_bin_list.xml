@@ -15,9 +15,9 @@
 
                 <EditText
                     android:id="@+id/search_bin"
-                    android:layout_width="300dp"
+                    android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="15dp"
                     android:backgroundTint="@color/colorWhite"
                     android:drawableLeft="@drawable/search_icon"
                     android:drawablePadding="@android:dimen/app_icon_size"
