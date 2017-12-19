@@ -2,6 +2,8 @@ package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,7 @@ public class RegisterBin extends NavigationDrawerActivity {
     private Button btn_register_bin;
     private ProgressDialog pDialog;
     private String ip_address, bin_name;
+    private Button registerBin;
     /*private String ip_address, bin_name;*/ /* Variables  to store post data*/
 
 
@@ -47,6 +50,8 @@ public class RegisterBin extends NavigationDrawerActivity {
         drawer.addView(contentView, 0);
         fab.setImageResource(R.drawable.floating_action_register_bin);
         castObjects();
+        registerBin     = (Button) findViewById(R.id.btn_reg_bin);
+
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Creating bin...");
