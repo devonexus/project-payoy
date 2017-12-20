@@ -58,18 +58,6 @@ public class LoginActivity extends AppCompatActivity {
         user  = (EditText) findViewById(R.id.editText);
         pass  = (EditText) findViewById(R.id.editText2);
 
-        //Set runtime color for buttons
-        GradientDrawable sd = (GradientDrawable) blogin.getBackground();
-        sd.setColor(Color.rgb(0, 191, 255));
-
-        GradientDrawable sd1 = (GradientDrawable) bregister.getBackground();
-        sd1.setColor(Color.rgb(199, 0, 57));
-
-        GradientDrawable sd2 = (GradientDrawable) user.getBackground();
-        sd2.setColor(Color.WHITE);
-
-        GradientDrawable sd3 = (GradientDrawable) pass.getBackground();
-        sd3.setColor(Color.WHITE);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Signing in, Please wait...");

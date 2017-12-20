@@ -51,6 +51,7 @@
 
     <Button
         android:id="@+id/btn_deploy"
+        android:backgroundTint="@color/colorMaroon"
         android:layout_width="300dp"
         android:textColor="@color/colorWhite"
         android:layout_centerInParent="true"

@@ -9,6 +9,7 @@
 
     <Button
         android:id="@+id/button2"
+        android:backgroundTint="@color/colorMaroon"
         android:layout_width="260dp"
         android:layout_height="45dp"
         android:textStyle="bold"
@@ -70,6 +71,7 @@
 
     <Button
         android:id="@+id/button"
+        android:backgroundTint="@color/colorDeepSkyblueButton"
         android:layout_width="260dp"
         android:layout_height="45dp"
         android:layout_above="@+id/button2"
