@@ -1,12 +1,12 @@
 package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -34,7 +34,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     private TextView tv_fullname, tv_email;
     private String fullName, imageUrl, emailAddress;    //Navigation Header data
     private ImageView img_login_user_image;
-
+    private ProgressDialog pDialog;
     private static final String TAG_HOME = "home";
     public static String CURRENT_TAG = TAG_HOME;    
 
@@ -92,16 +92,10 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
-        if (savedInstanceState == null) {
-            navItemIndex = 0;
-            CURRENT_TAG = TAG_HOME;
-            //loadHomeFragment();
-        }
-
+        initializeProgressDialogState();
     }
     private void castObjects(){
-        tv_fullname                     = (TextView) findViewById(R.id.tvFullName);
+        tv_fullname             = (TextView) findViewById(R.id.tvFullName);
         fab                     = (FloatingActionButton) findViewById(R.id.fab);
 
     }//Cast objects and point it to the object name
@@ -110,6 +104,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+
         } else {
             super.onBackPressed();
         }
@@ -136,6 +131,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -164,31 +161,65 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         return true;
     }
     private void signOut(){
-        showMessage("Message","Are you sure you want to logout?");
+        showMessage("Logout","Are you sure you want to logout?");
+    }
+
+    private void initializeProgressDialogState(){
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Signing out, Please wait...");
+        pDialog.setCancelable(false);
     }
     public void showMessage(String title,String Message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         builder.setCancelable(true);
         builder.setTitle(title);
-        builder.setMessage(Message);
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(NavigationDrawerActivity.this, LoginActivity.class);
-                intent.putExtra("LOGIN_STATUS", false);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK); // To clean up all activities
-                startActivity(intent);
-                finish();
 
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setMessage(Message);
+        builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
+        });
+        builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                showpDialog();
+                Thread thread = new Thread() {
+
+                    @Override
+                    public void run() {
+
+                        // Block this thread for 4 seconds.al
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                intent.putExtra("LOGIN_STATUS", false);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                        Intent.FLAG_ACTIVITY_NEW_TASK); // To clean up all activities
+                                startActivity(intent);
+                                finish();
+                                hidepDialog();
+                            }
+                        });
+
+                    }
+
+                };
+                thread.start();
+            }
+
         });
         builder.show();
     }
@@ -197,5 +228,13 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     }//Selecting navigation drawer item
 
 
+    private void showpDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }//Display progress dialog
 
+    private void hidepDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }//Dismiss progressDialog
 }

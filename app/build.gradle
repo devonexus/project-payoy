@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
-    useLibrary 'org.apache.http.legacy'
+    buildToolsVersion '26.0.1'
+
     defaultConfig {
         applicationId "com.example.apaodevo.basura_juan"
         minSdkVersion 17
@@ -34,5 +34,8 @@ dependencies {
     compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
     testCompile 'junit:junit:4.12'
     compile files('libs/ImageBase64Encoder.jar')
+
+    compile 'com.macroyau:blue2serial:0.1.5'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
 }

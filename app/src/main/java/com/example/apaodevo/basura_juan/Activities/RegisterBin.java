@@ -2,10 +2,12 @@ package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -35,8 +37,8 @@ import java.util.Map;
 
 public class RegisterBin extends NavigationDrawerActivity {
 
-    public static String BIN_REG_URL = "http://132.223.41.121/bin-registration.php";
-    //public static String BIN_REG_URL = "http://basurajuan.x10host.com/bin-registration.php";
+    //public static String BIN_REG_URL = "http://132.223.41.121/bin-registration.php";
+    public static String BIN_REG_URL = "http://basurajuan.x10host.com/bin-registration.php";
     private TextView etIpAddress, etBinName;
     private Button btn_register_bin;
     private ProgressDialog pDialog;
@@ -76,7 +78,7 @@ public class RegisterBin extends NavigationDrawerActivity {
             }
         });
 
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+        final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
 
                 .setBackgroundDrawable(R.drawable.floating_action_register_bin)
                 .build();
@@ -91,19 +93,68 @@ public class RegisterBin extends NavigationDrawerActivity {
         ImageView itemIcon3 = new ImageView(this);
         itemIcon3.setImageResource(R.drawable.floating_navigate_bin);
 
-        SubActionButton button1 = itemBuilder
-                .setBackgroundDrawable(ContextCompat.getDrawable(RegisterBin.this, R.drawable.bin_location_icon))
+        final SubActionButton sabLocateBin = itemBuilder
+                .setContentView(itemIcon1)
                 .build();
-        SubActionButton button2 = itemBuilder.setContentView(itemIcon2).build();
-        SubActionButton button3 = itemBuilder.setContentView(itemIcon3).build();
+        final SubActionButton sabDeployBin = itemBuilder.setContentView(itemIcon2).build();
+        final SubActionButton sabNavigateBin = itemBuilder.setContentView(itemIcon3).build();
 
         //attach the sub buttons to the main button
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(button1)
-                .addSubActionView(button2)
-                .addSubActionView(button3)
+                .addSubActionView(sabLocateBin)
+                .addSubActionView(sabDeployBin)
+                .addSubActionView(sabNavigateBin)
                 .attachTo(actionButton)
                 .build();
+
+
+        sabNavigateBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), NavigateBin.class));
+            }
+        });
+
+        sabLocateBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), BinLocationActivity.class));
+            }
+        });
+        sabDeployBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+            }
+        });
+
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                actionButton.setVisibility(View.INVISIBLE);
+                sabLocateBin.setVisibility(View.INVISIBLE);
+                sabNavigateBin.setVisibility(View.INVISIBLE);
+                sabDeployBin.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                actionButton.setVisibility(View.VISIBLE);
+                sabLocateBin.setVisibility(View.VISIBLE);
+                sabNavigateBin.setVisibility(View.VISIBLE);
+                sabDeployBin.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     public void castObjects(){

@@ -89,8 +89,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         inputUsername   = (TextInputLayout) findViewById(R.id.input_uname);
         inputPassword   = (TextInputLayout) findViewById(R.id.input_pword);
         inputEmail      = (TextInputLayout) findViewById(R.id.input_email);
-        GradientDrawable sd = (GradientDrawable) btn_update.getBackground();
-        sd.setColor(Color.rgb(199, 0, 57));
+
 
         /* Get data from loggedin user*/
         lastName        = globalData.getLastname();

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Basura_Juan</string>
     <string name="hint_fname">First Name</string>
+    <string name="hint_disconnect">Disconnect</string>
     <string name="hint_email">Email</string>
     <string name="hint_mname">Middle Initial</string>
     <string name="hint_lname">Last Name</string>
@@ -26,9 +27,14 @@
     <string name="err_msg_ip_address">Enter IP address</string>
     <string name="err_msg_bin_name">Enter bin name</string>
     <string name="hotlist">Notification here</string>
+    <string name="none_paired">No pair device</string>
+    <string name="scanning">Scanning device</string>
+    <string name="select_device">Selected Device</string>
+    <string name="none_found">No Device found</string>
+    <string name="paired_devices">Choose a paired Bluetooth device</string>
     <string name="binlist_activity">List of Bins</string>
     <string name="delete">DELETE</string>
-    <string name="search_placeholder">Search Bin Name</string>
+    <string name="search_placeholder">Search bin name...</string>
     <string-array name="nav_item_activity_titles">
         <item>Account Settings</item>
         <item>List of Registered Bins</item>

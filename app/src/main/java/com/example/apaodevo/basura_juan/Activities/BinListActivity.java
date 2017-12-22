@@ -60,8 +60,8 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
     private List<BinModel> binList;
     private CoordinatorLayout coordinatorLayout;
     private EditText binSearch;
-    private static final String BIN_LIST_URL = "http://132.223.41.121/bin-list.php";
-//     private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
+//    private static final String BIN_LIST_URL = "http://132.223.41.121/bin-list.php";
+     private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,7 +251,7 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         for(BinModel d: binList){
             //or use .equal(text) with you want equal match
             //use .toLowerCase() for better matches
-            if(d.getBinName().contains(s)){
+            if(d.getBinName().toLowerCase().contains(s)){
                 temp.add(d);
             }
         }

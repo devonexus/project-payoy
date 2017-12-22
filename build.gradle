@@ -13,6 +13,12 @@ buildscript {
 }
 allprojects {
     repositories {
+
+        jcenter()
+        maven {
+            url "http://dl.bintray.com/macroyau/maven"
+        }
+
         maven { url "http://jcenter.bintray.com"}
 
     }

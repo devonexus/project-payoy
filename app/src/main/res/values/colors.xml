@@ -5,14 +5,18 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBg">#FFE39B</color>
-
+    <color name="colorBlack">#34495E</color>
     <color name="colorDeepSkyblueButton">#00BFFF</color>
     <color name="colorMediumSeaGreen">#3CB371</color>
     <color name="colorAquamartine">#458b74</color>
     <color name="colorDarkGray">#696969</color>
     <color name="colorMaroon">#C70039</color>
-    <!--This is for the bin list-->
 
+    <!--This is for the bin list-->
+    <color name="colorPink">#FF1493</color>
+    <color name="colorIndianRed">#CD5C5C</color>
+    <color name="colorNavyBlue">#000080</color>
+    <color name="colorRecyclerItem">#AED6F1</color>
     <color name="bg_row_background">#fa315b</color>
     <color name="colorBinName">#535353</color>
     <color name="colorBinIpAddress">#006400</color>

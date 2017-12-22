@@ -67,7 +67,11 @@ public class RegisterUserActivity extends AppCompatActivity {
     private EditText etFname, etMinitial, etLname, etEmail, etUsername, etPassword;
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
     private ProgressDialog pDialog;
+
+    //public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
+
 //    public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
+
     public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
     private Uri uri;
     private String displayName;
@@ -103,8 +107,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         etUsername  = (EditText) findViewById(R.id.et_uname);
         etPassword  = (EditText) findViewById(R.id.et_pword);
 
-        GradientDrawable sd = (GradientDrawable) bregister.getBackground();
-        sd.setColor(Color.rgb(199, 0, 57));
+
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Registering account...");

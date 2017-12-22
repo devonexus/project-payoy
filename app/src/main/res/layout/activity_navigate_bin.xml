@@ -10,25 +10,25 @@
 
 
     <Button
-        android:id="@+id/button11"
+        android:id="@+id/btnLeft"
         android:layout_width="60dp"
         android:layout_height="50dp"
 
         android:background="@drawable/navigate_left"
-        android:layout_below="@+id/btn_up"
-        android:layout_toStartOf="@+id/btn_up" />
+        android:layout_below="@+id/btnForward"
+        android:layout_toStartOf="@+id/btnForward" />
 
     <Button
-        android:id="@+id/btn_up"
+        android:id="@+id/btnForward"
         android:layout_width="60dp"
         android:layout_height="50dp"
         android:background="@drawable/navigate_up"
         android:gravity="center"
-        android:layout_below="@+id/button4"
+        android:layout_below="@+id/btnAutomationPause"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/btnAutomationPause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -65,17 +65,26 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Move to Post"
-        android:layout_alignBaseline="@+id/button4"
-        android:layout_alignBottom="@+id/button4"
-        android:layout_toEndOf="@+id/button4"
+        android:layout_alignBaseline="@+id/btnAutomationPause"
+        android:layout_alignBottom="@+id/btnAutomationPause"
+        android:layout_toEndOf="@+id/btnAutomationPause"
         android:layout_marginStart="16dp" />
 
     <Button
-        android:id="@+id/button12"
+        android:id="@+id/btnRight"
         android:layout_width="60dp"
         android:layout_height="50dp"
-        android:layout_alignTop="@+id/button11"
-        android:layout_toEndOf="@+id/btn_up"
+        android:layout_below="@+id/btnForward"
+        android:layout_toEndOf="@+id/btnForward"
         android:background="@drawable/navigate_right" />
+
+    <Button
+        android:id="@+id/btnDisconnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAutomationPause"
+        android:layout_toStartOf="@+id/btnLeft"
+        android:text="@string/hint_disconnect" />
+
 
 </RelativeLayout >
