@@ -2,13 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.apaodevo.basura_juan">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality. 
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".Services.GlobalData"
@@ -18,42 +24,51 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.RegisterUserActivity"></activity>
-        <activity android:name=".Activities.LoginActivity">
+        <activity android:name=".Activities.RegisterUserActivity" />
+        <activity android:name=".Activities.LoginActivity" />
+
+        <activity android:name=".Activities.MapsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.BinListActivity"
-            android:launchMode="singleTask"
-            android:label="@string/binlist_activity">
 
-        </activity>
-        <activity android:name=".Activities.HomeActivity">
-
-        </activity>
+        <activity
+            android:name=".Activities.BinListActivity"
+            android:label="@string/binlist_activity"
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".Activities.HomeActivity"></activity>
         <activity
             android:name=".Activities.NavigationDrawerActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme"/>
-        <!--android:label="@string/title_toolbar"-->
+            android:theme="@style/AppTheme" />
+        <!-- android:label="@string/title_toolbar" -->
         <activity android:name=".Activities.BinLocationActivity" />
-        <activity android:name=".Activities.DeployBinActivity"
+        <activity
+            android:name=".Activities.DeployBinActivity"
             android:label="@string/deployment_history_activity"
-            android:launchMode="singleTask">
-        </activity>
-        <activity android:name=".Activities.RegisterBin"></activity>
-        <activity android:name=".Activities.DeviceList">
-        </activity>
-        <activity android:name=".Activities.NavigateBin"></activity>
-        <activity android:name=".Activities.UserProfileActivity"
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".Activities.RegisterBin" />
+        <activity android:name=".Activities.DeviceList"></activity>
+        <activity android:name=".Activities.NavigateBin" />
+        <activity
+            android:name=".Activities.UserProfileActivity"
             android:label="@string/user_profile_activity"
-            android:launchMode="singleTask">
-        </activity>
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".Activities.BinNavigation" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
-        <activity android:name=".Activities.BinNavigation"></activity>
     </application>
 
 </manifest>
