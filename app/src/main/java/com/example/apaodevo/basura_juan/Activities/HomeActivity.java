@@ -91,9 +91,15 @@ public class HomeActivity extends NavigationDrawerActivity{
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         builder.setCancelable(true);
         builder.setTitle(title);
-
+        builder.setIcon(R.drawable.ic_exit_to_app_white_48dp);
         builder.setMessage(Message);
-        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -135,12 +141,6 @@ public class HomeActivity extends NavigationDrawerActivity{
 
                 };
                 thread.start();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
             }
         });
         builder.show();

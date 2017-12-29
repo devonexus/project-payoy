@@ -6,8 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,11 +16,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
+import com.joanzapata.iconify.widget.IconButton;
 import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
@@ -35,11 +39,10 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     private String fullName, imageUrl, emailAddress;    //Navigation Header data
     private ImageView img_login_user_image;
     private ProgressDialog pDialog;
-    private static final String TAG_HOME = "home";
-    public static String CURRENT_TAG = TAG_HOME;    
-
-
+    private AlphaAnimation buttonClick;
+    private Toolbar toolbar;
     GlobalData globalData;
+    private IconButton iconButton;
     private ActionBarDrawerToggle toggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         // /Set text in navigation drawer header
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        buttonClick = new AlphaAnimation(1F, 0.2F);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
         View header=navigationView.getHeaderView(0);
         img_login_user_image    = (ImageView) header.findViewById(R.id.img_navigation_user_profile_image);
         tv_fullname             = (TextView)header.findViewById(R.id.tvFullName);
@@ -73,9 +78,17 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                 .into(img_login_user_image);
 
         //Create toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setLogo(R.mipmap.ic_logo);
 
+
+
+
+        /*toolbar.setNavigationIcon(R.drawable.location_icon);
+        toolbar.setTitle("Title");
+        toolbar.setSubtitle("Sub");*/
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,23 +112,32 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         fab                     = (FloatingActionButton) findViewById(R.id.fab);
 
     }//Cast objects and point it to the object name
-    @Override
-    public void onBackPressed() {
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
 
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation_drawer, menu);
-        return true;
+        RelativeLayout badgeLayout = (RelativeLayout)  menu.findItem(R.id.menu_notification).getActionView();
+        TextView counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
+        counter.setText("10");
+        counter.setVisibility(View.GONE);
+        iconButton = (IconButton) badgeLayout.findViewById(R.id.badge_icon_button);
+        iconButton.setText("{fa-bell}");
+        iconButton.setTextColor(getResources().getColor(R.color.colorNotificationBell));
+       //final View menu_notifications = menu.findItem(R.id.menu_notification).getActionView();
+        iconButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.startAnimation(buttonClick);
+
+                startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -125,9 +147,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -173,7 +193,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         builder.setCancelable(true);
         builder.setTitle(title);
-
+        builder.setIcon(R.drawable.ic_exit_to_app_white_48dp);
         builder.setMessage(Message);
         builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
             @Override
@@ -221,12 +241,12 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
             }
 
         });
+
         builder.show();
     }
     private void selectNavMenu(){
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }//Selecting navigation drawer item
-
 
     private void showpDialog() {
         if (!pDialog.isShowing())

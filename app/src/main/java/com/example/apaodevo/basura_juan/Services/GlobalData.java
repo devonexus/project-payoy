@@ -3,11 +3,25 @@ package com.example.apaodevo.basura_juan.Services;
 import android.app.Application;
 import android.util.StringBuilderPrinter;
 
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.EntypoModule;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.joanzapata.iconify.fonts.IoniconsModule;
+import com.joanzapata.iconify.fonts.MaterialCommunityModule;
+import com.joanzapata.iconify.fonts.MaterialModule;
+import com.joanzapata.iconify.fonts.MeteoconsModule;
+import com.joanzapata.iconify.fonts.SimpleLineIconsModule;
+import com.joanzapata.iconify.fonts.TypiconsModule;
+import com.joanzapata.iconify.fonts.WeathericonsModule;
+
 /**
  * Created by apaodevo on 11/15/2017.
  */
 
 public class GlobalData extends Application {
+
+
+
 
     private String someVariable;
     private String image_url;
@@ -68,5 +82,14 @@ public class GlobalData extends Application {
     }
     public String getMinitial(){
         return middleInitial;
+    }
+
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Iconify
+                .with(new FontAwesomeModule());
     }
 }

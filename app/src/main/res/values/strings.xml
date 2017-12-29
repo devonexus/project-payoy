@@ -41,5 +41,5 @@
         <item>Deployment History</item>
         <item>Logout</item>
     </string-array>
-
+    <string name="notification_item">Notification</string>
 </resources>

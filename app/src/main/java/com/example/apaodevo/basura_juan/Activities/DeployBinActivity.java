@@ -4,28 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.example.apaodevo.basura_juan.Configuration.Keys;
+
 import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
-import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 
@@ -58,7 +48,7 @@ public class DeployBinActivity extends NavigationDrawerActivity{
         //dropdown.setAdapter(adapter);
         fab.setImageResource(R.drawable.deploy);
         fab.setVisibility(View.GONE);
-        loadBinNames();
+        //loadBinNames();
 
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
 
@@ -140,7 +130,7 @@ public class DeployBinActivity extends NavigationDrawerActivity{
         });
     }
 
-    private void loadBinNames() {
+    /*private void loadBinNames() {
 
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, BIN_REG_URL, null,
                 new Response.Listener<JSONArray>() {
@@ -153,9 +143,9 @@ public class DeployBinActivity extends NavigationDrawerActivity{
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
                                 //binNames.add(jsonObject.getString(Keys.TAG_BIN_NAME));
-                              /*  BinModel binModel = new BinModel();
+                              *//*  BinModel binModel = new BinModel();
                                 binModel.setBinName(jsonObject.optString(Keys.TAG_BIN_NAME));
-                                world.add(binModel);*/
+                                world.add(binModel);*//*
                                 //json = jsonObject.getString(Keys.TAG_BIN_NAME);
                                 binNames.add(jsonObject.getString(Keys.TAG_BIN_NAME));
                                 Log.d("XXX", jsonObject.getString(Keys.TAG_BIN_NAME));
@@ -170,10 +160,10 @@ public class DeployBinActivity extends NavigationDrawerActivity{
                         //dropdown.setAdapter(new ArrayAdapter<String>(DeployBinActivity.this, android.R.layout.simple_spinner_dropdown_item, binNames));
 
 
-                       /* Log.d("Recycler View Contents", response.toString());
+                       *//* Log.d("Recycler View Contents", response.toString());
                         List<BinModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<BinModel>>() {
 
-                        }.getType());*/
+                        }.getType());*//*
 
                     }
                 }, new Response.ErrorListener() {
@@ -187,5 +177,5 @@ public class DeployBinActivity extends NavigationDrawerActivity{
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
 
 
-    }
+    }*/
 }
