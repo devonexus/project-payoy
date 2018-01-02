@@ -25,13 +25,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.RegisterUserActivity" />
-        <activity android:name=".Activities.LoginActivity" />
-
-        <activity android:name=".Activities.MapsActivity">
+        <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".Activities.MapsActivity">
+
         </activity>
 
         <activity
@@ -49,13 +51,18 @@
             android:name=".Activities.DeployBinActivity"
             android:label="@string/deployment_history_activity"
             android:launchMode="singleTask"></activity>
-        <activity android:name=".Activities.RegisterBin" />
+
         <activity android:name=".Activities.DeviceList"></activity>
         <activity android:name=".Activities.NavigateBin" />
         <activity
             android:name=".Activities.UserProfileActivity"
-            android:label="@string/user_profile_activity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask">
+        </activity>
+        <activity android:name=".Activities.RegisterBin"
+            android:launchMode="singleTask">
+
+        </activity>
+
         <activity android:name=".Activities.BinNavigation" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

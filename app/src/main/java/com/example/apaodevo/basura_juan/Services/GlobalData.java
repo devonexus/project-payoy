@@ -12,10 +12,26 @@ public class GlobalData extends Application {
     private String someVariable;
     private String image_url;
     private String email_address, username,  password, firstname, login_status, lastname, middleInitial;
-
+    private String latitude, longitude;
     public String getSomeVariable() {
 
         return someVariable;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
     }
 
     public void setSomeVariable(String someVariable) {

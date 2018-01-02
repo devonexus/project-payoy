@@ -107,8 +107,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         etUsername  = (EditText) findViewById(R.id.et_uname);
         etPassword  = (EditText) findViewById(R.id.et_pword);
 
-        GradientDrawable sd = (GradientDrawable) bregister.getBackground();
-        sd.setColor(Color.rgb(199, 0, 57));
+
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Registering account...");

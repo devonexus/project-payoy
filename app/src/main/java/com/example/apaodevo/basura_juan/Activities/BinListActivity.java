@@ -251,7 +251,7 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         for(BinModel d: binList){
             //or use .equal(text) with you want equal match
             //use .toLowerCase() for better matches
-            if(d.getBinName().contains(s)){
+            if(d.getBinName().toLowerCase().contains(s)){
                 temp.add(d);
             }
         }

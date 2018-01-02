@@ -1,16 +1,8 @@
 package com.example.apaodevo.basura_juan.Activities;
 
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -29,27 +21,27 @@ import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class LoginActivity extends AppCompatActivity {
 
-    //Declare objects static String json_response;
+    public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
+    protected String enteredUsername, enteredPassword;
+    /*
+    ** Declare login activity objects
+    */
     private Button bregister, blogin;
     private EditText user, pass;
     private ProgressDialog pDialog;
-    protected String enteredUsername, enteredPassword;
     private String json_response;
-
-
-
-    //JSON Responses
-    private int success;
-    private String image_url, email, response, username, password, firstName, lastName, middleInitial;
-
-   // public static String LOGIN_URL = "http://132.223.41.121/login.php";
-
-//    public static String LOGIN_URL = "http://132.223.41.121/login.php";
-
-    public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
+    private String image_url, email, username, password, firstName, lastName, middleInitial; //Variables to store json response
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +54,6 @@ public class LoginActivity extends AppCompatActivity {
         user  = (EditText) findViewById(R.id.editText);
         pass  = (EditText) findViewById(R.id.editText2);
 
-        //Set runtime color for buttons
-        GradientDrawable sd = (GradientDrawable) blogin.getBackground();
-        sd.setColor(Color.rgb(0, 191, 255));
-
-        GradientDrawable sd1 = (GradientDrawable) bregister.getBackground();
-        sd1.setColor(Color.rgb(199, 0, 57));
-
-        GradientDrawable sd2 = (GradientDrawable) user.getBackground();
-        sd2.setColor(Color.WHITE);
-
-        GradientDrawable sd3 = (GradientDrawable) pass.getBackground();
-        sd3.setColor(Color.WHITE);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Signing in, Please wait...");
@@ -186,13 +166,14 @@ public class LoginActivity extends AppCompatActivity {
                                             globalData.setPassword(pword);
                                             Intent i = new Intent(LoginActivity.this, HomeActivity.class);
                                             startActivity(i);
+                                            finish();
                                             hidepDialog();
                                         }catch(JSONException e){
                                             e.printStackTrace();
                                         }
 
                                     }
-                                }, 1500);
+                                }, 1000);
 
 
                         }else{

@@ -8,11 +8,7 @@ public class BinModel {
     private String binName, binIpAddress, binId;
 
 
-    public BinModel(String name, String address, String id) {
-        this.binName = name;
-        this.binIpAddress = address;
-        this.binId = id;
-    }
+
     public String getBinName() {
         return binName;
     }

@@ -1,6 +1,9 @@
 package com.example.apaodevo.basura_juan.Activities;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -17,7 +20,7 @@ import com.example.apaodevo.basura_juan.R;
 
 public class HomeActivity extends NavigationDrawerActivity{
     private Button btn_bin_location, btn_deploy_bin, btn_register_bin, btn_navigate_bin;
-
+    private ProgressDialog pDialog;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,8 @@ public class HomeActivity extends NavigationDrawerActivity{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(getApplicationContext(), BinLocationActivity.class));
+                        //startActivity(new Intent(getApplicationContext(), BinLocationActivity.class));
+                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                     }
                 }
         );
@@ -67,9 +71,88 @@ public class HomeActivity extends NavigationDrawerActivity{
                 startActivity(new Intent(getApplicationContext(), DeviceList.class));
             }
         });
+        initializeProgressDialogState();
 
 
     }
+    private void initializeProgressDialogState(){
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Signing out, Please wait...");
+        pDialog.setCancelable(false);
+    }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        signOut();
+    }
+    private void signOut(){
+        showMessage("Logout","This is the last activity, going back will log you out of the application.");
+    }
+    public void showMessage(String title,String Message){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+        builder.setCancelable(true);
+        builder.setTitle(title);
 
+        builder.setMessage(Message);
+        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        dialog.dismiss();
+                    }
+                });
+                showpDialog();
+                Thread thread = new Thread() {
 
+                    @Override
+                    public void run() {
+
+                        // Block this thread for 4 seconds.al
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                intent.putExtra("LOGIN_STATUS", false);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                        Intent.FLAG_ACTIVITY_NEW_TASK); // To clean up all activities
+                                startActivity(intent);
+                                finish();
+                                hidepDialog();
+                            }
+                        });
+
+                    }
+
+                };
+                thread.start();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+    private void showpDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }//Display progress dialog
+
+    private void hidepDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }//Dismiss progressDialog
 }

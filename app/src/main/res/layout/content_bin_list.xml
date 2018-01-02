@@ -15,12 +15,14 @@
 
                 <EditText
                     android:id="@+id/search_bin"
+                    android:fontFamily="sans-serif"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="8dp"
                     android:backgroundTint="@color/colorWhite"
                     android:drawableLeft="@drawable/search_icon"
                     android:drawablePadding="@android:dimen/app_icon_size"
+                    android:textColor="@color/colorNavyBlue"
                     android:layout_alignParentRight="true"
                     android:layout_margin="5dp"
                     android:background="@drawable/rounded_edittext"

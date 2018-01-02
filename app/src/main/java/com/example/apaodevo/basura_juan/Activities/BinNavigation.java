@@ -64,4 +64,6 @@ public class BinNavigation extends TabActivity  {
         TabHostWindow.addTab(TabMenu4);
 
     }
+
+
 }

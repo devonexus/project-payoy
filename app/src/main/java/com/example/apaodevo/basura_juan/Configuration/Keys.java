@@ -38,4 +38,8 @@ public class Keys{
 
     /*Error log tag*/
     public static final String TAG_ERRORS = "error";
+
+    /*Bin location tags*/
+    public static final String TAG_BIN_LATITUDE = "lat";
+    public static final String TAG_BIN_LONGITUDE = "long";
 }
