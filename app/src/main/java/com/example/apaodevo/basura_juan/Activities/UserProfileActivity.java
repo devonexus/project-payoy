@@ -107,6 +107,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
 
         Picasso.with(this).load(imageUrl)
                 .transform(new CropCircleTransformation())
+                .resize(220, 220)
                 .error(R.drawable.user_profile_placeholder)
                 .into(imageView);
         imageView.setOnClickListener(new View.OnClickListener() {

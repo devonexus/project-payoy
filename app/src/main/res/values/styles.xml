@@ -18,6 +18,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"></style>
     <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorAccent">@color/colorPink</item>
+        <item name="android:textColorSecondary">@color/colorWhite</item>
         <item name="android:textColorPrimary">@color/colorWhite</item>
         <item name="android:background">@color/colorBlack</item>
     </style>

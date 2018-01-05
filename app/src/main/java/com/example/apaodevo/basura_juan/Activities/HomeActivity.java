@@ -75,7 +75,7 @@ public class HomeActivity extends NavigationDrawerActivity{
 
     }
     private void initializeProgressDialogState(){
-        pDialog = new ProgressDialog(this);
+        pDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
         pDialog.setMessage("Signing out, Please wait...");
         pDialog.setCancelable(false);
     }
