@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    GoogleMap mMap;
     private String BIN_LOCATION_URL = "http://basurajuan.x10host.com/bin-location.php";
    // private double setLatitude = 10.262542, setLongitude = 123.952021;/*This is static longitude*/
     String jsonLatitude, jsonLongitude;
@@ -85,15 +85,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         //getCoordinates(setLatitude, setLongitude);
-        LatLng bin_location = new LatLng(lati, longitude);
+        LatLng bin_location = new LatLng(10.262542, 123.952021);
 //        Toast.makeText(getApplicationContext(), "DATA "+globalData.getLatitude()+" "+globalData.getLongitude(), Toast.LENGTH_SHORT).show();
         Toast.makeText(getApplicationContext(), jsonLatitude + " Sample" + jsonLongitude, Toast.LENGTH_SHORT).show();
 
         mMap.addMarker(new MarkerOptions().position(bin_location).title("BasuraJuan"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bin_location));
-
+        mMap.setMapType(mMap.MAP_TYPE_HYBRID);
     }
-
-
-
 }
