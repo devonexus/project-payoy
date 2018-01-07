@@ -27,6 +27,7 @@ dependencies {
     })
     compile files('libs/ImageBase64Encoder.jar')
 
+
     /*This is only for the icons*/
     // (v3,2015)
     // (v2.0.7)
@@ -36,6 +37,9 @@ dependencies {
     // (v2.0)
     // (v1.0.0)
     // (v2.0.1)
+
+
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.google.android.gms:play-services-maps:10.2.4'
@@ -54,5 +58,8 @@ dependencies {
     compile 'com.joanzapata.iconify:android-iconify-weathericons:2.2.2'
     compile 'com.joanzapata.iconify:android-iconify-simplelineicons:2.2.2'
     compile 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2'
+    compile files('libs/ImageBase64Encoder.jar')
+    compile 'com.macroyau:blue2serial:0.1.5'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 }

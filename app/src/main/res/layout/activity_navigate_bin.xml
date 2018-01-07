@@ -44,8 +44,8 @@
         android:textStyle="bold"
         android:text="Currently connected to: "
 
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="54dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="17dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
@@ -55,8 +55,7 @@
         android:layout_height="wrap_content"
         android:scaleType="center"
         app:srcCompat="@drawable/google_map"
-        android:layout_marginTop="24dp"
-        android:layout_alignTop="@+id/textView3"
+        android:layout_below="@+id/textView3"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -82,9 +81,10 @@
         android:id="@+id/btnDisconnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnAutomationPause"
-        android:layout_toStartOf="@+id/btnLeft"
-        android:text="@string/hint_disconnect" />
+        android:text="@string/hint_disconnect"
+        android:layout_alignBottom="@+id/btnLeft"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="17dp" />
 
 
 </RelativeLayout >

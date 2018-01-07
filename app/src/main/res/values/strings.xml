@@ -42,4 +42,5 @@
         <item>Logout</item>
     </string-array>
     <string name="notification_item">Notification</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

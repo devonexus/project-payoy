@@ -73,6 +73,17 @@ public class NavigateBin extends NavigationDrawerActivity {
 
         new ConnectBT().execute(); //Call the class to connect
 
+        if(auto == "Pause Automation") {
+            btnForward.setEnabled(false);
+            btnLeft.setEnabled(false);
+            btnRight.setEnabled(false);
+        }
+        else
+        {
+            btnForward.setEnabled(true);
+            btnLeft.setEnabled(true);
+            btnRight.setEnabled(true);
+        }
         btnRight.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -80,12 +91,23 @@ public class NavigateBin extends NavigationDrawerActivity {
                 return true;
             }
         });
-
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                turnRight();;
+            }
+        });
         btnLeft.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 turnLeft(); // method to turn Right
                 return true;
+            }
+        });
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                turnLeft();;
             }
         });
 
@@ -96,7 +118,12 @@ public class NavigateBin extends NavigationDrawerActivity {
                 return true;
             }
         });
-
+        btnForward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forward();
+            }
+        });
         btnAutomationpause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,12 +131,18 @@ public class NavigateBin extends NavigationDrawerActivity {
                     StopAutomate(); // method to Stop Automates
                     btnAutomationpause.setText("Automatic");
                     auto = "Automatic";
+                    btnForward.setEnabled(true);
+                    btnLeft.setEnabled(true);
+                    btnRight.setEnabled(true);
                 }
                 else if(auto == "Automatic")
                 {
                     Automation();
                     btnAutomationpause.setText("Pause Automation");
                     auto = "Pause Automation";
+                    btnForward.setEnabled(false);
+                    btnLeft.setEnabled(false);
+                    btnRight.setEnabled(false);
                 }
             }
         });
@@ -235,7 +268,7 @@ public class NavigateBin extends NavigationDrawerActivity {
         {
             try
             {
-                btSocket.getOutputStream().write("5".toString().getBytes());
+                btSocket.getOutputStream().write("0".toString().getBytes());
             }
             catch (IOException e)
             {
