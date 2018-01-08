@@ -29,15 +29,15 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 public class NavigateBin extends NavigationDrawerActivity {
 
-    private Button                  btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect;
-    private String                  address        = null;
-    private ProgressDialog  progress;
-    private BluetoothAdapter        myBluetooth    = null;
-    private BluetoothSocket         btSocket       = null;
-    private boolean         isBtConnected  = false;
+    private Button            btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect;
+    private String            address       = null;
+    private ProgressDialog    progress;
+    private BluetoothAdapter  myBluetooth   = null;
+    private BluetoothSocket   btSocket      = null;
+    private boolean           isBtConnected = false;
     //SPP UUID. Look for it
-    static final UUID myUUID               = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private String auto ="Pause Automation";
+    static final UUID         myUUID        = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private String            auto          ="Pause Automation";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
