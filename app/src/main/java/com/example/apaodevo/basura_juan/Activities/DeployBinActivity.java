@@ -12,6 +12,7 @@ import android.widget.Spinner;
 
 import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
@@ -26,6 +27,8 @@ public class DeployBinActivity extends NavigationDrawerActivity{
     private Spinner dropdown;
     private ArrayList<String> binNames= new ArrayList<>();
     ArrayList<BinModel> world;
+    GlobalData globalData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,8 @@ public class DeployBinActivity extends NavigationDrawerActivity{
         View contentView = inflater.inflate(R.layout.activity_deploy_bin, null, false);
         drawer.addView(contentView, 0);
 
+        globalData = (GlobalData) getApplicationContext();
+        globalData.msg(globalData.address);
         //get the spinner from the xml.
         dropdown = (Spinner)findViewById(R.id.spinner1);
         btnDeploy   = (Button) findViewById(R.id.btn_deploy);
@@ -72,8 +77,6 @@ public class DeployBinActivity extends NavigationDrawerActivity{
         final SubActionButton sabRegisterBin = itemBuilder.setContentView(itemIcon3).build();
 
         //attach the sub buttons to the main button
-
-
         final FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(sabNavigateBin)
                 .addSubActionView(sabLocateBin)
@@ -84,7 +87,13 @@ public class DeployBinActivity extends NavigationDrawerActivity{
         sabNavigateBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), NavigateBin.class));
+                if( globalData.address == "") {
+                    startActivity(new Intent(getApplicationContext(), DeviceList.class));
+                }
+                else if(globalData.address != null)
+                {
+                    startActivity(new Intent(getApplicationContext(), NavigateBin.class));
+                }
             }
         });
 
@@ -111,8 +120,6 @@ public class DeployBinActivity extends NavigationDrawerActivity{
 
             @Override
             public void onDrawerOpened(View drawerView) {
-
-
             }
 
             @Override

@@ -2,6 +2,7 @@ package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,15 +13,20 @@ import android.view.LayoutInflater;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.GlobalData;
 
+import java.io.IOException;
 
 
 public class HomeActivity extends NavigationDrawerActivity{
     private Button btn_bin_location, btn_deploy_bin, btn_register_bin, btn_navigate_bin;
     private ProgressDialog pDialog;
+    GlobalData globalData;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +37,7 @@ public class HomeActivity extends NavigationDrawerActivity{
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_home, null, false);
         drawer.addView(contentView, 0);
-        fab.setVisibility(View.INVISIBLE);
-
+        globalData = (GlobalData) getApplicationContext();
 //        //Go to bin location interface
 //        btn_bin_location = (Button) findViewById(R.id.btn_de);
 //        btn_bin_location.setOnClickListener(
@@ -78,7 +83,13 @@ public class HomeActivity extends NavigationDrawerActivity{
         btn_navigate_bin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DeviceList.class));
+                if( globalData.address == "") {
+                    startActivity(new Intent(getApplicationContext(), DeviceList.class));
+                }
+                else
+                {
+                    startActivity(new Intent(getApplicationContext(), NavigateBin.class));
+                }
             }
         });
         initializeProgressDialogState();
@@ -145,6 +156,7 @@ public class HomeActivity extends NavigationDrawerActivity{
                                 startActivity(intent);
                                 finish();
                                 hidepDialog();
+                                Disconnect();
                             }
                         });
 
@@ -165,6 +177,20 @@ public class HomeActivity extends NavigationDrawerActivity{
         if (pDialog.isShowing())
             pDialog.dismiss();
     }//Dismiss progressDialog
+
+    private void Disconnect()
+    {
+        if (NavigateBin.btSocket!=null) //If the btSocket is busy
+        {
+            try
+            {
+                NavigateBin.btSocket.close(); //close connection
+            }
+            catch (IOException e)
+            { globalData.msg("Error");}
+        }
+        finish(); //return to the first layout
+    }
 }
 //package com.example.apaodevo.basura_juan.Activities;
 //

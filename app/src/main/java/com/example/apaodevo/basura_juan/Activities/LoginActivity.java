@@ -106,14 +106,11 @@ public class LoginActivity extends AppCompatActivity {
                             /*AttemptLogin attemptLogin = new AttemptLogin();
                             attemptLogin.execute(enteredUsername, enteredPassword);*/
                                 loginUser(enteredUsername, enteredPassword);
-
                             }
                         }
-
                     }
                 }
         ); //Redirect to Home Activity otherwise remain
-
     }
 
     private void loginUser(final String uname , final String pword){

@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
+import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -45,7 +46,7 @@ public class RegisterBin extends NavigationDrawerActivity {
     private String ip_address, bin_name;
     private Button registerBin;
     /*private String ip_address, bin_name;*/ /* Variables  to store post data*/
-
+    GlobalData globalData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +60,7 @@ public class RegisterBin extends NavigationDrawerActivity {
         fab.setVisibility(View.GONE);
         castObjects();
         registerBin     = (Button) findViewById(R.id.btn_reg_bin);
-
-
+        globalData = (GlobalData) getApplicationContext();
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Creating bin...");
         pDialog.setCancelable(false);
@@ -111,7 +111,13 @@ public class RegisterBin extends NavigationDrawerActivity {
         sabNavigateBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), NavigateBin.class));
+                if( globalData.address == "") {
+                    startActivity(new Intent(getApplicationContext(), DeviceList.class));
+                }
+                else
+                {
+                    startActivity(new Intent(getApplicationContext(), NavigateBin.class));
+                }
             }
         });
 
@@ -195,9 +201,7 @@ public class RegisterBin extends NavigationDrawerActivity {
                                         }
                                     }
                                 });
-
                             }
-
                         };
                         thread.start();
 
@@ -222,7 +226,6 @@ public class RegisterBin extends NavigationDrawerActivity {
                 return params;
             }
         };
-
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
     }
 

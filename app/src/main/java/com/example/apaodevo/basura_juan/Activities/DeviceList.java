@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.GlobalData;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -28,18 +29,20 @@ public class DeviceList extends ActionBarActivity
     private BluetoothAdapter myBluetooth = null;
     private Set<BluetoothDevice> pairedDevices;
     public static String EXTRA_ADDRESS = "device_address";
+    GlobalData globalData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
 
+        globalData = (GlobalData) getApplicationContext();
         //Calling widgets
-        btnPaired = (Button) findViewById(R.id.button);
-        devicelist = (ListView) findViewById(R.id.listView);
+        btnPaired     = (Button) findViewById(R.id.button);
+        devicelist    = (ListView) findViewById(R.id.listView);
         getDevicelist = (ListView) findViewById(R.id.listView1);
         //if the device has bluetooth
-        myBluetooth = BluetoothAdapter.getDefaultAdapter();
+        myBluetooth   = BluetoothAdapter.getDefaultAdapter();
 
         if (myBluetooth == null) {
             //Show a message that the device has no bluetooth adapter
@@ -94,8 +97,10 @@ public class DeviceList extends ActionBarActivity
             // Make an intent to start next activity.
             Intent i = new Intent(DeviceList.this, NavigateBin.class);
 
+            globalData.address = address;
             //Change the activity.
-            i.putExtra(EXTRA_ADDRESS, address); //this will be received at ledControl (class) Activity
+            i.putExtra(EXTRA_ADDRESS,  address); //this will be received at Control (class) Activity
+
             startActivity(i);
         }
     };

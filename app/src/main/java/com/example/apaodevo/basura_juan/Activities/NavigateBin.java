@@ -3,6 +3,7 @@ package com.example.apaodevo.basura_juan.Activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 
 import android.view.View;
@@ -23,35 +24,43 @@ import java.util.UUID;
 
 
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 public class NavigateBin extends NavigationDrawerActivity {
 
-    private Button            btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect;
-    private String            address       = null;
-    private ProgressDialog    progress;
-    private BluetoothAdapter  myBluetooth   = null;
-    private BluetoothSocket   btSocket      = null;
-    private boolean           isBtConnected = false;
+    private Button                btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect;
+    private ProgressDialog        progress;
+    private BluetoothAdapter      myBluetooth   = null;
+    public static BluetoothSocket btSocket      = null;
+    private boolean               isBtConnected = false;
     //SPP UUID. Look for it
-    static final UUID         myUUID        = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private String            auto          ="Pause Automation";
+    static final UUID             myUUID        = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private String                auto          ="Pause Automation";
+    GlobalData      globalData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        globalData = (GlobalData) getApplicationContext();
 
-        Intent newint = getIntent();
-        if(newint != null) {
-            address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
-        }
-        else
-        {
+        //Intent newint = getIntent();
+       // globalData.address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
+        if(globalData.address == null) {
+            globalData.msg(globalData.address);
             Intent bluetooth = new Intent(NavigateBin.this, DeviceList.class);
             Toast.makeText(getApplicationContext(), "Please Connect First to a SPP bluetooth", Toast.LENGTH_SHORT).show();
             startActivity(bluetooth);
+        }
+        else if(globalData.address != null)
+        {
+
+        }
+        else
+        {
+            new ConnectBT().execute(); //Call the class to connect
         }
 
         //setContentView(R.layout.activity_navigate_bin);
@@ -70,8 +79,6 @@ public class NavigateBin extends NavigationDrawerActivity {
         btnForward         = (Button)   findViewById(R.id.btnForward);
         btnDisconnect      = (Button)   findViewById(R.id.btnDisconnect);
         btnAutomationpause = (Button)  findViewById(R.id.btnAutomationPause);
-
-        new ConnectBT().execute(); //Call the class to connect
 
         if(auto == "Pause Automation") {
             btnForward.setEnabled(false);
@@ -160,8 +167,7 @@ public class NavigateBin extends NavigationDrawerActivity {
         displayFloatingActionButton();
     }
     private void displayFloatingActionButton(){
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
-
+        final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
                 .setBackgroundDrawable(R.drawable.floating_navigate_bin)
                 .build();
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
@@ -175,19 +181,65 @@ public class NavigateBin extends NavigationDrawerActivity {
         ImageView itemIcon3 = new ImageView(this);
         itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
 
-        SubActionButton button1 = itemBuilder
+        final SubActionButton sabLocateBin = itemBuilder
                 .setBackgroundDrawable(ContextCompat.getDrawable(NavigateBin.this, R.drawable.bin_location_icon))
                 .build();
-        SubActionButton button2 = itemBuilder.setContentView(itemIcon2).build();
-        SubActionButton button3 = itemBuilder.setContentView(itemIcon3).build();
+        final SubActionButton sabDeployBin = itemBuilder.setContentView(itemIcon2).build();
+        final SubActionButton sabRegisterBin = itemBuilder.setContentView(itemIcon3).build();
 
         //attach the sub buttons to the main button
-        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(button1)
-                .addSubActionView(button2)
-                .addSubActionView(button3)
+        final FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(sabLocateBin)
+                .addSubActionView(sabDeployBin)
+                .addSubActionView(sabRegisterBin)
                 .attachTo(actionButton)
                 .build();
+
+        sabLocateBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            }
+        });
+
+        sabDeployBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+            }
+        });
+        sabRegisterBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), RegisterBin.class));
+            }
+        });
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                actionButton.setVisibility(View.INVISIBLE);
+                sabLocateBin.setVisibility(View.INVISIBLE);
+                sabDeployBin.setVisibility(View.INVISIBLE);
+                sabRegisterBin.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                actionButton.setVisibility(View.VISIBLE);
+                sabLocateBin.setVisibility(View.VISIBLE);
+                sabDeployBin.setVisibility(View.VISIBLE);
+                sabRegisterBin.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }//Display floating action button with circular animation
     private void Disconnect()
     {
@@ -198,7 +250,7 @@ public class NavigateBin extends NavigationDrawerActivity {
                 btSocket.close(); //close connection
             }
             catch (IOException e)
-            { msg("Error");}
+            { globalData.msg("Error");}
         }
         finish(); //return to the first layout
 
@@ -214,7 +266,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                msg("Error");
+                globalData.msg("Error");
             }
         }
     }
@@ -229,7 +281,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                msg("Error");
+                globalData.msg("Error");
             }
         }
     }
@@ -243,7 +295,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                msg("Error");
+                globalData.msg("Error");
             }
         }
     }
@@ -258,7 +310,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                msg("Error");
+                globalData.msg("Error");
             }
         }
     }
@@ -272,15 +324,9 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                msg("Error");
+                globalData.msg("Error");
             }
         }
-    }
-
-    // fast way to call Toast
-    private void msg(String s)
-    {
-        Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
     }
 
     private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
@@ -301,7 +347,7 @@ public class NavigateBin extends NavigationDrawerActivity {
                 if (btSocket == null || !isBtConnected)
                 {
                     myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);//connects to the device's address and checks if it's available
+                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice( globalData.address);//connects to the device's address and checks if it's available
                     btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                     btSocket.connect();//start connection
@@ -320,12 +366,12 @@ public class NavigateBin extends NavigationDrawerActivity {
 
             if (!ConnectSuccess)
             {
-                msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
+                globalData.msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
                 finish();
             }
             else
             {
-                msg("Connected.");
+                globalData.msg("Connected.");
                 isBtConnected = true;
             }
             progress.dismiss();

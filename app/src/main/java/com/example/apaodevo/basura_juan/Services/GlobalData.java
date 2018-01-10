@@ -2,6 +2,7 @@ package com.example.apaodevo.basura_juan.Services;
 
 import android.app.Application;
 import android.util.StringBuilderPrinter;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.EntypoModule;
@@ -19,14 +20,12 @@ import com.joanzapata.iconify.fonts.WeathericonsModule;
  */
 
 public class GlobalData extends Application {
+    private String       someVariable;
+    private String       image_url;
+    private String       email_address, username,  password, firstname, login_status, lastname, middleInitial;
+    private String       latitude, longitude;
+    public String address  = "";
 
-
-
-
-    private String someVariable;
-    private String image_url;
-    private String email_address, username,  password, firstname, login_status, lastname, middleInitial;
-    private String latitude, longitude;
     public String getSomeVariable() {
 
         return someVariable;
@@ -100,7 +99,11 @@ public class GlobalData extends Application {
         return middleInitial;
     }
 
-
+    // fast way to call Toast
+    public void msg(String s)
+    {
+        Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public void onCreate() {
