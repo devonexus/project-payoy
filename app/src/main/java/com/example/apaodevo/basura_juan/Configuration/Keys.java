@@ -10,6 +10,7 @@ public class Keys{
 
 
      public static final String TAG_USERNAME = "username";
+    public static final String TAG_USER_ID = "userId";
      public static final String TAG_PASSWORD = "password";
      public  static final String TAG_FIRSTNAME = "fname";
      public static final String TAG_LASTNAME = "lname";
@@ -40,6 +41,17 @@ public class Keys{
     public static final String TAG_ERRORS = "error";
 
     /*Bin location tags*/
+    public static final String TAG_BIN_REQUEST = "requestType";
     public static final String TAG_BIN_LATITUDE = "lat";
     public static final String TAG_BIN_LONGITUDE = "long";
+
+
+    /*Deploy Bin Tags*/
+
+    public static final String TAG_DEPLOYMENT_DATESTART = "dateStart";
+    public static final String TAG_DEPLOYMENT_DATEEND = "dateEnd";
+    public static final String TAG_DEPLOYMENT_TIMESTART = "timeStart";
+    public static final String TAG_DEPLOYMENT_TIMEEND = "timeEnd";
+    public static final String TAG_DEPLOYMENT_LOCATION = "location";
+
 }

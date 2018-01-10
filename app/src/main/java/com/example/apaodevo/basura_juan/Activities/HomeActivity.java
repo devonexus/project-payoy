@@ -49,7 +49,7 @@ public class HomeActivity extends NavigationDrawerActivity{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //startActivity(new Intent(getApplicationContext(), BinLocationActivity.class));
+
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                     }
                 }

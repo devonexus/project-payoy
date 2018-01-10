@@ -1,31 +1,17 @@
 package com.example.apaodevo.basura_juan.Activities;
 
-import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
-import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
-import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -41,7 +27,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps) ;
 
-        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_LOCATION_URL, null,
+      /*  CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_LOCATION_URL, null,
                 new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
@@ -65,7 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }){
         };
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);*/
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -91,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.addMarker(new MarkerOptions().position(bin_location).title("BasuraJuan"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bin_location));
-        mMap.setMapType(mMap.MAP_TYPE_HYBRID);
+        //mMap.setMapType(mMap.MAP_TYPE_HYBRID);
         //error
     }
 }
