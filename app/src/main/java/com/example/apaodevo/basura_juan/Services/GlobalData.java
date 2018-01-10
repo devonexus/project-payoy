@@ -22,13 +22,19 @@ import com.joanzapata.iconify.fonts.WeathericonsModule;
 public class GlobalData extends Application {
     private String       someVariable;
     private String       image_url;
-    private String       email_address, username,  password, firstname, login_status, lastname, middleInitial;
+    private String       userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
     private String       latitude, longitude;
     public String address  = "";
-
     public String getSomeVariable() {
 
         return someVariable;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+    public String getUserid() {
+        return userid;
     }
 
     public void setLatitude(String latitude) {

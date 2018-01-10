@@ -39,7 +39,7 @@ public class BinNavigation extends TabActivity  {
         //Setting up tab 1 name.
         TabMenu1.setIndicator("Bin Location");
         //Set tab 1 activity to tab 1 menu.
-        TabMenu1.setContent(new Intent(this,BinLocationActivity.class));
+        TabMenu1.setContent(new Intent(this,MapsActivity.class));
 
         //Setting up tab 2 name.
         TabMenu2.setIndicator("Deploy Bin");

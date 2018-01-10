@@ -118,13 +118,14 @@ public class RegisterBin extends NavigationDrawerActivity {
                 {
                     startActivity(new Intent(getApplicationContext(), NavigateBin.class));
                 }
+                startActivity(new Intent(getApplicationContext(), DeviceList.class));
             }
         });
 
         sabLocateBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), BinLocationActivity.class));
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
             }
         });
         sabDeployBin.setOnClickListener(new View.OnClickListener() {

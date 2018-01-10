@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText user, pass;
     private ProgressDialog pDialog;
     private String json_response;
-    private String image_url, email, username, password, firstName, lastName, middleInitial; //Variables to store json response
+    private String image_url, email, username, password, firstName, lastName, middleInitial, userId; //Variables to store json response
     private boolean clicked;
     private String cancellationTag = "TAG";
     @Override
@@ -167,12 +167,12 @@ public class LoginActivity extends AppCompatActivity {
                                 lastName = response.getString(Keys.TAG_LNAME);
                                 middleInitial = response.getString(Keys.TAG_MINITIAL);
                                 password = response.getString(Keys.TAG_PWORD);
-
+                                userId  = response.getString(Keys.TAG_USER_ID);
                                 final GlobalData globalData = (GlobalData) getApplicationContext();
                                 globalData.setSomeVariable(json_response);
                                 globalData.setImageUrl(image_url);
                                 globalData.setEmailAddress(email);
-
+                                globalData.setUserid(userId);
                                 globalData.setUsername(username);
                                 globalData.setMiddleInitial(middleInitial);
                                 globalData.setFirstname(firstName);
