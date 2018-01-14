@@ -71,7 +71,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         drawer.addView(contentView, 0);
 
         globalData = (GlobalData) getApplicationContext();
-        globalData.msg(globalData.address);
         locationHelper = new LocationHelper(DeployBinActivity.this);
         //get the spinner from the xml.
         dropdown = (Spinner) findViewById(R.id.spinner1);
@@ -125,7 +124,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 {
                     startActivity(new Intent(getApplicationContext(), NavigateBin.class));
                 }
-                startActivity(new Intent(getApplicationContext(), DeviceList.class));
             }
         });
 

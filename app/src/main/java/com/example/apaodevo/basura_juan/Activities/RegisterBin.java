@@ -118,7 +118,6 @@ public class RegisterBin extends NavigationDrawerActivity {
                 {
                     startActivity(new Intent(getApplicationContext(), NavigateBin.class));
                 }
-                startActivity(new Intent(getApplicationContext(), DeviceList.class));
             }
         });
 

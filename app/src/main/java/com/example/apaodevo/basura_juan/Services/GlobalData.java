@@ -24,7 +24,8 @@ public class GlobalData extends Application {
     private String       image_url;
     private String       userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
     private String       latitude, longitude;
-    public String address  = "";
+    public String        address  = "";
+    public String        name = "";
     public String getSomeVariable() {
 
         return someVariable;

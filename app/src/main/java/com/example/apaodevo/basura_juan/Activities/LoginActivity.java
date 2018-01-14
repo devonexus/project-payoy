@@ -149,15 +149,11 @@ public class LoginActivity extends AppCompatActivity {
                                             hidepDialog();
                                         }
                                     });
-
                                 }
-
                             };
                             thread.start();
 
                         } else if (response_success.equals("1")) {
-
-
                             try {
                                 json_response = response.getString(Keys.TAG_FULLNAME);
                                 image_url = response.getString(Keys.TAG_IMAGE_URL);
@@ -185,11 +181,6 @@ public class LoginActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-
-
-
-
                         } else {
                             Thread thread = new Thread() {
 
@@ -212,9 +203,7 @@ public class LoginActivity extends AppCompatActivity {
                                             hidepDialog();
                                         }
                                     });
-
                                 }
-
                             };
                             thread.start();
 
@@ -237,7 +226,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         customJSONRequest.setTag(cancellationTag);
-
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
 
     }

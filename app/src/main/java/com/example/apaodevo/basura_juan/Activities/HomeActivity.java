@@ -54,7 +54,6 @@ public class HomeActivity extends NavigationDrawerActivity{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                     }
                 }
@@ -147,7 +146,7 @@ public class HomeActivity extends NavigationDrawerActivity{
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
+                                Disconnect();
                                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                 intent.putExtra("LOGIN_STATUS", false);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
@@ -156,7 +155,6 @@ public class HomeActivity extends NavigationDrawerActivity{
                                 startActivity(intent);
                                 finish();
                                 hidepDialog();
-                                Disconnect();
                             }
                         });
 
@@ -180,11 +178,13 @@ public class HomeActivity extends NavigationDrawerActivity{
 
     private void Disconnect()
     {
-        if (NavigateBin.btSocket!=null) //If the btSocket is busy
+        if (NavigateBin.btSocket != null)
         {
             try
             {
                 NavigateBin.btSocket.close(); //close connection
+                globalData.address="";
+                NavigateBin.btSocket = null;
             }
             catch (IOException e)
             { globalData.msg("Error");}

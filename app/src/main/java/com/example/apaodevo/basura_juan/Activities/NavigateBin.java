@@ -7,12 +7,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 
 import android.view.View;
-
-
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -33,33 +32,40 @@ public class NavigateBin extends NavigationDrawerActivity {
 
     private Button                btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect;
     private ProgressDialog        progress;
-    private BluetoothAdapter      myBluetooth   = null;
-    public static BluetoothSocket btSocket      = null;
+    private BluetoothAdapter      myBluetooth;
+    public static BluetoothSocket btSocket ;
     private boolean               isBtConnected = false;
     //SPP UUID. Look for it
     static final UUID             myUUID        = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private String                auto          ="Pause Automation";
-    GlobalData      globalData;
+    GlobalData                    globalData;
+    Intent bluetooth,home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         globalData = (GlobalData) getApplicationContext();
-
+        TextView binConnected = (TextView) findViewById(R.id.txtBinConnected);
+        binConnected.setText(globalData.name);
         //Intent newint = getIntent();
        // globalData.address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
         if(globalData.address == null) {
-            globalData.msg(globalData.address);
-            Intent bluetooth = new Intent(NavigateBin.this, DeviceList.class);
+            bluetooth = new Intent(NavigateBin.this, DeviceList.class);
             Toast.makeText(getApplicationContext(), "Please Connect First to a SPP bluetooth", Toast.LENGTH_SHORT).show();
             startActivity(bluetooth);
         }
-        else if(globalData.address != null)
-        {
 
-        }
-        else
+        if(btSocket != null)
         {
+            try {
+                btSocket.connect();//start connection
+            }
+            catch (Exception io)
+            {
+                globalData.msg(io.toString());
+            }
+        }
+        else{
             new ConnectBT().execute(); //Call the class to connect
         }
 
@@ -181,24 +187,29 @@ public class NavigateBin extends NavigationDrawerActivity {
         ImageView itemIcon3 = new ImageView(this);
         itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
 
+        ImageView itemIcon4 = new ImageView(this);
+        itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
+
         final SubActionButton sabLocateBin = itemBuilder
                 .setBackgroundDrawable(ContextCompat.getDrawable(NavigateBin.this, R.drawable.bin_location_icon))
                 .build();
         final SubActionButton sabDeployBin = itemBuilder.setContentView(itemIcon2).build();
         final SubActionButton sabRegisterBin = itemBuilder.setContentView(itemIcon3).build();
+        final SubActionButton sabHome = itemBuilder.setContentView(itemIcon4).build();
 
         //attach the sub buttons to the main button
         final FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(sabLocateBin)
                 .addSubActionView(sabDeployBin)
                 .addSubActionView(sabRegisterBin)
+                .addSubActionView(sabHome)
                 .attachTo(actionButton)
                 .build();
 
         sabLocateBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
             }
         });
 
@@ -214,6 +225,13 @@ public class NavigateBin extends NavigationDrawerActivity {
                 startActivity(new Intent(getApplicationContext(), RegisterBin.class));
             }
         });
+
+        sabHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            }
+        });
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -221,6 +239,7 @@ public class NavigateBin extends NavigationDrawerActivity {
                 sabLocateBin.setVisibility(View.INVISIBLE);
                 sabDeployBin.setVisibility(View.INVISIBLE);
                 sabRegisterBin.setVisibility(View.INVISIBLE);
+                sabHome.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -233,6 +252,7 @@ public class NavigateBin extends NavigationDrawerActivity {
                 sabLocateBin.setVisibility(View.VISIBLE);
                 sabDeployBin.setVisibility(View.VISIBLE);
                 sabRegisterBin.setVisibility(View.VISIBLE);
+                sabHome.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -246,11 +266,17 @@ public class NavigateBin extends NavigationDrawerActivity {
         if (btSocket!=null) //If the btSocket is busy
         {
             try
-            {
+            { 
                 btSocket.close(); //close connection
+                btSocket = null;
+                globalData.address = "";
+                home = new Intent(this, HomeActivity.class);
+                startActivity(home);
             }
             catch (IOException e)
-            { globalData.msg("Error");}
+            {
+                globalData.msg("Error");
+            }
         }
         finish(); //return to the first layout
 
