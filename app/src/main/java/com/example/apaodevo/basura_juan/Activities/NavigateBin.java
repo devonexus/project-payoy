@@ -21,7 +21,6 @@ import android.os.AsyncTask;
 import java.io.IOException;
 import java.util.UUID;
 
-
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
@@ -46,7 +45,8 @@ public class NavigateBin extends NavigationDrawerActivity {
         super.onCreate(savedInstanceState);
         globalData = (GlobalData) getApplicationContext();
         TextView binConnected = (TextView) findViewById(R.id.txtBinConnected);
-        binConnected.setText(globalData.name);
+
+        //binConnected.setText(globalData.name);
         //Intent newint = getIntent();
        // globalData.address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
         if(globalData.address == null) {
@@ -55,18 +55,45 @@ public class NavigateBin extends NavigationDrawerActivity {
             startActivity(bluetooth);
         }
 
-        if(btSocket != null)
-        {
+        if(DeployBinActivity.deploy == "deploy") {
             try {
+                myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
+                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(globalData.address);//connects to the device's address and checks if it's available
+                btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
+                BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                 btSocket.connect();//start connection
             }
             catch (Exception io)
             {
                 globalData.msg(io.toString());
             }
+            if (btSocket != null) {
+                try {
+                    btSocket.getOutputStream().write("0".toString().getBytes());
+                    DeployBinActivity.deploy = "";
+                    Intent deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
+                    startActivity(deploy);
+
+                } catch (IOException e) {
+                    globalData.msg("Error");
+                }
+            }
         }
-        else{
-            new ConnectBT().execute(); //Call the class to connect
+        else
+        {
+            if(btSocket != null)
+            {
+                try {
+                    btSocket.connect();//start connection
+                }
+                catch (Exception io)
+                {
+                    globalData.msg(io.toString());
+                }
+            }
+            else{
+                new ConnectBT().execute(); //Call the class to connect
+            }
         }
 
         //setContentView(R.layout.activity_navigate_bin);
@@ -188,7 +215,7 @@ public class NavigateBin extends NavigationDrawerActivity {
         itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
 
         ImageView itemIcon4 = new ImageView(this);
-        itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
+        itemIcon4.setImageResource(R.drawable.home_button);
 
         final SubActionButton sabLocateBin = itemBuilder
                 .setBackgroundDrawable(ContextCompat.getDrawable(NavigateBin.this, R.drawable.bin_location_icon))
@@ -261,6 +288,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
         });
     }//Display floating action button with circular animation
+
     private void Disconnect()
     {
         if (btSocket!=null) //If the btSocket is busy
@@ -297,7 +325,7 @@ public class NavigateBin extends NavigationDrawerActivity {
         }
     }
 
-    private void turnLeft()
+    public void turnLeft()
     {
         if (btSocket!=null)
         {
@@ -340,7 +368,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
         }
     }
-    private void Automation()
+    public void Automation()
     {
         if (btSocket!=null)
         {

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -94,15 +95,16 @@ public class DeviceList extends ActionBarActivity
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
 
-            String blueoothName = myBluetooth.getName();
             // Make an intent to start next activity.
             Intent i = new Intent(DeviceList.this, NavigateBin.class);
 
             globalData.address = address;
-            globalData.name    = blueoothName;
+
+
             //Change the activity.
-           // i.putExtra(EXTRA_ADDRESS,  address); //this will be received at Control (class) Activity
+            // i.putExtra(EXTRA_ADDRESS,  address); //this will be received at Control (class) Activity
             startActivity(i);
+
         }
     };
 }

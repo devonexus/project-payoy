@@ -93,17 +93,22 @@ public class RegisterBin extends NavigationDrawerActivity {
         ImageView itemIcon3 = new ImageView(this);
         itemIcon3.setImageResource(R.drawable.floating_navigate_bin);
 
+        ImageView itemIcon4 = new ImageView(this);
+        itemIcon4.setImageResource(R.drawable.home_button);
+
         final SubActionButton sabLocateBin = itemBuilder
                 .setContentView(itemIcon1)
                 .build();
         final SubActionButton sabDeployBin = itemBuilder.setContentView(itemIcon2).build();
         final SubActionButton sabNavigateBin = itemBuilder.setContentView(itemIcon3).build();
+        final SubActionButton sabHome = itemBuilder.setContentView(itemIcon4).build();
 
         //attach the sub buttons to the main button
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(sabLocateBin)
                 .addSubActionView(sabDeployBin)
                 .addSubActionView(sabNavigateBin)
+                .addSubActionView(sabHome)
                 .attachTo(actionButton)
                 .build();
 
@@ -133,6 +138,12 @@ public class RegisterBin extends NavigationDrawerActivity {
                 startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
             }
         });
+        sabHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            }
+        });
 
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -141,6 +152,7 @@ public class RegisterBin extends NavigationDrawerActivity {
                 sabLocateBin.setVisibility(View.INVISIBLE);
                 sabNavigateBin.setVisibility(View.INVISIBLE);
                 sabDeployBin.setVisibility(View.INVISIBLE);
+                sabHome.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -154,6 +166,7 @@ public class RegisterBin extends NavigationDrawerActivity {
                 sabLocateBin.setVisibility(View.VISIBLE);
                 sabNavigateBin.setVisibility(View.VISIBLE);
                 sabDeployBin.setVisibility(View.VISIBLE);
+                sabHome.setVisibility(View.VISIBLE);
             }
 
             @Override

@@ -1,9 +1,5 @@
 package com.example.apaodevo.basura_juan.Services;
 
-/**
- * Created by apaodevo on 11/20/2017.
- */
-
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import org.json.JSONException;

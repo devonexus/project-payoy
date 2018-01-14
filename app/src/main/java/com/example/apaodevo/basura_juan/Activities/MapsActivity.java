@@ -91,7 +91,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
 
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
 
-                .setBackgroundDrawable(R.drawable.deploy)
+                .setBackgroundDrawable(R.drawable.bin_location_icon)
                 .build();
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         // repeat many times:
@@ -99,20 +99,20 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         itemIcon1.setImageResource(R.drawable.floating_navigate_bin);
 
         ImageView itemIcon2 = new ImageView(this);
-        itemIcon2.setImageResource(R.drawable.bin_location_icon);
+        itemIcon2.setImageResource(R.drawable.deploy);
 
         ImageView itemIcon3 = new ImageView(this);
         itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
 
         ImageView itemIcon4 = new ImageView(this);
-        itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
+        itemIcon4.setImageResource(R.drawable.home_button);
 
         final SubActionButton sabNavigateBin = itemBuilder
                 .setContentView(itemIcon1)
                 .build();
         final SubActionButton sabDeployBin = itemBuilder.setContentView(itemIcon2).build();
         final SubActionButton sabRegisterBin = itemBuilder.setContentView(itemIcon3).build();
-        final SubActionButton sabHome = itemBuilder.setContentView(itemIcon3).build();
+        final SubActionButton sabHome = itemBuilder.setContentView(itemIcon4).build();
 
         //attach the sub buttons to the main button
         final FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
@@ -174,7 +174,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
                 sabDeployBin.setVisibility(View.VISIBLE);
                 sabNavigateBin.setVisibility(View.VISIBLE);
                 sabRegisterBin.setVisibility(View.VISIBLE);
-                sabHome.setVisibility(View.INVISIBLE);
+                sabHome.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -183,39 +183,10 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
             }
         });
     }
-    public void onMapSearch(View view) {
-        EditText locationSearch = (EditText) findViewById(R.id.editText);
-        String location = locationSearch.getText().toString();
-        List<Address> addressList = null;
-
-        if (location != null || !location.equals("")) {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(location, 1);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address address = addressList.get(0);
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        }
-    }
 
     public void onNormalMap(View view) {
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
     }
-
-    public void onSatelliteMap(View view) {
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-    }
-
-    public void onTerrainMap(View view) {
-        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-    }
-
-
     public void onHybridMap(View view) {
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
@@ -241,7 +212,6 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bin_location));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bin_location, 15));
         mMap.setMapType(mMap.MAP_TYPE_HYBRID);
-        //error
     }
 
 }

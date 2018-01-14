@@ -58,13 +58,13 @@ public class DeployBinActivity extends NavigationDrawerActivity {
     private LocationHelper locationHelper;
     private String strAddress;
     private ProgressDialog pDialog;
+    Intent devicelist;
+    public static String deploy = "deploy";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Set up navigation drawer
-
-
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_deploy_bin, null, false);
@@ -100,17 +100,21 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         ImageView itemIcon3 = new ImageView(this);
         itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
 
-        final SubActionButton sabNavigateBin = itemBuilder
-                .setContentView(itemIcon1)
-                .build();
+        ImageView itemIcon4 = new ImageView(this);
+        itemIcon4.setImageResource(R.drawable.home_button);
+
+
+        final SubActionButton sabNavigateBin = itemBuilder.setContentView(itemIcon1).build();
         final SubActionButton sabLocateBin = itemBuilder.setContentView(itemIcon2).build();
         final SubActionButton sabRegisterBin = itemBuilder.setContentView(itemIcon3).build();
+        final SubActionButton sabHome = itemBuilder.setContentView(itemIcon4).build();
 
         //attach the sub buttons to the main button
         final FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(sabNavigateBin)
                 .addSubActionView(sabLocateBin)
                 .addSubActionView(sabRegisterBin)
+                .addSubActionView(sabHome)
                 .attachTo(actionButton)
                 .build();
 
@@ -139,6 +143,12 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 startActivity(new Intent(getApplicationContext(), RegisterBin.class));
             }
         });
+        sabHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            }
+        });
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -146,6 +156,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 sabLocateBin.setVisibility(View.INVISIBLE);
                 sabNavigateBin.setVisibility(View.INVISIBLE);
                 sabRegisterBin.setVisibility(View.INVISIBLE);
+                sabHome.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -158,6 +169,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 sabLocateBin.setVisibility(View.VISIBLE);
                 sabNavigateBin.setVisibility(View.VISIBLE);
                 sabRegisterBin.setVisibility(View.VISIBLE);
+                sabHome.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -170,8 +182,10 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         btnDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                devicelist = new Intent(DeployBinActivity.this, DeviceList.class);
+                startActivity(devicelist);
                 //showpDialog();
-                if(locationHelper.canGetLocation()) {
+                /*if(locationHelper.canGetLocation()) {
 
                     double latitude = locationHelper.getLatitude();
                     double longitude = locationHelper.getLongitude();
@@ -181,19 +195,15 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                         try {
                             list = gc.getFromLocation(latitude, longitude,1);
                             Address address = list.get(0);
-/*
+
                             str.append("Name: " + address.getLocality() + "\n");
                             str.append("Sub-Admin Ares: " + address.getSubAdminArea() + "\n");
                             str.append("Admin Area: " + address.getAdminArea() + "\n");
                             str.append("Admin Area: " + address.getAddressLine(0) + "\n");
                             str.append("Admin Area: " + address + "\n");
                             str.append("Country: " + address.getCountryName() + "\n");str.append("Country Code: " + address.getCountryCode() + "\n");
-                            str.append("Country Code: " + address.getCountryCode() + "\n");*/
+                            str.append("Country Code: " + address.getCountryCode() + "\n");
                             strAddress = address.getAddressLine(0);
-
-
-
-
                         }
 
                         catch (IOException e) {
@@ -211,7 +221,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                     // GPS or network is not enabled.
                     // Ask user to enable GPS/network in settings.
                     locationHelper.showSettingsAlert();
-                }
+                }*/
             }
         });
     }
