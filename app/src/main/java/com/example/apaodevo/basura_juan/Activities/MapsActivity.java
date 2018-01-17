@@ -1,18 +1,20 @@
 package com.example.apaodevo.basura_juan.Activities;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -28,15 +30,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.List;
 
 public class MapsActivity extends NavigationDrawerActivity implements OnMapReadyCallback {
 
@@ -47,6 +47,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
     double realLat, realLong;
     double lati, longitude;
     public static GlobalData globalData;
+    ImageView lcIcon1,lcIcon2,lcIcon3,lcIcon4,lcIcon5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_maps, null, false);
+        globalData = (GlobalData) getApplicationContext();
         drawer.addView(contentView, 0);
 
         fab.setImageResource(R.drawable.floating_navigate_bin);
@@ -90,8 +92,8 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         mapFragment.getMapAsync(this);
 
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
-
                 .setBackgroundDrawable(R.drawable.bin_location_icon)
+                .setPosition(FloatingActionButton.POSITION_BOTTOM_RIGHT)
                 .build();
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         // repeat many times:
@@ -126,10 +128,10 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         sabNavigateBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( globalData.address == "") {
+                if(DeviceList.btSocket == null) {
                     startActivity(new Intent(getApplicationContext(), DeviceList.class));
                 }
-                else if(globalData.address != null)
+                else
                 {
                     startActivity(new Intent(getApplicationContext(), NavigateBin.class));
                 }
@@ -179,7 +181,124 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
 
             @Override
             public void onDrawerStateChanged(int newState) {
+            }
+        });
 
+        // Set up the large red button on the center right side
+        // With custom button and content sizes and margins
+        int redActionButtonSize = getResources().getDimensionPixelSize(R.dimen.red_action_button_size);
+        int redActionButtonMargin = getResources().getDimensionPixelOffset(R.dimen.action_button_margin);
+        int redActionButtonContentSize = getResources().getDimensionPixelSize(R.dimen.red_action_button_content_size);
+        int redActionButtonContentMargin = getResources().getDimensionPixelSize(R.dimen.red_action_button_content_margin);
+        int redActionMenuRadius = getResources().getDimensionPixelSize(R.dimen.red_action_menu_radius);
+        int blueSubActionButtonSize = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_size);
+        int blueSubActionButtonContentMargin = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_content_margin);
+
+        ImageView fabIconStar = new ImageView(this);
+        fabIconStar.setImageDrawable(getResources().getDrawable(R.drawable.bin_location_icon));
+
+        FloatingActionButton.LayoutParams starParams = new FloatingActionButton.LayoutParams(redActionButtonSize, redActionButtonSize);
+        starParams.setMargins(redActionButtonMargin,
+                redActionButtonMargin,
+                redActionButtonMargin,
+                redActionButtonMargin);
+        fabIconStar.setLayoutParams(starParams);
+
+        FloatingActionButton.LayoutParams fabIconStarParams = new FloatingActionButton.LayoutParams(redActionButtonContentSize, redActionButtonContentSize);
+        fabIconStarParams.setMargins(redActionButtonContentMargin,
+                redActionButtonContentMargin,
+                redActionButtonContentMargin,
+                redActionButtonContentMargin);
+
+        final FloatingActionButton leftCenterButton = new FloatingActionButton.Builder(this)
+                .setContentView(fabIconStar, fabIconStarParams)
+                .setBackgroundDrawable(R.drawable.bin_location)
+                .setPosition(FloatingActionButton.POSITION_TOP_RIGHT)
+                .setLayoutParams(starParams)
+                .build();
+
+        // Set up customized SubActionButtons for the right center menu
+        //SubActionButton.Builder lCSubBuilder = new SubActionButton.Builder(this);
+       // lCSubBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));
+
+       /* FrameLayout.LayoutParams blueContentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        blueContentParams.setMargins(blueSubActionButtonContentMargin,
+                blueSubActionButtonContentMargin,
+                blueSubActionButtonContentMargin,
+                blueSubActionButtonContentMargin);
+        lCSubBuilder.setLayoutParams(blueContentParams);
+        // Set custom layout params
+        FrameLayout.LayoutParams blueParams = new FrameLayout.LayoutParams(blueSubActionButtonSize, blueSubActionButtonSize);
+        lCSubBuilder.setLayoutParams(blueParams);*/
+
+        SubActionButton.Builder itemBuilder1 = new SubActionButton.Builder(this);
+        // repeat many times:
+        ImageView itemHybrid = new ImageView(this);
+        itemIcon1.setImageResource(R.drawable.floating_navigate_bin);
+
+        ImageView itemNormal = new ImageView(this);
+        itemIcon2.setImageResource(R.drawable.deploy);
+
+        final SubActionButton sabHybrid = itemBuilder1
+                .setContentView(itemHybrid)
+                .build();
+        final SubActionButton sabNormal = itemBuilder1.setContentView(itemNormal).build();
+
+        /*lcIcon1 = new ImageView(this);
+        lcIcon2 = new ImageView(this);
+        lcIcon3 = new ImageView(this);
+        lcIcon4 = new ImageView(this);
+        lcIcon5 = new ImageView(this);
+
+        lcIcon1.setImageDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));
+        lcIcon2.setImageDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));
+        lcIcon3.setImageDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));
+        lcIcon4.setImageDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));
+        lcIcon5.setImageDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));*/
+
+        // Build another menu with custom options
+        final FloatingActionMenu leftCenterMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(sabHybrid)
+                .addSubActionView(sabNormal)
+                .setRadius(redActionMenuRadius)
+                .setStartAngle(170)
+                .setEndAngle(100)
+                .attachTo(leftCenterButton)
+                .build();
+
+        sabHybrid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onHybridMap(v);
+            }
+        });
+        sabNormal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onNormalMap(v);
+            }
+        });
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                leftCenterButton.setVisibility(View.INVISIBLE);
+                sabHybrid.setVisibility(View.INVISIBLE);
+                sabNormal.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                leftCenterButton.setVisibility(View.VISIBLE);
+                sabHybrid.setVisibility(View.INVISIBLE);
+                sabNormal.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
             }
         });
     }

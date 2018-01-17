@@ -7,19 +7,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 
 import android.view.View;
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.os.AsyncTask;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
@@ -30,14 +24,8 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 public class NavigateBin extends NavigationDrawerActivity {
 
     private Button                btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect;
-    private ProgressDialog        progress;
-    private BluetoothAdapter      myBluetooth;
-    public static BluetoothSocket btSocket ;
-    private boolean               isBtConnected = false;
-    //SPP UUID. Look for it
-    static final UUID             myUUID        = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private String                auto          ="Pause Automation";
     GlobalData                    globalData;
+    private String                auto          ="Pause Automation";
     Intent bluetooth,home;
 
     @Override
@@ -53,47 +41,6 @@ public class NavigateBin extends NavigationDrawerActivity {
             bluetooth = new Intent(NavigateBin.this, DeviceList.class);
             Toast.makeText(getApplicationContext(), "Please Connect First to a SPP bluetooth", Toast.LENGTH_SHORT).show();
             startActivity(bluetooth);
-        }
-
-        if(DeployBinActivity.deploy == "deploy") {
-            try {
-                myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(globalData.address);//connects to the device's address and checks if it's available
-                btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
-                BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                btSocket.connect();//start connection
-            }
-            catch (Exception io)
-            {
-                globalData.msg(io.toString());
-            }
-            if (btSocket != null) {
-                try {
-                    btSocket.getOutputStream().write("0".toString().getBytes());
-                    DeployBinActivity.deploy = "";
-                    Intent deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
-                    startActivity(deploy);
-
-                } catch (IOException e) {
-                    globalData.msg("Error");
-                }
-            }
-        }
-        else
-        {
-            if(btSocket != null)
-            {
-                try {
-                    btSocket.connect();//start connection
-                }
-                catch (Exception io)
-                {
-                    globalData.msg(io.toString());
-                }
-            }
-            else{
-                new ConnectBT().execute(); //Call the class to connect
-            }
         }
 
         //setContentView(R.layout.activity_navigate_bin);
@@ -124,6 +71,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             btnLeft.setEnabled(true);
             btnRight.setEnabled(true);
         }
+
         btnRight.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -291,12 +239,12 @@ public class NavigateBin extends NavigationDrawerActivity {
 
     private void Disconnect()
     {
-        if (btSocket!=null) //If the btSocket is busy
+        if (DeviceList.btSocket!=null) //If the btSocket is busy
         {
             try
-            { 
-                btSocket.close(); //close connection
-                btSocket = null;
+            {
+                DeviceList.btSocket.close(); //close connection
+                DeviceList.btSocket = null;
                 globalData.address = "";
                 home = new Intent(this, HomeActivity.class);
                 startActivity(home);
@@ -312,11 +260,11 @@ public class NavigateBin extends NavigationDrawerActivity {
 
     private void forward()
     {
-        if (btSocket!=null)
+        if (DeviceList.btSocket!=null)
         {
             try
             {
-                btSocket.getOutputStream().write("2".toString().getBytes());
+                DeviceList.btSocket.getOutputStream().write("2".toString().getBytes());
             }
             catch (IOException e)
             {
@@ -327,11 +275,11 @@ public class NavigateBin extends NavigationDrawerActivity {
 
     public void turnLeft()
     {
-        if (btSocket!=null)
+        if (DeviceList.btSocket!=null)
         {
             try
             {
-                btSocket.getOutputStream().write("3".toString().getBytes());
+                DeviceList.btSocket.getOutputStream().write("3".toString().getBytes());
             }
             catch (IOException e)
             {
@@ -341,11 +289,11 @@ public class NavigateBin extends NavigationDrawerActivity {
     }
     private void turnRight()
     {
-        if (btSocket!=null)
+        if (DeviceList.btSocket!=null)
         {
             try
             {
-                btSocket.getOutputStream().write("4".toString().getBytes());
+                DeviceList.btSocket.getOutputStream().write("4".toString().getBytes());
             }
             catch (IOException e)
             {
@@ -356,11 +304,11 @@ public class NavigateBin extends NavigationDrawerActivity {
 
     private void StopAutomate()
     {
-        if (btSocket!=null)
+        if (DeviceList.btSocket!=null)
         {
             try
             {
-                btSocket.getOutputStream().write("1".toString().getBytes());
+                DeviceList.btSocket.getOutputStream().write("1".toString().getBytes());
             }
             catch (IOException e)
             {
@@ -370,11 +318,11 @@ public class NavigateBin extends NavigationDrawerActivity {
     }
     public void Automation()
     {
-        if (btSocket!=null)
+        if (DeviceList.btSocket!=null)
         {
             try
             {
-                btSocket.getOutputStream().write("0".toString().getBytes());
+                DeviceList.btSocket.getOutputStream().write("0".toString().getBytes());
             }
             catch (IOException e)
             {
@@ -383,52 +331,4 @@ public class NavigateBin extends NavigationDrawerActivity {
         }
     }
 
-    private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
-    {
-        private boolean ConnectSuccess = true; //if it's here, it's almost connected
-
-        @Override
-        protected void onPreExecute()
-        {
-            progress = ProgressDialog.show(NavigateBin.this, "Connecting...", "Please wait!!!");  //show a progress dialog
-        }
-
-        @Override
-        protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
-        {
-            try
-            {
-                if (btSocket == null || !isBtConnected)
-                {
-                    myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice( globalData.address);//connects to the device's address and checks if it's available
-                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
-                    BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    btSocket.connect();//start connection
-                }
-            }
-            catch (IOException e)
-            {
-                ConnectSuccess = false;//if the try failed, you can check the exception here
-            }
-            return null;
-        }
-        @Override
-        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
-        {
-            super.onPostExecute(result);
-
-            if (!ConnectSuccess)
-            {
-                globalData.msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
-                finish();
-            }
-            else
-            {
-                globalData.msg("Connected.");
-                isBtConnected = true;
-            }
-            progress.dismiss();
-        }
-    }
 }

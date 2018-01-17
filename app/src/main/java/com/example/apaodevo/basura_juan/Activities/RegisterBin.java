@@ -116,7 +116,7 @@ public class RegisterBin extends NavigationDrawerActivity {
         sabNavigateBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( globalData.address == "") {
+                if(DeviceList.btSocket == null) {
                     startActivity(new Intent(getApplicationContext(), DeviceList.class));
                 }
                 else

@@ -59,7 +59,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
     private String strAddress;
     private ProgressDialog pDialog;
     Intent devicelist;
-    public static String deploy = "deploy";
+    public static String deploy = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,10 +121,10 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         sabNavigateBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( globalData.address == "") {
+                if(DeviceList.btSocket == null) {
                     startActivity(new Intent(getApplicationContext(), DeviceList.class));
                 }
-                else if(globalData.address != null)
+                else
                 {
                     startActivity(new Intent(getApplicationContext(), NavigateBin.class));
                 }
@@ -182,6 +182,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         btnDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deploy = "deploy";
                 devicelist = new Intent(DeployBinActivity.this, DeviceList.class);
                 startActivity(devicelist);
                 //showpDialog();

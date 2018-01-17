@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,9 @@ import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.PathUtil;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.kosalgeek.android.imagebase64encoder.ImageBase64;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -46,7 +50,6 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
  * Created by apaodevo on 11/16/2017.
  */
 
-
 public class UserProfileActivity extends NavigationDrawerActivity{
     private GlobalData globalData;
     private TextView etlname, etfname, etminitial, etuname, etpword, etemail;
@@ -59,6 +62,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
     private static String lastName, firstName, middleInitial, email, userName, passWord, imageUrl; /*Store user profile data*/
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
     private ProgressDialog pDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +72,112 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         View contentView = inflater.inflate(R.layout.activity_user_profile, null, false);
         drawer.addView(contentView, 0);
         fab.setVisibility(View.INVISIBLE);
+
+        final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+                .setBackgroundDrawable(R.drawable.bin_location_icon)
+                .build();
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        // repeat many times:
+        ImageView itemIcon1 = new ImageView(this);
+        itemIcon1.setImageResource(R.drawable.floating_navigate_bin);
+
+        ImageView itemIcon2 = new ImageView(this);
+        itemIcon2.setImageResource(R.drawable.deploy);
+
+        ImageView itemIcon3 = new ImageView(this);
+        itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
+
+        ImageView itemIcon4 = new ImageView(this);
+        itemIcon4.setImageResource(R.drawable.bin_location_icon);
+
+        ImageView itemIcon5 = new ImageView(this);
+        itemIcon5.setImageResource(R.drawable.home_button);
+
+        final SubActionButton sabNavigateBin = itemBuilder
+                .setContentView(itemIcon1)
+                .build();
+        final SubActionButton sabDeployBin = itemBuilder.setContentView(itemIcon2).build();
+        final SubActionButton sabRegisterBin = itemBuilder.setContentView(itemIcon3).build();
+        final SubActionButton sabLocation = itemBuilder.setContentView(itemIcon4).build();
+        final SubActionButton sabHome = itemBuilder.setContentView(itemIcon5).build();
+
+        //attach the sub buttons to the main button
+        final FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(sabNavigateBin)
+                .addSubActionView(sabDeployBin)
+                .addSubActionView(sabRegisterBin)
+                .addSubActionView(sabLocation)
+                .addSubActionView(sabHome)
+                .attachTo(actionButton)
+                .build();
+
+        sabNavigateBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(DeviceList.btSocket == null) {
+                    startActivity(new Intent(getApplicationContext(), DeviceList.class));
+                }
+                else
+                {
+                    startActivity(new Intent(getApplicationContext(), NavigateBin.class));
+                }
+            }
+        });
+
+        sabDeployBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+            }
+        });
+        sabRegisterBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), RegisterBin.class));
+            }
+        });
+        sabLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            }
+        });
+        sabHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            }
+        });
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                actionButton.setVisibility(View.INVISIBLE);
+                sabDeployBin.setVisibility(View.INVISIBLE);
+                sabNavigateBin.setVisibility(View.INVISIBLE);
+                sabRegisterBin.setVisibility(View.INVISIBLE);
+                sabLocation.setVisibility(View.INVISIBLE);
+                sabHome.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                actionButton.setVisibility(View.VISIBLE);
+                sabDeployBin.setVisibility(View.VISIBLE);
+                sabNavigateBin.setVisibility(View.VISIBLE);
+                sabRegisterBin.setVisibility(View.VISIBLE);
+                sabLocation.setVisibility(View.INVISIBLE);
+                sabHome.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+            }
+        });
+
         //castObjects();
         if (shouldAskPermissions()) {
             askPermissions();
@@ -87,7 +197,6 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         inputUsername   = (TextInputLayout) findViewById(R.id.input_uname);
         inputPassword   = (TextInputLayout) findViewById(R.id.input_pword);
         inputEmail      = (TextInputLayout) findViewById(R.id.input_email);
-
 
         /* Get data from loggedin user*/
         lastName        = globalData.getLastname();
@@ -184,7 +293,6 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                 File f = new File(uri.getPath());
 
 
-
                 displayName = null;
                 Picasso.with(this).load(uri).into(imageView);
                 if (uri.toString().startsWith("content://")) {
@@ -200,12 +308,8 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                 } else if (uri.toString().startsWith("file://")) {
                     displayName = f.getName();
                 }
-
             }
-
         }
-
-
     }
 
     private void getImageFromAlbum(){

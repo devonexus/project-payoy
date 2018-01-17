@@ -1,11 +1,13 @@
 package com.example.apaodevo.basura_juan.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,9 +16,12 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -34,6 +39,9 @@ import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.example.apaodevo.basura_juan.Utils.RecyclerItemTouchHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 
 import org.json.JSONArray;
@@ -44,15 +52,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * Created by apaodevo on 12/5/2017.
  */
 
-
-
 public class BinListActivity extends NavigationDrawerActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
-
 
     /*Declare variables here*/
     private RecyclerView recyclerView;
@@ -67,13 +71,118 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_bin_list);
-
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_bin_list, null, false);
         drawer.addView(contentView, 0);
-        fab.setVisibility(View.INVISIBLE); // Hide floating action button
+        fab.setVisibility(View.INVISIBLE); // Hide floating action
 
+        final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+                .setBackgroundDrawable(R.drawable.bin_location_icon)
+                .build();
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        // repeat many times:
+        ImageView itemIcon1 = new ImageView(this);
+        itemIcon1.setImageResource(R.drawable.floating_navigate_bin);
+
+        ImageView itemIcon2 = new ImageView(this);
+        itemIcon2.setImageResource(R.drawable.deploy);
+
+        ImageView itemIcon3 = new ImageView(this);
+        itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
+
+        ImageView itemIcon4 = new ImageView(this);
+        itemIcon4.setImageResource(R.drawable.bin_location_icon);
+
+        ImageView itemIcon5 = new ImageView(this);
+        itemIcon5.setImageResource(R.drawable.home_button);
+
+
+        final SubActionButton sabNavigateBin = itemBuilder
+                .setContentView(itemIcon1)
+                .build();
+        final SubActionButton sabDeployBin = itemBuilder.setContentView(itemIcon2).build();
+        final SubActionButton sabRegisterBin = itemBuilder.setContentView(itemIcon3).build();
+        final SubActionButton sabLocation = itemBuilder.setContentView(itemIcon4).build();
+        final SubActionButton sabHome = itemBuilder.setContentView(itemIcon5).build();
+
+        //attach the sub buttons to the main button
+        final FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(sabNavigateBin)
+                .addSubActionView(sabDeployBin)
+                .addSubActionView(sabRegisterBin)
+                .addSubActionView(sabLocation)
+                .addSubActionView(sabHome)
+                .attachTo(actionButton)
+                .build();
+
+        sabNavigateBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(DeviceList.btSocket == null) {
+                    startActivity(new Intent(getApplicationContext(), DeviceList.class));
+                }
+                else
+                {
+                    startActivity(new Intent(getApplicationContext(), NavigateBin.class));
+                }
+            }
+        });
+
+        sabDeployBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+            }
+        });
+        sabRegisterBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), RegisterBin.class));
+            }
+        });
+        sabLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            }
+        });
+        sabHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            }
+        });
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                actionButton.setVisibility(View.INVISIBLE);
+                sabDeployBin.setVisibility(View.INVISIBLE);
+                sabNavigateBin.setVisibility(View.INVISIBLE);
+                sabRegisterBin.setVisibility(View.INVISIBLE);
+                sabLocation.setVisibility(View.INVISIBLE);
+                sabHome.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                actionButton.setVisibility(View.VISIBLE);
+                sabDeployBin.setVisibility(View.VISIBLE);
+                sabNavigateBin.setVisibility(View.VISIBLE);
+                sabRegisterBin.setVisibility(View.VISIBLE);
+                sabLocation.setVisibility(View.INVISIBLE);
+                sabHome.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+            }
+        });
 
         /*
         ** Cast objects here
@@ -83,9 +192,6 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
 
         //Change as per key press
         binSearch.addTextChangedListener(new SearchBinTextWatcher(binSearch));
-
-
-
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
@@ -101,13 +207,11 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
-
         //Initialize bin list adapter
         initializeAdapter();
 
         //Retrieve bin list item
         showBinListItem();
-
 
     }
 
@@ -143,8 +247,6 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
             }
         });
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
-
-
     }
 
     /**
@@ -173,10 +275,8 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
             final BinModel deletedBin = binList.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
 
-
             // remove the item from recycler view
             binListAdapter.removeItem(viewHolder.getAdapterPosition());
-
 
             CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_LIST_URL, null,
                     new Response.Listener<JSONObject>() {
@@ -201,7 +301,7 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
                     .make(coordinatorLayout, binName + " was removed from list!", Snackbar.LENGTH_LONG);
-            snackbar.setAction("DELETED", new View.OnClickListener() {
+            snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -214,9 +314,6 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         }
     }
 
-
-
-
     //Triggering function for keypress
     private class SearchBinTextWatcher implements TextWatcher {
         private View view;
@@ -224,8 +321,6 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         private SearchBinTextWatcher(View view) {
             this.view = view;
         }
-
-
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -241,9 +336,7 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         public void afterTextChanged(Editable s) {
 
             filter(s.toString());
-
         }
-
     }
 
     void filter(String s){
@@ -258,5 +351,4 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         //update recyclerview
         binListAdapter.updateList(temp);
     }//This is used to filter the list....
-
 }

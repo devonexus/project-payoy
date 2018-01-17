@@ -86,7 +86,7 @@ public class HomeActivity extends NavigationDrawerActivity{
         btn_navigate_bin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( globalData.address == "") {
+                if(DeviceList.btSocket == null) {
                     startActivity(new Intent(getApplicationContext(), DeviceList.class));
                 }
                 else
@@ -183,13 +183,13 @@ public class HomeActivity extends NavigationDrawerActivity{
 
     private void Disconnect()
     {
-        if (NavigateBin.btSocket != null)
+        if (DeviceList.btSocket != null)
         {
             try
             {
-                NavigateBin.btSocket.close(); //close connection
+                DeviceList.btSocket.close(); //close connection
                 globalData.address="";
-                NavigateBin.btSocket = null;
+                DeviceList.btSocket = null;
             }
             catch (IOException e)
             { globalData.msg("Error");}

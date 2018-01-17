@@ -134,7 +134,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                 startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
             }
         });
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -148,11 +147,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         //noinspection SimplifiableIfStatement
 
-
         return super.onOptionsItemSelected(item);
     }
-
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -222,7 +218,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
                                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                 intent.putExtra("LOGIN_STATUS", false);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
