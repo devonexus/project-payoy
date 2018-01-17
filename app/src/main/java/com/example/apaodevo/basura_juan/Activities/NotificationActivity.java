@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.example.apaodevo.basura_juan.R;
@@ -27,7 +28,16 @@ public class NotificationActivity extends NavigationDrawerActivity{
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
                 .setBackgroundDrawable(R.drawable.bin_location_icon)
                 .build();
+        int blueSubActionButtonSize,blueSubActionButtonContentMargin;
+        blueSubActionButtonSize = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_size);
+        blueSubActionButtonContentMargin = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_content_margin);
+
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        FrameLayout.LayoutParams ContentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        itemBuilder.setLayoutParams(ContentParams);
+        // Set custom layout params
+        FrameLayout.LayoutParams conParams = new FrameLayout.LayoutParams(blueSubActionButtonSize,blueSubActionButtonSize);
+        itemBuilder.setLayoutParams(conParams);
         // repeat many times:
         ImageView itemIcon1 = new ImageView(this);
         itemIcon1.setImageResource(R.drawable.floating_navigate_bin);

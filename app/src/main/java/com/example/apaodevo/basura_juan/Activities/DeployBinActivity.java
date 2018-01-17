@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -89,7 +90,16 @@ public class DeployBinActivity extends NavigationDrawerActivity {
 
                 .setBackgroundDrawable(R.drawable.deploy)
                 .build();
+        int blueSubActionButtonSize,blueSubActionButtonContentMargin;
+        blueSubActionButtonSize = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_size);
+        blueSubActionButtonContentMargin = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_content_margin);
+
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        FrameLayout.LayoutParams ContentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        itemBuilder.setLayoutParams(ContentParams);
+        // Set custom layout params
+        FrameLayout.LayoutParams conParams = new FrameLayout.LayoutParams(blueSubActionButtonSize,blueSubActionButtonSize);
+        itemBuilder.setLayoutParams(conParams);
         // repeat many times:
         ImageView itemIcon1 = new ImageView(this);
         itemIcon1.setImageResource(R.drawable.floating_navigate_bin);

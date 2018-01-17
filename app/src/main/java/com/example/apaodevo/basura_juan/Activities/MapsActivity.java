@@ -5,16 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -48,6 +43,8 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
     double lati, longitude;
     public static GlobalData globalData;
     ImageView lcIcon1,lcIcon2,lcIcon3,lcIcon4,lcIcon5;
+    int redActionButtonSize,leftMargin,rightMargin,topMargin,bottomMargin,redActionButtonContentSize,
+            redActionButtonContentMargin,redActionMenuRadius,blueSubActionButtonSize,blueSubActionButtonContentMargin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,11 +88,28 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // Set up the large red button on the center right side
+        // With custom button and content sizes and margins
+        redActionButtonSize = getResources().getDimensionPixelSize(R.dimen.red_action_button_size);
+        leftMargin = getResources().getDimensionPixelOffset(R.dimen.red_action_button_margin);
+        rightMargin = getResources().getDimensionPixelOffset(R.dimen.rightMargin);
+        topMargin = getResources().getDimensionPixelOffset(R.dimen.topMargin);
+        bottomMargin = getResources().getDimensionPixelOffset(R.dimen.red_action_button_margin);
+        redActionButtonContentSize = getResources().getDimensionPixelSize(R.dimen.red_action_button_content_size);
+        redActionButtonContentMargin = getResources().getDimensionPixelSize(R.dimen.red_action_button_content_margin);
+        redActionMenuRadius = getResources().getDimensionPixelSize(R.dimen.red_action_menu_radius);
+        blueSubActionButtonSize = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_size);
+        blueSubActionButtonContentMargin = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_content_margin);
+
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
                 .setBackgroundDrawable(R.drawable.bin_location_icon)
-                .setPosition(FloatingActionButton.POSITION_BOTTOM_RIGHT)
                 .build();
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        FrameLayout.LayoutParams ContentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        itemBuilder.setLayoutParams(ContentParams);
+        // Set custom layout params
+        FrameLayout.LayoutParams conParams = new FrameLayout.LayoutParams(blueSubActionButtonSize,blueSubActionButtonSize);
+        itemBuilder.setLayoutParams(conParams);
         // repeat many times:
         ImageView itemIcon1 = new ImageView(this);
         itemIcon1.setImageResource(R.drawable.floating_navigate_bin);
@@ -184,24 +198,11 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
             }
         });
 
-        // Set up the large red button on the center right side
-        // With custom button and content sizes and margins
-        int redActionButtonSize = getResources().getDimensionPixelSize(R.dimen.red_action_button_size);
-        int redActionButtonMargin = getResources().getDimensionPixelOffset(R.dimen.action_button_margin);
-        int redActionButtonContentSize = getResources().getDimensionPixelSize(R.dimen.red_action_button_content_size);
-        int redActionButtonContentMargin = getResources().getDimensionPixelSize(R.dimen.red_action_button_content_margin);
-        int redActionMenuRadius = getResources().getDimensionPixelSize(R.dimen.red_action_menu_radius);
-        int blueSubActionButtonSize = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_size);
-        int blueSubActionButtonContentMargin = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_content_margin);
-
         ImageView fabIconStar = new ImageView(this);
         fabIconStar.setImageDrawable(getResources().getDrawable(R.drawable.bin_location_icon));
 
         FloatingActionButton.LayoutParams starParams = new FloatingActionButton.LayoutParams(redActionButtonSize, redActionButtonSize);
-        starParams.setMargins(redActionButtonMargin,
-                redActionButtonMargin,
-                redActionButtonMargin,
-                redActionButtonMargin);
+        starParams.setMargins(leftMargin,topMargin,rightMargin,bottomMargin);
         fabIconStar.setLayoutParams(starParams);
 
         FloatingActionButton.LayoutParams fabIconStarParams = new FloatingActionButton.LayoutParams(redActionButtonContentSize, redActionButtonContentSize);
@@ -212,7 +213,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
 
         final FloatingActionButton leftCenterButton = new FloatingActionButton.Builder(this)
                 .setContentView(fabIconStar, fabIconStarParams)
-                .setBackgroundDrawable(R.drawable.bin_location)
+                .setBackgroundDrawable(R.drawable.bin_location_icon)
                 .setPosition(FloatingActionButton.POSITION_TOP_RIGHT)
                 .setLayoutParams(starParams)
                 .build();
@@ -232,29 +233,23 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         lCSubBuilder.setLayoutParams(blueParams);*/
 
         SubActionButton.Builder itemBuilder1 = new SubActionButton.Builder(this);
+        FrameLayout.LayoutParams blueContentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        itemBuilder1.setLayoutParams(blueContentParams);
+        // Set custom layout params
+        FrameLayout.LayoutParams blueParams = new FrameLayout.LayoutParams(blueSubActionButtonSize, blueSubActionButtonSize);
+        itemBuilder1.setLayoutParams(blueParams);
+
         // repeat many times:
         ImageView itemHybrid = new ImageView(this);
-        itemIcon1.setImageResource(R.drawable.floating_navigate_bin);
+        itemHybrid.setImageResource(R.drawable.floating_navigate_bin);
 
         ImageView itemNormal = new ImageView(this);
-        itemIcon2.setImageResource(R.drawable.deploy);
+        itemNormal.setImageResource(R.drawable.deploy);
 
         final SubActionButton sabHybrid = itemBuilder1
                 .setContentView(itemHybrid)
                 .build();
         final SubActionButton sabNormal = itemBuilder1.setContentView(itemNormal).build();
-
-        /*lcIcon1 = new ImageView(this);
-        lcIcon2 = new ImageView(this);
-        lcIcon3 = new ImageView(this);
-        lcIcon4 = new ImageView(this);
-        lcIcon5 = new ImageView(this);
-
-        lcIcon1.setImageDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));
-        lcIcon2.setImageDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));
-        lcIcon3.setImageDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));
-        lcIcon4.setImageDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));
-        lcIcon5.setImageDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));*/
 
         // Build another menu with custom options
         final FloatingActionMenu leftCenterMenu = new FloatingActionMenu.Builder(this)
@@ -262,7 +257,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
                 .addSubActionView(sabNormal)
                 .setRadius(redActionMenuRadius)
                 .setStartAngle(170)
-                .setEndAngle(100)
+                .setEndAngle(120)
                 .attachTo(leftCenterButton)
                 .build();
 

@@ -82,7 +82,7 @@ public class NavigateBin extends NavigationDrawerActivity {
         btnRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                turnRight();;
+                turnRight();
             }
         });
         btnLeft.setOnLongClickListener(new View.OnLongClickListener() {
