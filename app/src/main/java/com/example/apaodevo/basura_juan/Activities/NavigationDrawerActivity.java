@@ -42,7 +42,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     private AlphaAnimation buttonClick;
     private Toolbar toolbar;
     GlobalData globalData;
-    private IconButton iconButton;
+    private IconButton iconButton, homeButton;
     private ActionBarDrawerToggle toggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +123,11 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         counter.setText("10");
         counter.setVisibility(View.GONE);
         iconButton = (IconButton) badgeLayout.findViewById(R.id.badge_icon_button);
+        homeButton = (IconButton) badgeLayout.findViewById(R.id.badge_home_button);
+        homeButton.setText("{fa-home}");
+        homeButton.setTextColor(getResources().getColor(R.color.colorWhite));
         iconButton.setText("{fa-bell}");
-        iconButton.setTextColor(getResources().getColor(R.color.colorNotificationBell));
+        iconButton.setTextColor(getResources().getColor(R.color.colorWhite));
         //final View menu_notifications = menu.findItem(R.id.menu_notification).getActionView();
         iconButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +135,13 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                 v.startAnimation(buttonClick);
 
                 startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
+            }
+        });
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.startAnimation(buttonClick);
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
             }
         });
 

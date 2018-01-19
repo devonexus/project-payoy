@@ -41,6 +41,7 @@
         <EditText
             android:id="@+id/et_minitial"
             android:maxLength="1"
+            android:maxLines="1"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="@string/hint_mname"
@@ -62,6 +63,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="@string/hint_lname"
+            android:maxLines="1"
             android:inputType="textCapSentences"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -78,6 +80,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLines="1"
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
@@ -110,6 +113,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLines="1"
             android:hint="@string/hint_pword"
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
@@ -150,6 +154,15 @@
             android:layout_centerVertical="true"
             android:scaleType="centerInside"
             android:src="@drawable/user_profile_placeholder" />
+
+        <TextView
+            android:id="@+id/tvImgUserProfile"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/imgUserProfile"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
