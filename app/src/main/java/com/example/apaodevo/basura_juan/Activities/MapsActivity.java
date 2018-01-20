@@ -306,7 +306,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         //getCoordinates(setLatitude, setLongitude);
         LatLng bin_location = new LatLng(10.262542, 123.952021);
 //        Toast.makeText(getApplicationContext(), "DATA "+globalData.getLatitude()+" "+globalData.getLongitude(), Toast.LENGTH_SHORT).show();
-        Toast.makeText(getApplicationContext(), jsonLatitude + " Sample" + jsonLongitude, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), jsonLatitude + " Sample" + jsonLongitude, Toast.LENGTH_SHORT).show();
 
         mMap.addMarker(new MarkerOptions().position(bin_location).title("BasuraJuan"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bin_location));

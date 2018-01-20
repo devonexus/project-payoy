@@ -21,7 +21,6 @@
         android:name=".Services.GlobalData"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
@@ -46,7 +45,8 @@
             android:launchMode="singleTask"
             android:theme="@style/AppTheme" />
         <!-- android:label="@string/title_toolbar" -->
-        <activity android:name=".Activities.MapsActivity">
+        <activity android:name=".Activities.MapsActivity"
+            android:label="Bin Location">
         </activity>
         <activity
             android:name=".Activities.DeployBinActivity"
@@ -54,8 +54,11 @@
             android:launchMode="singleTask"></activity>
         <activity
             android:name=".Activities.RegisterBin"
+            android:label="Register Bin"
             android:launchMode="singleTask" />
-        <activity android:name=".Activities.DeviceList"></activity>
+        <activity android:name=".Activities.DeviceList"
+            android:label="Device List">
+        </activity>
         <activity android:name=".Activities.NavigateBin" />
         <activity
             android:name=".Activities.UserProfileActivity"

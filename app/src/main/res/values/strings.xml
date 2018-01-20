@@ -19,7 +19,7 @@
     <string name="err_msg_email">Enter a valid email</string>
     <string name="err_msg_name">Enter your username</string>
     <string name="err_msg_password">Enter the password</string>
-    <string name="deployment_history_activity">Deployment History</string>
+    <string name="deployment_history_activity">Deploy Bin</string>
     <string name="user_profile_activity">Account Settings</string>
     <string name="err_msg_fname">Enter your first name</string>
     <string name="err_msg_lname">Enter your last name</string>
