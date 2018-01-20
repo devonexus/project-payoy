@@ -240,10 +240,10 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
 
         // repeat many times:
         ImageView itemHybrid = new ImageView(this);
-        itemHybrid.setImageResource(R.drawable.floating_navigate_bin);
+        itemHybrid.setImageResource(R.drawable.satellite_view);
 
         ImageView itemNormal = new ImageView(this);
-        itemNormal.setImageResource(R.drawable.deploy);
+        itemNormal.setImageResource(R.drawable.icon_normal_view);
 
         final SubActionButton sabHybrid = itemBuilder1
                 .setContentView(itemHybrid)
