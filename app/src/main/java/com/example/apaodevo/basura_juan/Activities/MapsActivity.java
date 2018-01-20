@@ -119,22 +119,17 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         ImageView itemIcon3 = new ImageView(this);
         itemIcon3.setImageResource(R.drawable.floating_action_register_bin);
 
-        ImageView itemIcon4 = new ImageView(this);
-        itemIcon4.setImageResource(R.drawable.home_button);
-
         final SubActionButton sabNavigateBin = itemBuilder
                 .setContentView(itemIcon1)
                 .build();
         final SubActionButton sabDeployBin = itemBuilder.setContentView(itemIcon2).build();
         final SubActionButton sabRegisterBin = itemBuilder.setContentView(itemIcon3).build();
-        final SubActionButton sabHome = itemBuilder.setContentView(itemIcon4).build();
 
         //attach the sub buttons to the main button
         final FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(sabNavigateBin)
                 .addSubActionView(sabDeployBin)
                 .addSubActionView(sabRegisterBin)
-                .addSubActionView(sabHome)
                 .attachTo(actionButton)
                 .build();
 
@@ -163,12 +158,6 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
                 startActivity(new Intent(getApplicationContext(), RegisterBin.class));
             }
         });
-        sabHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-            }
-        });
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -176,7 +165,6 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
                 sabDeployBin.setVisibility(View.INVISIBLE);
                 sabNavigateBin.setVisibility(View.INVISIBLE);
                 sabRegisterBin.setVisibility(View.INVISIBLE);
-                sabHome.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -189,8 +177,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
                 sabDeployBin.setVisibility(View.VISIBLE);
                 sabNavigateBin.setVisibility(View.VISIBLE);
                 sabRegisterBin.setVisibility(View.VISIBLE);
-                sabHome.setVisibility(View.VISIBLE);
-            }
+        }
 
             @Override
             public void onDrawerStateChanged(int newState) {
