@@ -246,8 +246,6 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         pDialog.setMessage("Updating user profile...");
         pDialog.setCancelable(false);
 
-
-
         btn_update.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -414,9 +412,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                                         }
                                     }
                                 });
-
                             }
-
                         };
                         thread.start();
                     }

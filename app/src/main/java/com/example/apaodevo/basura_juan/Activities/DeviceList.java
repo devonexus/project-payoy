@@ -2,6 +2,7 @@ package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothSocket;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
+import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,7 +94,7 @@ public class DeviceList extends ActionBarActivity
             Toast.makeText(getApplicationContext(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
         }
 
-        final ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, list);
+        final ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_2, list);
         devicelist.setAdapter(adapter);
         devicelist.setOnItemClickListener(myListClickListener); //Method called when the device from the list is clicked
     }
@@ -105,7 +107,8 @@ public class DeviceList extends ActionBarActivity
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
             globalData.address = address;
-
+            globalData.name = info;
+            //globalData.msg(info);
             if(btSocket != null)
             {
                 try {
@@ -126,11 +129,25 @@ public class DeviceList extends ActionBarActivity
     {
         private boolean ConnectSuccess = true; //if it's here, it's almost connected
 
+
         @Override
         protected void onPreExecute()
         {
             //progress = new ProgressDialog(DeviceList.this,R.style.AppCompatAlertDialogStyle);
-            progress = ProgressDialog.show(DeviceList.this, "Connecting...", "Please wait!!!");  //show a progress dialog
+            progress = new ProgressDialog(DeviceList.this, R.style.AppCompatAlertDialogStyle);
+            //progress = ProgressDialog.show(DeviceList.this, "Connecting...", "Please wait!!!");  //show a progress dialog
+            progress.setTitle("Connecting...");
+            progress.setMessage("Please wait!!!");
+            progress.setCancelable(false);
+
+            progress.setIndeterminate(true);
+            progress.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            progress.show();
         }
 
         @Override
@@ -141,7 +158,7 @@ public class DeviceList extends ActionBarActivity
                 if (btSocket == null || !isBtConnected)
                 {
                     myBlue = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice connect = myBlue.getRemoteDevice( globalData.address);//connects to the device's address and checks if it's available
+                    BluetoothDevice connect = myBlue.getRemoteDevice(globalData.address);//connects to the device's address and checks if it's available
                     btSocket = connect.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                     btSocket.connect();//start connection

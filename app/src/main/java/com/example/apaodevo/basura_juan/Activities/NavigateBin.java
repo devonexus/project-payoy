@@ -27,26 +27,30 @@ public class NavigateBin extends NavigationDrawerActivity {
     GlobalData                    globalData;
     private String                auto          ="Pause Automation";
     Intent bluetooth,home;
+    TextView binConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         globalData = (GlobalData) getApplicationContext();
-        TextView binConnected = (TextView) findViewById(R.id.txtBinConnected);
 
-        //binConnected.setText(globalData.name);
         //Intent newint = getIntent();
        // globalData.address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
+
         if(globalData.address == null) {
             bluetooth = new Intent(NavigateBin.this, DeviceList.class);
             Toast.makeText(getApplicationContext(), "Please Connect First to a SPP bluetooth", Toast.LENGTH_SHORT).show();
             startActivity(bluetooth);
         }
+        if(DeviceList.btSocket == null)
+        {
+            home = new Intent(NavigateBin.this, HomeActivity.class);
+            startActivity(home);
+        }
 
         //setContentView(R.layout.activity_navigate_bin);
         //Set up navigation drawer
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_navigate_bin, null, false);
         drawer.addView(contentView, 0);
 
@@ -59,7 +63,9 @@ public class NavigateBin extends NavigationDrawerActivity {
         btnForward         = (Button)   findViewById(R.id.btnForward);
         btnDisconnect      = (Button)   findViewById(R.id.btnDisconnect);
         btnAutomationpause = (Button)  findViewById(R.id.btnAutomationPause);
+        binConnected       = (TextView) findViewById(R.id.txtBinConnected);
 
+        binConnected.setText(globalData.name);
         if(auto == "Pause Automation") {
             btnForward.setEnabled(false);
             btnLeft.setEnabled(false);
@@ -246,7 +252,7 @@ public class NavigateBin extends NavigationDrawerActivity {
                 DeviceList.btSocket.close(); //close connection
                 DeviceList.btSocket = null;
                 globalData.address = "";
-                home = new Intent(this, HomeActivity.class);
+                home = new Intent(NavigateBin.this, HomeActivity.class);
                 startActivity(home);
             }
             catch (IOException e)

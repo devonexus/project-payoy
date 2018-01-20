@@ -28,17 +28,10 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
     private Context context;
     private List<BinModel> binList;
 
-
-
     public BinListAdapter(Context context, List<BinModel> binList) {
         this.context = context;
         this.binList = binList;
-
     }
-
-
-
-
 
     public interface BinListAdapterListener {
         void onBinSelected(BinModel binModel);

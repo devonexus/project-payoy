@@ -1,6 +1,5 @@
 package com.example.apaodevo.basura_juan.Activities;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
