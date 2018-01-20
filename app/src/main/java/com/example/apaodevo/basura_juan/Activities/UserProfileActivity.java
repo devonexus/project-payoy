@@ -62,6 +62,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
     private String image_path, displayName, encodedImage;
     private static String lastName, firstName, middleInitial, email, userName, passWord, imageUrl; /*Store user profile data*/
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
+    private TextView tvLoginUserProfile;
     private ProgressDialog pDialog;
 
     @Override
@@ -211,6 +212,9 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         inputPassword   = (TextInputLayout) findViewById(R.id.input_pword);
         inputEmail      = (TextInputLayout) findViewById(R.id.input_email);
 
+        tvLoginUserProfile = (TextView) findViewById(R.id.tvLoginUser);
+
+
         /* Get data from loggedin user*/
         lastName        = globalData.getLastname();
         firstName       = globalData.getFirstname();
@@ -264,6 +268,9 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                                 Log.d("Error:", e.getMessage());
                                 e.printStackTrace();
                             }
+                            if(!validateImagePath()){
+                                return;
+                            }
                             updateUserProfile(etlname.getText().toString(),
                                                 etfname.getText().toString(),
                                                 etminitial.getText().toString(),
@@ -305,7 +312,10 @@ public class UserProfileActivity extends NavigationDrawerActivity{
 
 
                 displayName = null;
-                Picasso.with(this).load(uri).into(imageView);
+                Picasso.with(this)
+                        .load(uri)
+                        .transform(new CropCircleTransformation())
+                        .into(imageView);
                 if (uri.toString().startsWith("content://")) {
                     Cursor cursor = null;
                     try {
@@ -444,7 +454,16 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         };
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
     }
-    
+    private boolean validateImagePath(){
+        if(image_path.isEmpty()){
+            tvLoginUserProfile.setError(getString(R.string.err_select_image));
+        return false;
+    } else{
+        tvLoginUserProfile.setError(null);
+        return true;
+    }
+
+    }
     private void clearUserProfileActivity(){
         etfname.setText("");
         etlname.setText("");

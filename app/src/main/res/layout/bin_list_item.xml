@@ -85,7 +85,15 @@
             android:text="Bin name"
             android:textColor="@color/colorAccent"
             android:textStyle="bold" />
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_bin"
+            android:layout_centerInParent="true"
+            android:textColor="@color/colorMaroon"
+            android:layout_alignParentRight="true"
+            android:id="@+id/edit_bin"
+            ></Button>
     </RelativeLayout>
 
 </FrameLayout>

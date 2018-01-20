@@ -67,7 +67,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     private EditText etFname, etMinitial, etLname, etEmail, etUsername, etPassword;
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
     private ProgressDialog pDialog;
-
+    private TextView tvImageUserProfile;
     //public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
 
 //    public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
@@ -105,6 +105,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         etMinitial  = (EditText) findViewById(R.id.et_minitial);
         etEmail     = (EditText) findViewById(R.id.et_email);
         etUsername  = (EditText) findViewById(R.id.et_uname);
+        tvImageUserProfile = (TextView) findViewById(R.id.tvImgUserProfile);
         etPassword  = (EditText) findViewById(R.id.et_pword);
 
 
@@ -336,7 +337,9 @@ public class RegisterUserActivity extends AppCompatActivity {
         if(!validatePasssword()){
             return;
         }
-
+        if(!validateImagePath()){
+            return;
+        }
         try {
             encodedImage = ImageBase64
                     .with(getApplicationContext())
@@ -352,7 +355,16 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     }
 
+    private boolean validateImagePath(){
+        if(image_path.isEmpty()){
+            tvImageUserProfile.setError(getString(R.string.err_select_image));
+            return false;
+        } else{
+            tvImageUserProfile.setError(null);
+            return true;
+        }
 
+    }
 
     private boolean validatePasssword(){
         if(etPassword.getText().toString().trim().isEmpty()){

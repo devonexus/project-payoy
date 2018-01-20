@@ -127,6 +127,15 @@
             android:layout_centerVertical="true"
             android:scaleType="centerInside"
             android:src="@drawable/user_profile_placeholder" />
+
+        <TextView
+            android:id="@+id/tvLoginUser"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/img_login_user"
+            android:gravity="center"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
     <Button
