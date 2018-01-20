@@ -185,7 +185,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         });
 
         ImageView fabIconStar = new ImageView(this);
-        fabIconStar.setImageDrawable(getResources().getDrawable(R.drawable.bin_location_icon));
+       // fabIconStar.setImageDrawable(getResources().getDrawable(R.drawable.bin_location_icon));
 
         FloatingActionButton.LayoutParams starParams = new FloatingActionButton.LayoutParams(redActionButtonSize, redActionButtonSize);
         starParams.setMargins(leftMargin,topMargin,rightMargin,bottomMargin);
@@ -199,7 +199,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
 
         final FloatingActionButton leftCenterButton = new FloatingActionButton.Builder(this)
                 .setContentView(fabIconStar, fabIconStarParams)
-                .setBackgroundDrawable(R.drawable.bin_location_icon)
+                .setBackgroundDrawable(R.drawable.map_view)
                 .setPosition(FloatingActionButton.POSITION_TOP_RIGHT)
                 .setLayoutParams(starParams)
                 .build();

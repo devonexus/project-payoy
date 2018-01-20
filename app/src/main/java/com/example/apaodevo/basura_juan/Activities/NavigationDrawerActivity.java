@@ -69,7 +69,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         tv_fullname.setText(fullName);
         tv_email.setText(emailAddress);
 
-
         Picasso.with(this)
                 .load(imageUrl)
                 .transform(new CropCircleTransformation())
@@ -81,9 +80,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_logo);
-
-
-
 
         /*toolbar.setNavigationIcon(R.drawable.location_icon);
         toolbar.setTitle("Title");

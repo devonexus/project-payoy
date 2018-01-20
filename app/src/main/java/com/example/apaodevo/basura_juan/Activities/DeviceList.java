@@ -2,11 +2,13 @@ package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,7 +31,7 @@ import java.util.Set;
 import java.util.UUID;
 
 
-public class DeviceList extends ActionBarActivity
+public class DeviceList extends NavigationDrawerActivity
 {
     //widgets
     Button btnPaired;
@@ -49,7 +51,14 @@ public class DeviceList extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_list);
+        //setContentView(R.layout.activity_device_list);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_device_list, null, false);
+        drawer.addView(contentView, 0);
+
+        fab.setImageResource(R.drawable.floating_navigate_bin);
+        fab.setVisibility(View.GONE);
 
         globalData = (GlobalData) getApplicationContext();
         //Calling widgets
@@ -94,7 +103,7 @@ public class DeviceList extends ActionBarActivity
             Toast.makeText(getApplicationContext(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
         }
 
-        final ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_2, list);
+        final ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, list);
         devicelist.setAdapter(adapter);
         devicelist.setOnItemClickListener(myListClickListener); //Method called when the device from the list is clicked
     }
