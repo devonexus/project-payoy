@@ -25,7 +25,7 @@ public class NavigateBin extends NavigationDrawerActivity {
 
     private Button                btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect;
     GlobalData                    globalData;
-    private String                auto          ="Pause Automation";
+    private String                auto = "Pause Automation";
     Intent bluetooth,home;
     TextView binConnected;
 

@@ -8,40 +8,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.R;
-import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
-import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MapsActivity extends NavigationDrawerActivity implements OnMapReadyCallback {
 
     GoogleMap mMap;
     private String BIN_LOCATION_URL = "http://basurajuan.x10host.com/bin-location.php";
    // private double setLatitude = 10.262542, setLongitude = 123.952021;/*This is static longitude*/
-    String jsonLatitude, jsonLongitude;
-    double realLat, realLong;
-    double lati, longitude;
+
     public static GlobalData globalData;
     ImageView lcIcon1,lcIcon2,lcIcon3,lcIcon4,lcIcon5;
+
     int redActionButtonSize,leftMargin,rightMargin,topMargin,bottomMargin,redActionButtonContentSize,
             redActionButtonContentMargin,redActionMenuRadius,blueSubActionButtonSize,blueSubActionButtonContentMargin;
 
@@ -57,32 +45,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         fab.setImageResource(R.drawable.floating_navigate_bin);
         fab.setVisibility(View.GONE);
 
-        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_LOCATION_URL, null,
-                new Response.Listener<JSONObject>(){
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            jsonLatitude = response.getString(Keys.TAG_BIN_LATITUDE);
-                            jsonLongitude = response.getString(Keys.TAG_BIN_LONGITUDE);
-                            // lati = Double.parseDouble(jsonLatitude);
-                            // longitude = Double.parseDouble(jsonLongitude);
-                          //   globalData = (GlobalData) getApplicationContext();
-                          //   globalData.setLatitude(jsonLatitude);
-                          //   globalData.setLongitude(jsonLongitude);
-                            Toast.makeText(getApplicationContext(), jsonLatitude+" Longitude "+jsonLongitude, Toast.LENGTH_SHORT).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }){
-        };
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
-
+        //getCoordinates();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -304,7 +267,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         //getCoordinates(setLatitude, setLongitude);
-        LatLng bin_location = new LatLng(10.262542, 123.952021);
+        LatLng bin_location = new LatLng(Double.parseDouble(globalData.getLatitude()), Double.parseDouble(globalData.getLongitude()));
 //        Toast.makeText(getApplicationContext(), "DATA "+globalData.getLatitude()+" "+globalData.getLongitude(), Toast.LENGTH_SHORT).show();
         //Toast.makeText(getApplicationContext(), jsonLatitude + " Sample" + jsonLongitude, Toast.LENGTH_SHORT).show();
 
@@ -313,5 +276,39 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bin_location, 15));
         mMap.setMapType(mMap.MAP_TYPE_HYBRID);
     }
+    /*private void getCoordinates(){
+        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_LOCATION_URL, null,
+                new Response.Listener<JSONObject>(){
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            jsonLatitude = response.getString(Keys.TAG_BIN_LATITUDE);
+                            jsonLongitude = response.getString(Keys.TAG_BIN_LONGITUDE);
+                            // lati = Double.parseDouble(jsonLatitude);
+                            // longitude = Double.parseDouble(jsonLongitude);
+                            //   globalData = (GlobalData) getApplicationContext();
+                            //   globalData.setLatitude(jsonLatitude);
+                            //   globalData.setLongitude(jsonLongitude);
+                            Toast.makeText(getApplicationContext(), jsonLatitude+" Longitude "+jsonLongitude, Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
 
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_BIN_LOCATION_REQUEST, "retrieve");
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
+    }*/
 }

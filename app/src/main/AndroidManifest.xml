@@ -64,7 +64,6 @@
             android:name=".Activities.UserProfileActivity"
             android:label="@string/user_profile_activity"
             android:launchMode="singleTask"></activity>
-        <activity android:name=".Activities.BinNavigation" />
         <activity android:name=".Activities.NotificationActivity"
 
             android:launchMode="singleTask"

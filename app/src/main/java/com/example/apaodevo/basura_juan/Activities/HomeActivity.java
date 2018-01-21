@@ -16,10 +16,23 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
+import com.example.apaodevo.basura_juan.Services.VolleySingleton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class HomeActivity extends NavigationDrawerActivity{
@@ -27,6 +40,8 @@ public class HomeActivity extends NavigationDrawerActivity{
     private ProgressDialog pDialog;
     GlobalData globalData;
 
+    private String BIN_LOCATION_URL = "http://basurajuan.x10host.com/bin-location.php";
+    String jsonLatitude, jsonLongitude;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +55,21 @@ public class HomeActivity extends NavigationDrawerActivity{
 
         fab.setImageResource(R.drawable.floating_navigate_bin);
         fab.setVisibility(View.GONE);
-
+        getCoordinates();
         globalData = (GlobalData) getApplicationContext();
-//        //Go to bin location interface
-//        btn_bin_location = (Button) findViewById(R.id.btn_de);
-//        btn_bin_location.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-//                    }
-//                }
-//        );
+        //        //Go to bin location interface
+        //        btn_bin_location = (Button) findViewById(R.id.btn_de);
+        //        btn_bin_location.setOnClickListener(
+        //                new View.OnClickListener() {
+        //                    @Override
+        //                    public void onClick(View v) {
+        //                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+        //                    }
+        //                }
+        //        );
         //Go to bin location interface
+
+
         btn_bin_location = (Button) findViewById(R.id.btn_de);
         btn_bin_location.setOnClickListener(
                 new View.OnClickListener() {
@@ -99,6 +116,45 @@ public class HomeActivity extends NavigationDrawerActivity{
         initializeProgressDialogState();
 
 
+    }
+
+    private void getCoordinates(){
+        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_LOCATION_URL, null,
+                new Response.Listener<JSONObject>(){
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            jsonLatitude = response.getString(Keys.TAG_BIN_LATITUDE);
+                            jsonLongitude = response.getString(Keys.TAG_BIN_LONGITUDE);
+                            final GlobalData globalData = (GlobalData) getApplicationContext();
+                            globalData.setLatitude(jsonLatitude);
+                            globalData.setLongitude(jsonLongitude);
+                            // lati = Double.parseDouble(jsonLatitude);
+                            // longitude = Double.parseDouble(jsonLongitude);
+                            //   globalData = (GlobalData) getApplicationContext();
+                            //   globalData.setLatitude(jsonLatitude);
+                            //   globalData.setLongitude(jsonLongitude);
+                            //Toast.makeText(getApplicationContext(), jsonLatitude+" Longitude "+jsonLongitude, Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_BIN_LOCATION_REQUEST, "retrieve");
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
     }
     private void initializeProgressDialogState(){
         pDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);

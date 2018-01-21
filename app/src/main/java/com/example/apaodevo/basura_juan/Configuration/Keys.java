@@ -44,7 +44,7 @@ public class Keys{
     public static final String TAG_BIN_REQUEST = "requestType";
     public static final String TAG_BIN_LATITUDE = "lat";
     public static final String TAG_BIN_LONGITUDE = "long";
-
+    public static final String TAG_BIN_LOCATION_REQUEST = "function";
 
     /*Deploy Bin Tags*/
 

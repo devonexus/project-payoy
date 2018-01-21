@@ -85,7 +85,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         pDialog.setMessage("Fetching location...");
         pDialog.setCancelable(false);
 
-
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
 
                 .setBackgroundDrawable(R.drawable.deploy)

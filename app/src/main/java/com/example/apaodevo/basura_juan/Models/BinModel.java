@@ -9,6 +9,7 @@ public class BinModel {
 
 
 
+
     public String getBinName() {
         return binName;
     }

@@ -56,7 +56,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         imageUrl            = globalData.getImageUrl().trim();
         emailAddress        = globalData.getEmailAddress();
 
-
         // /Set text in navigation drawer header
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         buttonClick = new AlphaAnimation(1F, 0.2F);
@@ -79,7 +78,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         //Create toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setLogo(R.mipmap.ic_logo);
+        toolbar.setLogo(R.mipmap.ic_launcher);
 
         /*toolbar.setNavigationIcon(R.drawable.location_icon);
         toolbar.setTitle("Title");
@@ -97,7 +96,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -108,7 +106,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         fab                     = (FloatingActionButton) findViewById(R.id.fab);
 
     }//Cast objects and point it to the object name
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -143,7 +140,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -161,7 +157,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (id == R.id.nav_account) {
@@ -234,7 +229,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                                 hidepDialog();
                             }
                         });
-
                     }
 
                 };
@@ -245,6 +239,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         builder.show();
     }
+
     private void selectNavMenu(){
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }//Selecting navigation drawer item

@@ -96,7 +96,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         if (shouldAskPermissions()) {
             askPermissions();
         }
-
+        //Toast.makeText(getApplicationContext(), ""+image_path, Toast.LENGTH_SHORT).show();
         //Cast objects
         bregister   = (Button) findViewById(R.id.btn_submit);
         tv1         = (TextView) findViewById(R.id.et_go_to_login);
@@ -317,7 +317,9 @@ public class RegisterUserActivity extends AppCompatActivity {
         String userEmail        = etEmail.getText().toString();
         String userUsername     = etUsername.getText().toString();
         String userPassword     = etPassword.getText().toString();
-
+        if(!validateImagePath()){
+            return;
+        }
         if(!validateFirstname()){
             return;
         }
@@ -337,9 +339,8 @@ public class RegisterUserActivity extends AppCompatActivity {
         if(!validatePasssword()){
             return;
         }
-        if(!validateImagePath()){
-            return;
-        }
+
+
         try {
             encodedImage = ImageBase64
                     .with(getApplicationContext())
@@ -349,14 +350,14 @@ public class RegisterUserActivity extends AppCompatActivity {
             Log.d("Error:", e.getMessage());
             e.printStackTrace();
         }
-//        Toast.makeText(getApplicationContext(), ""+displayName.toString(), Toast.LENGTH_LONG).show();
+
         registerUser(lastName, firstName, middleInitial, userEmail, userUsername, userPassword, encodedImage, displayName);
 
 
     }
 
     private boolean validateImagePath(){
-        if(image_path.isEmpty()){
+        if(image_path == null){
             tvImageUserProfile.setError(getString(R.string.err_select_image));
             return false;
         } else{
@@ -517,7 +518,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         etMinitial.setError(null);
         etFname.setError(null);
         etLname.setError(null);
-        img_user_profile.setImageResource(android.R.color.transparent);
+        img_user_profile.setImageResource(R.drawable.user_profile_placeholder);
     }
 
 

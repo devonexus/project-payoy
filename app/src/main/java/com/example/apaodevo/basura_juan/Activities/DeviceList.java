@@ -148,14 +148,6 @@ public class DeviceList extends NavigationDrawerActivity
             progress.setTitle("Connecting...");
             progress.setMessage("Please wait!!!");
             progress.setCancelable(false);
-
-            progress.setIndeterminate(true);
-            progress.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
             progress.show();
         }
 
