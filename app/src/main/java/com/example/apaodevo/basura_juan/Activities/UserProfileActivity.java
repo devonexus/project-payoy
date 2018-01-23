@@ -57,14 +57,14 @@ public class UserProfileActivity extends NavigationDrawerActivity{
     private Button btn_update;
     private ImageView imageView;
     private Uri uri;
-    public static String UPDATE_USER_URL= "http://132.223.41.121/update-user.php"; //WEB Service URL
+    public static String UPDATE_USER_URL= "http://basurajuan.x10host.com/update-user.php"; //WEB Service URL
     private static int RESULT_LOAD_IMAGE = 1;
     private String image_path, displayName, encodedImage;
     private static String lastName, firstName, middleInitial, email, userName, passWord, imageUrl; /*Store user profile data*/
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
     private TextView tvLoginUserProfile;
     private ProgressDialog pDialog;
-
+    private String navFname, navEmail, navImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,15 +79,15 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         if (shouldAskPermissions()) {
             askPermissions();
         }
-        globalData = (GlobalData) getApplicationContext();
-        btn_update  = (Button) findViewById(R.id.btn_update);
-        etlname     = (EditText) findViewById(R.id.etLname);
-        etfname     = (EditText) findViewById(R.id.etFname);
-        etuname     = (EditText) findViewById(R.id.etUname);
-        etemail     = (EditText) findViewById(R.id.etEmail);
-        etminitial  = (EditText) findViewById(R.id.etMinitial);
-        etpword     = (EditText) findViewById(R.id.etPword);
-        imageView   = (ImageView) findViewById(R.id.img_login_user);
+        globalData      = (GlobalData) getApplicationContext();
+        btn_update      = (Button) findViewById(R.id.btn_update);
+        etlname         = (EditText) findViewById(R.id.etLname);
+        etfname         = (EditText) findViewById(R.id.etFname);
+        etuname         = (EditText) findViewById(R.id.etUname);
+        etemail         = (EditText) findViewById(R.id.etEmail);
+        etminitial      = (EditText) findViewById(R.id.etMinitial);
+        etpword         = (EditText) findViewById(R.id.etPword);
+        imageView       = (ImageView) findViewById(R.id.img_login_user);
         inputFname      = (TextInputLayout) findViewById(R.id.input_fname);
         inputLname      = (TextInputLayout) findViewById(R.id.input_lname);
         inputMinitial   = (TextInputLayout) findViewById(R.id.input_minitial);
@@ -96,17 +96,19 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         inputEmail      = (TextInputLayout) findViewById(R.id.input_email);
 
         tvLoginUserProfile = (TextView) findViewById(R.id.tvLoginUser);
+        getUserInfo();
+
 
 
         /* Get data from loggedin user*/
-        lastName        = globalData.getLastname();
+      /*  lastName        = globalData.getLastname();
         firstName       = globalData.getFirstname();
         middleInitial   = globalData.getMinitial();
         email           = globalData.getEmailAddress();
         userName        = globalData.getUsername();
         passWord        = globalData.getPassword();
         imageUrl        = globalData.getImageUrl();
-
+        Toast.makeText(getApplicationContext(), ""+imageUrl, Toast.LENGTH_SHORT).show();
         etlname.setText(lastName);
         etfname.setText(firstName);
         etminitial.setText(middleInitial);
@@ -118,7 +120,9 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                 .transform(new CropCircleTransformation())
                 .resize(220, 220)
                 .error(R.drawable.user_profile_placeholder)
-                .into(imageView);
+                .into(imageView);*/
+
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,36 +143,83 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                     public void onClick(View v) {
                        /* && etfname.equals(firstName) && etminitial.equals(middleInitial) &&
                                 etemail.equals(email) && etuname.equals(userName) && etpword.equals(passWord)*/
-                        if(etlname.getText().toString().equals(lastName) && etfname.getText().toString().equals(firstName)){
+                        //etlname.getText().toString().equals(lastName) && etfname.getText().toString().equals(firstName) &&
+
+                       /* lastName        = globalData.getLastname();
+                        firstName       = globalData.getFirstname();
+                        middleInitial   = globalData.getMinitial();
+                        email           = globalData.getEmailAddress();
+                        userName        = globalData.getUsername();
+                        passWord        = globalData.getPassword();
+                        imageUrl        = globalData.getImageUrl();*/
+                        if(etlname.getText().toString().equals(lastName)
+                                && etfname.getText().toString().equals(firstName)
+                                && etminitial.getText().toString().equals(middleInitial)
+                                && etuname.getText().toString().equals(userName)
+                                && etpword.getText().toString().equals(passWord)
+                                && image_path == null){
                             Toast.makeText(getApplicationContext(), "No changes made.", Toast.LENGTH_SHORT).show();
                         }else{
-                            try {
-                                encodedImage = ImageBase64
-                                        .with(getApplicationContext())
-                                        .requestSize(60, 60)
-                                        .encodeFile(image_path);
-                            } catch (FileNotFoundException e) {
-                                Log.d("Error:", e.getMessage());
-                                e.printStackTrace();
+                            if(image_path == null){
+                                updateUserProfileExceptImage(etlname.getText().toString(),
+                                        etfname.getText().toString(),
+                                        etminitial.getText().toString(),
+                                        etemail.getText().toString(),
+                                        etuname.getText().toString(),
+                                        etpword.getText().toString());
+                            }else{
+                                  try {
+                                        encodedImage = ImageBase64
+                                                .with(getApplicationContext())
+                                                .requestSize(60, 60)
+                                                .encodeFile(image_path);
+                                    } catch (FileNotFoundException e) {
+                                        Log.d("Error:", e.getMessage());
+                                        e.printStackTrace();
+                                  }
+                                    if(!validateImagePath()){
+                                        return;
+                                    }
+                                    updateUserProfile(etlname.getText().toString(),
+                                                        etfname.getText().toString(),
+                                                        etminitial.getText().toString(),
+                                                        etemail.getText().toString(),
+                                                        etuname.getText().toString(),
+                                                        etpword.getText().toString(),
+                                                        encodedImage, displayName);
+
                             }
-                            if(!validateImagePath()){
-                                return;
-                            }
-                            updateUserProfile(etlname.getText().toString(),
-                                                etfname.getText().toString(),
-                                                etminitial.getText().toString(),
-                                                etemail.getText().toString(),
-                                                etuname.getText().toString(),
-                                                etpword.getText().toString(),
-                                                encodedImage, displayName);
 
 
-                           // Toast.makeText(getApplicationContext(), "You have updated"+image_path, Toast.LENGTH_SHORT).show();
+
+
                         }
                     }
                 }
         );//Check changes for user profile, update else no changes made
     }
+    private void getUserInfo(){
+        globalData = (GlobalData) getApplicationContext();
+        lastName        = globalData.getLastname();
+        firstName       = globalData.getFirstname();
+        middleInitial   = globalData.getMinitial();
+        email           = globalData.getEmailAddress();
+        userName        = globalData.getUsername();
+        passWord        = globalData.getPassword();
+        imageUrl        = globalData.getImageUrl();
+        etlname.setText(lastName);
+        etfname.setText(firstName);
+        etminitial.setText(middleInitial);
+        etemail.setText(email);
+        etuname.setText(userName);
+        etpword.setText(passWord);
+
+        Picasso.with(this).load(imageUrl)
+                .transform(new CropCircleTransformation())
+                .error(R.drawable.user_profile_placeholder)
+                .into(imageView);
+    }
+
 
     protected boolean shouldAskPermissions() {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
@@ -299,6 +350,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                                                 globalData.setEmailAddress(response.getString(Keys.TAG_USER_EMAIL));
                                                 globalData.setMiddleInitial(response.getString(Keys.TAG_MINITIAL));
                                                 globalData.setImageUrl(response.getString(Keys.TAG_IMAGE_URL));
+                                                globalData.setFullname(response.getString(Keys.TAG_LNAME)+" "+response.getString(Keys.TAG_FNAME)+" "+response.getString(Keys.TAG_MINITIAL));
                                         hidepDialog();
                                         }catch (JSONException e){
                                             e.printStackTrace();
@@ -337,34 +389,138 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         };
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
     }
+
+
+
+
+    private void updateUserProfileExceptImage(final String lastName, final String firstName, final String middleInitial, final String email, final String uName, final String pWord){
+        showpDialog();
+        final CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, UPDATE_USER_URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(final JSONObject response) {
+                String server_response;
+                try {
+                    server_response = response.getString(Keys.TAG_SUCCESS);
+
+                    if(server_response.equals("0")){
+                        Thread thread = new Thread() {
+                            @Override
+                            public void run() {
+                                // Block this thread for 1.5 seconds.
+                                try {
+                                    Thread.sleep(1500);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                                // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        etuname.setError("Username does not exist");
+                                        hidepDialog();
+                                    }
+                                });
+
+                            }
+
+                        };
+                        thread.start();
+                    } else if(server_response.equals("1")){
+                        Thread thread = new Thread() {
+
+                            @Override
+                            public void run() {
+
+                                // Block this thread for 1.5 seconds.
+                                try {
+                                    Thread.sleep(1500);
+                                } catch (InterruptedException e) {
+                                }
+
+                                // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try{
+                                            Toast.makeText(getApplicationContext(),
+                                                    "User successfully updated",
+                                                    Toast.LENGTH_LONG).show();
+                                            etfname.setText(response.getString(Keys.TAG_FNAME));
+                                            etlname.setText(response.getString(Keys.TAG_LNAME));
+                                            etminitial.setText(response.getString(Keys.TAG_MINITIAL));
+                                            etemail.setText(response.getString(Keys.TAG_USER_EMAIL));
+                                            etpword.setText(response.getString(Keys.TAG_PWORD));
+                                            etuname.setText(response.getString(Keys.TAG_USERNAME));
+                                            Picasso.with(getApplicationContext())
+                                                    .load(response.getString(Keys.TAG_IMAGE_URL))
+                                                    .transform(new CropCircleTransformation())
+                                                    .into(imageView);
+
+                                            //Update data for new users
+                                            globalData.setUsername(response.getString(Keys.TAG_USERNAME));
+                                            globalData.setPassword(response.getString(Keys.TAG_PWORD));
+                                            globalData.setFirstname(response.getString(Keys.TAG_FNAME));
+                                            globalData.setLastname(response.getString(Keys.TAG_LNAME));
+                                            globalData.setEmailAddress(response.getString(Keys.TAG_USER_EMAIL));
+                                            globalData.setMiddleInitial(response.getString(Keys.TAG_MINITIAL));
+                                            globalData.setImageUrl(response.getString(Keys.TAG_IMAGE_URL));
+
+                                            globalData.setFullname(response.getString(Keys.TAG_LNAME)+" "+response.getString(Keys.TAG_FNAME)+" "+response.getString(Keys.TAG_MINITIAL));
+
+                                            hidepDialog();
+                                        }catch (JSONException e){
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            }
+                        };
+                        thread.start();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(UserProfileActivity.this, "Could not get data from server.", Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+                hidepDialog();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_LASTNAME, lastName);
+                params.put(Keys.TAG_FIRSTNAME, firstName);
+                params.put(Keys.TAG_MIDDLE_INITIAL, middleInitial);
+                params.put(Keys.TAG_EMAIL, email);
+                params.put(Keys.TAG_USERNAME, uName);
+                params.put(Keys.TAG_PASSWORD, pWord);
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
+    }
     private boolean validateImagePath(){
-        if(image_path.isEmpty()){
+        if(image_path == null){
             tvLoginUserProfile.setError(getString(R.string.err_select_image));
         return false;
-    } else{
-        tvLoginUserProfile.setError(null);
-        return true;
-    }
+        } else{
+            tvLoginUserProfile.setError(null);
+            return true;
+        }
 
     }
-    private void clearUserProfileActivity(){
-        etfname.setText("");
-        etlname.setText("");
-        etemail.setText("");
-        etpword.setText("");
 
-
-        etuname.setText("");
-        etminitial.setText("");
-
-        etuname.setError(null);
-        etpword.setError(null);
-        etemail.setError(null);
-        etminitial.setError(null);
-        etfname.setError(null);
-        etlname.setError(null);
-        imageView.setImageResource(android.R.color.transparent);
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }
+
     private void showpDialog() {
         if (!pDialog.isShowing())
             pDialog.show();

@@ -35,11 +35,12 @@
         </activity>
         <activity
             android:name=".Activities.BinListActivity"
-            android:label="@string/binlist_activity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask"
+            android:label="@string/binlist_activity"></activity>
         <activity android:name=".Activities.HomeActivity"
             android:label="  Basura Juan"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask"
+         ></activity>
         <activity
             android:name=".Activities.NavigationDrawerActivity"
             android:launchMode="singleTask"

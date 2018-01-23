@@ -1,16 +1,21 @@
 package com.example.apaodevo.basura_juan.Services;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.apaodevo.basura_juan.Activities.BinListActivity;
+import com.example.apaodevo.basura_juan.Activities.RegisterBin;
+import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
 import com.squareup.picasso.Picasso;
@@ -27,6 +32,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHolder>{
     private Context context;
     private List<BinModel> binList;
+    private Intent sendIntent;
 
     public BinListAdapter(Context context, List<BinModel> binList) {
         this.context = context;
@@ -40,7 +46,7 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
         public TextView textViewBinName, textViewBinIpAddress, textViewBinId;
         public ImageView thumbNail;
         public RelativeLayout viewBackground, viewForeground;
-
+        public Button btnEditBin;
         public MyViewHolder(View view){
             super(view);
             textViewBinName = (TextView) view.findViewById(R.id.binlist_bin_name);
@@ -49,26 +55,38 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
             thumbNail      = (ImageView) view.findViewById(R.id.thumbnail);
             viewBackground = (RelativeLayout) view.findViewById(R.id.view_background);
             viewForeground = (RelativeLayout) view.findViewById(R.id.view_foreground);
+            btnEditBin     = (Button) view.findViewById(R.id.edit_bin);
 
         }
 
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.bin_list_item, parent, false);
+
 
         return new MyViewHolder(itemView);
     }
     @Override
-    public void onBindViewHolder(BinListAdapter.MyViewHolder holder, int position) {
-        BinModel binModel = binList.get(position);
+    public void onBindViewHolder(BinListAdapter.MyViewHolder holder, final int position) {
+        final BinModel binModel = binList.get(position);
         holder.textViewBinName.setText(binModel.getBinName());
         holder.textViewBinId.setVisibility(View.GONE);
         holder.textViewBinIpAddress.setText(binModel.getBinIpAddress());
         holder.textViewBinId.setText(binModel.getBinId());
-
+        holder.btnEditBin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendIntent = new Intent(new Intent(context, RegisterBin.class));
+                sendIntent.putExtra(Keys.TAG_BIN_UPDATE, "Update");
+                sendIntent.putExtra(Keys.TAG_IP_ADDRESS, binModel.getBinIpAddress());
+                sendIntent.putExtra(Keys.TAG_BIN_NAME, binModel.getBinName());
+                sendIntent.putExtra(Keys.TAG_BIN_ID, binModel.getBinId());
+                context.startActivity(sendIntent);
+            }
+        });
         Picasso.with(context)
                 .load(R.drawable.bin_list_icon)
                 .transform(new CropCircleTransformation())

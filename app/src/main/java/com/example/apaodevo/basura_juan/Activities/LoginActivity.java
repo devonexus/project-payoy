@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -13,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Cache;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -28,13 +29,13 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class LoginActivity extends AppCompatActivity {
 
     public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
+    //public static String LOGIN_URL = "http://132.223.41.121/login.php";
+
     protected String enteredUsername, enteredPassword;
     /*
     ** Declare login activity objects
@@ -111,6 +112,10 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
         ); //Redirect to Home Activity otherwise remain
+
+        pass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        pass.setTransformationMethod(new PasswordTransformationMethod());
     }
 
     private void loginUser(final String uname , final String pword){
@@ -165,7 +170,7 @@ public class LoginActivity extends AppCompatActivity {
                                 password = response.getString(Keys.TAG_PWORD);
                                 userId  = response.getString(Keys.TAG_USER_ID);
                                 final GlobalData globalData = (GlobalData) getApplicationContext();
-                                globalData.setSomeVariable(json_response);
+                                globalData.setFullname(json_response);
                                 globalData.setImageUrl(image_url);
                                 globalData.setEmailAddress(email);
                                 globalData.setUserid(userId);

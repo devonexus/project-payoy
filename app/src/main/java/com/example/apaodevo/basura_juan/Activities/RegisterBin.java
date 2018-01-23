@@ -8,10 +8,12 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,18 +39,17 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RegisterBin extends NavigationDrawerActivity {
-
-    //public static String BIN_REG_URL = "http://132.223.41.121/bin-registration.php";
+public class RegisterBin extends NavigationDrawerActivity implements View.OnClickListener{
     public static String BIN_REG_URL = "http://basurajuan.x10host.com/bin-registration.php";
-    private TextView etIpAddress, etBinName;
+    //public static String BIN_REG_URL = "http://132.223.41.121/bin-registration.php";
+    private EditText etIpAddress, etBinName;
     private Button btn_register_bin;
     private ProgressDialog pDialog;
     private String ip_address, bin_name;
-    private Button registerBin;
+    private String selectedBinId = "";
     /*private String ip_address, bin_name;*/ /* Variables  to store post data*/
     GlobalData globalData;
-
+    Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,24 +61,29 @@ public class RegisterBin extends NavigationDrawerActivity {
         fab.setImageResource(R.drawable.floating_action_register_bin);
         fab.setVisibility(View.GONE);
         castObjects();
-        registerBin     = (Button) findViewById(R.id.btn_reg_bin);
+
         globalData = (GlobalData) getApplicationContext();
         pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Creating bin...");
         pDialog.setCancelable(false);
+        bundle      = getIntent().getExtras();
+        if(bundle != null){
+            if(bundle.get(Keys.TAG_BIN_UPDATE).toString().equals("Update")){
+                setTitle(getString(R.string.edit_bin));
+                etIpAddress.setText(bundle.get(Keys.TAG_IP_ADDRESS).toString());
+                etBinName.setText(bundle.get(Keys.TAG_BIN_NAME).toString());
+                selectedBinId = bundle.get(Keys.TAG_BIN_ID).toString();
+                btn_register_bin.setText(getString(R.string.update_bin));
+                Toast.makeText(getApplicationContext(), ""+selectedBinId+" "+etBinName.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
 
-        btn_register_bin.setOnClickListener(new View.OnClickListener() {
+        btn_register_bin.setOnClickListener(this);
+      /*  btn_register_bin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!validateIpAddress()){
-                    return;
-                }
-                if(!validateBinName()){
-                    return;
-                }
-                createBin();
+
             }
-        });
+        });*/
 
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
 
@@ -173,13 +179,14 @@ public class RegisterBin extends NavigationDrawerActivity {
     }
 
     public void castObjects(){
-        etIpAddress = (TextView) findViewById(R.id.et_ip_address);
-        etBinName   = (TextView) findViewById(R.id.et_bin_name);
+        etIpAddress = (EditText) findViewById(R.id.et_ip_address);
+        etBinName   = (EditText) findViewById(R.id.et_bin_name);
         btn_register_bin    = (Button) findViewById(R.id.btn_reg_bin);
     }
 
 
     private void createBin() {
+        pDialog.setMessage("Creating bin...");
         showpDialog();
         CustomJSONRequest request = new CustomJSONRequest(Request.Method.POST, BIN_REG_URL, null, new Response.Listener<JSONObject>() {
             @Override
@@ -193,7 +200,7 @@ public class RegisterBin extends NavigationDrawerActivity {
 
                                 // Block this thread for 4 seconds.al
                                 try {
-                                    Thread.sleep(2000);
+                                    Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -279,4 +286,87 @@ public class RegisterBin extends NavigationDrawerActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }  //Focus
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_reg_bin:
+                if(btn_register_bin.getText().toString().equals("Register Bin")){
+                    if(!validateIpAddress()){
+                        return;
+                    }
+                    if(!validateBinName()){
+                        return;
+                    }
+                    createBin();
+                }else if (btn_register_bin.getText().toString().equals(getString(R.string.update_bin))){
+                    updateBin(selectedBinId, etIpAddress.getText().toString(), etBinName.getText().toString());
+                }
+            break;
+        }
+    }
+
+    private void updateBin(final String binId, final String binIp, final String binName){
+        showpDialog();
+        pDialog.setMessage("Updating bin");
+        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_REG_URL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            final String server_response = response.getString(Keys.TAG_SUCCESS);
+                            Thread thread = new Thread() {
+
+                                @Override
+                                public void run() {
+
+                                    // Block this thread for 4 seconds.al
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if(server_response.equals("1")){
+                                                Toast.makeText(getApplicationContext(), "Bin successfully updated!!!", Toast.LENGTH_SHORT).show();
+                                                etIpAddress.setText("");
+                                                etBinName.setText("");
+                                                hidepDialog();
+                                            }
+                                        }
+                                    });
+                                }
+                            };
+                            thread.start();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                hidepDialog();
+                Log.d(Keys.TAG_ERRORS, error.getMessage());
+                Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_BIN_ID, binId);
+                params.put(Keys.TAG_IP_ADDRESS, binIp);
+                params.put(Keys.TAG_BIN_NAME, binName);
+
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
+        // showing snack bar with Undo opt
+    }
 }

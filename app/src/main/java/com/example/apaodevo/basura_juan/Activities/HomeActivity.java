@@ -2,26 +2,20 @@ package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
-import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
@@ -52,11 +46,11 @@ public class HomeActivity extends NavigationDrawerActivity{
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_home, null, false);
         drawer.addView(contentView, 0);
-
+        globalData = (GlobalData) getApplicationContext();
         fab.setImageResource(R.drawable.floating_navigate_bin);
         fab.setVisibility(View.GONE);
         getCoordinates();
-        globalData = (GlobalData) getApplicationContext();
+
         //        //Go to bin location interface
         //        btn_bin_location = (Button) findViewById(R.id.btn_de);
         //        btn_bin_location.setOnClickListener(

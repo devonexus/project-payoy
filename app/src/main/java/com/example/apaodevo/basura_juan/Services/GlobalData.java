@@ -20,15 +20,15 @@ import com.joanzapata.iconify.fonts.WeathericonsModule;
  */
 
 public class GlobalData extends Application {
-    private String       someVariable;
+    private String       fullname;
     private String       image_url;
     private String       userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
     private String       latitude, longitude;
     public String        address  = "";
     public String        name;
-    public String getSomeVariable() {
 
-        return someVariable;
+    public String getFullname() {
+        return fullname;
     }
 
     public void setUserid(String userid) {
@@ -54,9 +54,10 @@ public class GlobalData extends Application {
         return longitude;
     }
 
-    public void setSomeVariable(String someVariable) {
-        this.someVariable = someVariable;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
+
     public void setEmailAddress(String email_address){
         this.email_address = email_address;
     }

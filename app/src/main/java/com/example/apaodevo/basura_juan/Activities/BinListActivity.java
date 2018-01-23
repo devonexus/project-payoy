@@ -1,13 +1,10 @@
 package com.example.apaodevo.basura_juan.Activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,13 +13,9 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -34,16 +27,11 @@ import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.BinListAdapter;
-
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.example.apaodevo.basura_juan.Utils.RecyclerItemTouchHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
-import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
-
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -65,8 +53,8 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
     private List<BinModel> binList;
     private CoordinatorLayout coordinatorLayout;
     private EditText binSearch;
-//    private static final String BIN_LIST_URL = "http://132.223.41.121/bin-list.php";
-     private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
+    //private static final String BIN_LIST_URL = "http://132.223.41.121/bin-list.php";
+    private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,4 +233,10 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         //update recyclerview
         binListAdapter.updateList(temp);
     }//This is used to filter the list....
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showBinListItem();
+    }
 }
