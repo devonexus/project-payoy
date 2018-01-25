@@ -36,6 +36,7 @@ public class Keys{
     public static final String TAG_IP_ADDRESS = "ipAddress";
     public static final String TAG_BIN_NAME = "binName";
     public static final String TAG_BIN_ID = "binId";
+    public static final String TAG_BIN_UPDATE = "updateBin";
 
     /*Error log tag*/
     public static final String TAG_ERRORS = "error";
@@ -53,5 +54,6 @@ public class Keys{
     public static final String TAG_DEPLOYMENT_TIMESTART = "timeStart";
     public static final String TAG_DEPLOYMENT_TIMEEND = "timeEnd";
     public static final String TAG_DEPLOYMENT_LOCATION = "location";
+
 
 }

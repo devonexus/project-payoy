@@ -44,17 +44,7 @@
             android:hint="@string/hint_bin_name"
             android:singleLine="true" />
     </android.support.design.widget.TextInputLayout>
-    <TextView
 
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="70dp"
-        android:text="Currently connected to: "
-        android:textStyle="bold" />
     <Button
         android:id="@+id/btn_reg_bin"
         android:backgroundTint="@color/colorMaroon"

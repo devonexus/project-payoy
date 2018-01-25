@@ -58,7 +58,6 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class RegisterUserActivity extends AppCompatActivity {
 
-
     //Declare objects
     private TextView tv1;
     private ImageView img_user_profile;
@@ -107,7 +106,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         etUsername  = (EditText) findViewById(R.id.et_uname);
         tvImageUserProfile = (TextView) findViewById(R.id.tvImgUserProfile);
         etPassword  = (EditText) findViewById(R.id.et_pword);
-
 
 
         pDialog = new ProgressDialog(this);
@@ -215,7 +213,6 @@ public class RegisterUserActivity extends AppCompatActivity {
                 String server_response;
                 try {
                     server_response = response.getString(Keys.TAG_SUCCESS);
-
                 if(server_response.equals("0")){
                     Thread thread = new Thread() {
                         @Override
@@ -309,6 +306,17 @@ public class RegisterUserActivity extends AppCompatActivity {
             Log.i("Error", e.toString());
         }
     }
+
+    private boolean validateImagePath(){
+        if(image_path == null){
+            tvImageUserProfile.setError(getString(R.string.err_select_image));
+            return false;
+        } else{
+            tvImageUserProfile.setError(null);
+            return true;
+        }
+
+    }
     //Submit form
     private void submitForm() {
         String firstName        = etFname.getText().toString();
@@ -356,16 +364,6 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     }
 
-    private boolean validateImagePath(){
-        if(image_path == null){
-            tvImageUserProfile.setError(getString(R.string.err_select_image));
-            return false;
-        } else{
-            tvImageUserProfile.setError(null);
-            return true;
-        }
-
-    }
 
     private boolean validatePasssword(){
         if(etPassword.getText().toString().trim().isEmpty()){

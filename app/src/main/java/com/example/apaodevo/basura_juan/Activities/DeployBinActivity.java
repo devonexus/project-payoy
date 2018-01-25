@@ -84,6 +84,53 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Fetching location...");
         pDialog.setCancelable(false);
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                 /*if(locationHelper.canGetLocation()) {
+
+                    double latitude = locationHelper.getLatitude();
+                    double longitude = locationHelper.getLongitude();
+                    Geocoder gc = new Geocoder(getApplicationContext());
+                    if(gc.isPresent()){
+                        List<Address> list = null;
+                        try {
+                            list = gc.getFromLocation(latitude, longitude,1);
+                            Address address = list.get(0);
+
+                            str.append("Name: " + address.getLocality() + "\n");
+                            str.append("Sub-Admin Ares: " + address.getSubAdminArea() + "\n");
+                            str.append("Admin Area: " + address.getAdminArea() + "\n");
+                            str.append("Admin Area: " + address.getAddressLine(0) + "\n");
+                            str.append("Admin Area: " + address + "\n");
+                            str.append("Country: " + address.getCountryName() + "\n");str.append("Country Code: " + address.getCountryCode() + "\n");
+                            str.append("Country Code: " + address.getCountryCode() + "\n");
+                            strAddress = address.getAddressLine(0);
+                        }
+
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    etActualLocation.setText(strAddress);
+                    Toast.makeText(getApplicationContext(), ""+strAddress, Toast.LENGTH_SHORT).show();
+                    hidepDialog();
+                    locationHelper.stopUsingGPS();
+                    // \n is for new line
+                    //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                } else {
+                    // Can't get location.
+                    // GPS or network is not enabled.
+                    // Ask user to enable GPS/network in settings.
+                    locationHelper.showSettingsAlert();
+                }*/
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
 
@@ -177,9 +224,9 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         btnDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deploy = "deploy";
+                /*deploy = "deploy";
                 devicelist = new Intent(DeployBinActivity.this, DeviceList.class);
-                startActivity(devicelist);
+                startActivity(devicelist);*/
                 //showpDialog();
                 /*if(locationHelper.canGetLocation()) {
 

@@ -20,7 +20,6 @@ import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
@@ -51,10 +50,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         castObjects(); //Call cast object function
 
-        globalData = (GlobalData) getApplicationContext();
-        fullName            = globalData.getSomeVariable();
-        imageUrl            = globalData.getImageUrl().trim();
-        emailAddress        = globalData.getEmailAddress();
+
 
         // /Set text in navigation drawer header
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -65,16 +61,13 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         img_login_user_image    = (ImageView) header.findViewById(R.id.img_navigation_user_profile_image);
         tv_fullname             = (TextView)header.findViewById(R.id.tvFullName);
         tv_email                = (TextView) header.findViewById(R.id.tvEmail);
+        /*globalData = (GlobalData) getApplicationContext();
+        fullName            = globalData.getSomeVariable();
+        imageUrl            = globalData.getImageUrl().trim();
+        emailAddress        = globalData.getEmailAddress();
         tv_fullname.setText(fullName);
-        tv_email.setText(emailAddress);
-
-        Picasso.with(this)
-                .load(imageUrl)
-                .transform(new CropCircleTransformation())
-                .placeholder(R.drawable.basurajuan_logo)     //This loads the image from the server
-                .error(R.drawable.bin_list)
-                .into(img_login_user_image);
-
+        tv_email.setText(emailAddress);*/
+        loadNavHeader();
         //Create toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,10 +90,53 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                loadNavHeader();
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
         toggle.syncState();
 
         initializeProgressDialogState();
+
+
     }
+
+    private void loadNavHeader(){
+        globalData = (GlobalData) getApplicationContext();
+        fullName            = globalData.getFullname();
+        imageUrl            = globalData.getImageUrl().trim();
+        emailAddress        = globalData.getEmailAddress();
+        tv_fullname.setText(fullName);
+        tv_email.setText(emailAddress);
+
+        Picasso.with(this)
+                .load(imageUrl)
+                .transform(new CropCircleTransformation())
+                .placeholder(R.drawable.basurajuan_logo)     //This loads the image from the server
+                .error(R.drawable.bin_list)
+                .into(img_login_user_image);
+    }
+
+
+
     private void castObjects(){
         tv_fullname             = (TextView) findViewById(R.id.tvFullName);
         fab                     = (FloatingActionButton) findViewById(R.id.fab);
@@ -239,6 +275,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         builder.show();
     }
+
 
     private void selectNavMenu(){
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
