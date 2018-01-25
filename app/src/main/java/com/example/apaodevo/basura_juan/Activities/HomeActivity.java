@@ -243,6 +243,7 @@ public class HomeActivity extends NavigationDrawerActivity{
         {
             try
             {
+                DeviceList.btSocket.getOutputStream().write("0".toString().getBytes());
                 DeviceList.btSocket.close(); //close connection
                 globalData.address="";
                 DeviceList.btSocket = null;
