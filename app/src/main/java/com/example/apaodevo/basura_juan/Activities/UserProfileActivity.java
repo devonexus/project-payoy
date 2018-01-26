@@ -187,12 +187,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                                                         etuname.getText().toString(),
                                                         etpword.getText().toString(),
                                                         encodedImage, displayName);
-
                             }
-
-
-
-
                         }
                     }
                 }
@@ -216,10 +211,11 @@ public class UserProfileActivity extends NavigationDrawerActivity{
 
         Picasso.with(this).load(imageUrl)
                 .transform(new CropCircleTransformation())
+                .fit()
+                .rotate(90f)
                 .error(R.drawable.user_profile_placeholder)
                 .into(imageView);
     }
-
 
     protected boolean shouldAskPermissions() {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
@@ -306,7 +302,6 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                                         hidepDialog();
                                     }
                                 });
-
                             }
 
                         };
@@ -339,6 +334,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                                                 etuname.setText(response.getString(Keys.TAG_USERNAME));
                                                 Picasso.with(getApplicationContext())
                                                     .load(response.getString(Keys.TAG_IMAGE_URL))
+                                                    .fit()
                                                     .transform(new CropCircleTransformation())
                                                     .into(imageView);
 
@@ -389,9 +385,6 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         };
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
     }
-
-
-
 
     private void updateUserProfileExceptImage(final String lastName, final String firstName, final String middleInitial, final String email, final String uName, final String pWord){
         showpDialog();
@@ -454,6 +447,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                                             etuname.setText(response.getString(Keys.TAG_USERNAME));
                                             Picasso.with(getApplicationContext())
                                                     .load(response.getString(Keys.TAG_IMAGE_URL))
+                                                    .fit()
                                                     .transform(new CropCircleTransformation())
                                                     .into(imageView);
 

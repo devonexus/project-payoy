@@ -48,8 +48,7 @@
             android:layout_width="@dimen/thumbnail"
             android:layout_height="@dimen/thumbnail"
             android:layout_marginRight="@dimen/activity_padding_horizontal"
-            android:scaleType="centerCrop"
-            />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/binlist_bin_id"
@@ -68,8 +67,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/binlist_bin_id"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/thumbnail"
             android:text="Bin IP Address"
             android:textColor="@color/colorBinIpAddress"
@@ -85,15 +84,15 @@
             android:text="Bin name"
             android:textColor="@color/colorAccent"
             android:textStyle="bold" />
+
         <Button
+            android:id="@+id/edit_bin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/edit_bin"
-            android:layout_centerInParent="true"
-            android:textColor="@color/colorMaroon"
             android:layout_alignParentRight="true"
-            android:id="@+id/edit_bin"
-            ></Button>
+            android:layout_centerInParent="true"
+            android:text="@string/edit_bin"
+            android:textColor="@color/colorMaroon"></Button>
     </RelativeLayout>
 
 </FrameLayout>

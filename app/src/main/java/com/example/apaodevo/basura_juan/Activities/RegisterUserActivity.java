@@ -140,7 +140,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         tv1.setHighlightColor(Color.TRANSPARENT);
         tv1.setText(content);
 
-
         img_user_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,23 +148,15 @@ public class RegisterUserActivity extends AppCompatActivity {
             }
         });
 
-
-
         bregister.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
                         submitForm();
-
-
                     }
                 }
         );  //Register user
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -176,8 +167,6 @@ public class RegisterUserActivity extends AppCompatActivity {
                 uri = data.getData();
                 image_path = PathUtil.getPathFromURI(RegisterUserActivity.this, uri);
                 File f = new File(uri.getPath());
-
-
 
                 displayName = null;
                 Picasso.with(this)
@@ -197,9 +186,7 @@ public class RegisterUserActivity extends AppCompatActivity {
                 } else if (uri.toString().startsWith("file://")) {
                     displayName = f.getName();
                 }
-
             }
-
         }
 
 

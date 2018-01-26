@@ -50,8 +50,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         castObjects(); //Call cast object function
 
-
-
         // /Set text in navigation drawer header
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         buttonClick = new AlphaAnimation(1F, 0.2F);
@@ -115,8 +113,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         toggle.syncState();
 
         initializeProgressDialogState();
-
-
     }
 
     private void loadNavHeader(){
@@ -134,8 +130,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                 .error(R.drawable.bin_list)
                 .into(img_login_user_image);
     }
-
-
 
     private void castObjects(){
         tv_fullname             = (TextView) findViewById(R.id.tvFullName);
@@ -226,7 +220,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         builder.setCancelable(true);
         builder.setTitle(title);
-        builder.setIcon(R.drawable.ic_exit_to_app_white_48dp);
         builder.setMessage(Message);
         builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
             @Override

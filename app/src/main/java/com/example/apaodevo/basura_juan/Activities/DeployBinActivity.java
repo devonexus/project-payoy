@@ -45,6 +45,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import im.delight.android.location.SimpleLocation;
+
 
 public class DeployBinActivity extends NavigationDrawerActivity {
 
@@ -61,7 +63,8 @@ public class DeployBinActivity extends NavigationDrawerActivity {
     private ProgressDialog pDialog;
     Intent devicelist;
     public static String deploy = "";
-
+    private SimpleLocation simpleLocation;
+    private double latitude, longitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,46 +87,25 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Fetching location...");
         pDialog.setCancelable(false);
+
+        // construct a new instance of SimpleLocation
+        simpleLocation = new SimpleLocation(this);
+        if(shouldAskPermissions()){
+            askPermissions();
+        }
+        if (!simpleLocation.hasLocationEnabled()) {
+            // ask the user to enable location access
+            SimpleLocation.openSettings(this);
+        }
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                 /*if(locationHelper.canGetLocation()) {
+                /*String selectedItem = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getApplicationContext(), ""+selectedItem, Toast.LENGTH_SHORT).show();*/
 
-                    double latitude = locationHelper.getLatitude();
-                    double longitude = locationHelper.getLongitude();
-                    Geocoder gc = new Geocoder(getApplicationContext());
-                    if(gc.isPresent()){
-                        List<Address> list = null;
-                        try {
-                            list = gc.getFromLocation(latitude, longitude,1);
-                            Address address = list.get(0);
-
-                            str.append("Name: " + address.getLocality() + "\n");
-                            str.append("Sub-Admin Ares: " + address.getSubAdminArea() + "\n");
-                            str.append("Admin Area: " + address.getAdminArea() + "\n");
-                            str.append("Admin Area: " + address.getAddressLine(0) + "\n");
-                            str.append("Admin Area: " + address + "\n");
-                            str.append("Country: " + address.getCountryName() + "\n");str.append("Country Code: " + address.getCountryCode() + "\n");
-                            str.append("Country Code: " + address.getCountryCode() + "\n");
-                            strAddress = address.getAddressLine(0);
-                        }
-
-                        catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    etActualLocation.setText(strAddress);
-                    Toast.makeText(getApplicationContext(), ""+strAddress, Toast.LENGTH_SHORT).show();
-                    hidepDialog();
-                    locationHelper.stopUsingGPS();
-                    // \n is for new line
-                    //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-                } else {
-                    // Can't get location.
-                    // GPS or network is not enabled.
-                    // Ask user to enable GPS/network in settings.
-                    locationHelper.showSettingsAlert();
-                }*/
+                latitude = simpleLocation.getLatitude();
+                longitude = simpleLocation.getLongitude();
+                getLocationName(latitude, longitude);
             }
 
             @Override
@@ -131,7 +113,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
 
             }
         });
-
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
 
                 .setBackgroundDrawable(R.drawable.deploy)
@@ -224,52 +205,42 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         btnDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*deploy = "deploy";
+              /*  latitude = simpleLocation.getLatitude();
+                longitude = simpleLocation.getLongitude();
+                getLocationName(latitude, longitude);
+                Toast.makeText(getApplicationContext(), "Latitude: "+latitude+" Longitude"+longitude, Toast.LENGTH_SHORT).show();*/
+                deploy = "deploy";
                 devicelist = new Intent(DeployBinActivity.this, DeviceList.class);
-                startActivity(devicelist);*/
-                //showpDialog();
-                /*if(locationHelper.canGetLocation()) {
-
-                    double latitude = locationHelper.getLatitude();
-                    double longitude = locationHelper.getLongitude();
-                    Geocoder gc = new Geocoder(getApplicationContext());
-                    if(gc.isPresent()){
-                        List<Address> list = null;
-                        try {
-                            list = gc.getFromLocation(latitude, longitude,1);
-                            Address address = list.get(0);
-
-                            str.append("Name: " + address.getLocality() + "\n");
-                            str.append("Sub-Admin Ares: " + address.getSubAdminArea() + "\n");
-                            str.append("Admin Area: " + address.getAdminArea() + "\n");
-                            str.append("Admin Area: " + address.getAddressLine(0) + "\n");
-                            str.append("Admin Area: " + address + "\n");
-                            str.append("Country: " + address.getCountryName() + "\n");str.append("Country Code: " + address.getCountryCode() + "\n");
-                            str.append("Country Code: " + address.getCountryCode() + "\n");
-                            strAddress = address.getAddressLine(0);
-                        }
-
-                        catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    etActualLocation.setText(strAddress);
-                    Toast.makeText(getApplicationContext(), ""+strAddress, Toast.LENGTH_SHORT).show();
-                    hidepDialog();
-                    locationHelper.stopUsingGPS();
-                    // \n is for new line
-                    //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-                } else {
-                    // Can't get location.
-                    // GPS or network is not enabled.
-                    // Ask user to enable GPS/network in settings.
-                    locationHelper.showSettingsAlert();
-                }*/
+                startActivity(devicelist);
             }
         });
     }
 
+    private void getLocationName(double lat, double longi){
+        Geocoder gc = new Geocoder(getApplicationContext());
+        if(gc.isPresent()){
+            List<Address> list = null;
+            try {
+                list = gc.getFromLocation(latitude, longitude,1);
+                Address address = list.get(0);
 
+              /*  str.append("Name: " + address.getLocality() + "\n");
+                str.append("Sub-Admin Ares: " + address.getSubAdminArea() + "\n");
+                str.append("Admin Area: " + address.getAdminArea() + "\n");
+                str.append("Admin Area: " + address.getAddressLine(0) + "\n");
+                str.append("Admin Area: " + address + "\n");
+                str.append("Country: " + address.getCountryName() + "\n");str.append("Country Code: " + address.getCountryCode() + "\n");
+                str.append("Country Code: " + address.getCountryCode() + "\n");*/
+                strAddress = address.getAddressLine(0);
+
+                etActualLocation.setText(strAddress);
+            }
+
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     protected boolean shouldAskPermissions() {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
     }
@@ -382,5 +353,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
+
+
 
 }

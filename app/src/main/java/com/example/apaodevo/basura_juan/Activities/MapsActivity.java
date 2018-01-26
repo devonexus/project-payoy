@@ -28,7 +28,6 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
    // private double setLatitude = 10.262542, setLongitude = 123.952021;/*This is static longitude*/
 
     public static GlobalData globalData;
-    ImageView lcIcon1,lcIcon2,lcIcon3,lcIcon4,lcIcon5;
 
     int redActionButtonSize,leftMargin,rightMargin,topMargin,bottomMargin,redActionButtonContentSize,
             redActionButtonContentMargin,redActionMenuRadius,blueSubActionButtonSize,blueSubActionButtonContentMargin;
