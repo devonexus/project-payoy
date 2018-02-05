@@ -26,6 +26,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
@@ -56,8 +57,8 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
     private List<BinModel> binList;
     private CoordinatorLayout coordinatorLayout;
     private EditText binSearch;
-    //private static final String BIN_LIST_URL = "http://132.223.41.121/bin-list.php";
-    private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
+    private static final String BIN_LIST_URL = "http://172.17.152.98/bin-list.php";
+    //private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
     private String binId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,12 +109,11 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
 
      }*/
     private void showBinListItem() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BIN_LIST_URL,
+                new Response.Listener<String>() {
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, BIN_LIST_URL, null,
-                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        //Toast.makeText(getApplicationContext(), ""+response.toString(), Toast.LENGTH_SHORT).show();
+                    public void onResponse(String response) {
                         Log.d("Recycler View Contents", response.toString());
                         List<BinModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<BinModel>>() {
 
@@ -126,12 +126,18 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Could not get data from server.", Toast.LENGTH_SHORT).show();
-                Log.d(Keys.TAG_ERRORS, error.getMessage());
-                error.printStackTrace();
+
             }
-        });
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_USER_ID, globalData.getUserid());
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+
     }
 
     /**

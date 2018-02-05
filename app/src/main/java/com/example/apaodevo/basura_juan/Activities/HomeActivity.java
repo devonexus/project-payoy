@@ -99,8 +99,7 @@ public class HomeActivity extends NavigationDrawerActivity{
             public void onClick(View v) {
                 if(DeviceList.btSocket == null) {
                     startActivity(new Intent(getApplicationContext(), DeviceList.class));
-                }
-                else
+                } else
                 {
                     startActivity(new Intent(getApplicationContext(), NavigateBin.class));
                 }

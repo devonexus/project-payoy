@@ -15,6 +15,8 @@ import com.joanzapata.iconify.fonts.SimpleLineIconsModule;
 import com.joanzapata.iconify.fonts.TypiconsModule;
 import com.joanzapata.iconify.fonts.WeathericonsModule;
 
+import zemin.notification.NotificationDelegater;
+
 /**
  * Created by apaodevo on 11/15/2017.
  */
@@ -26,6 +28,15 @@ public class GlobalData extends Application {
     private String       latitude, longitude;
     public String        address  = "";
     public String        name;
+    private String      binId;
+
+    public void setBinId(String binId) {
+        this.binId = binId;
+    }
+
+    public String getBinId() {
+        return binId;
+    }
 
     public String getFullname() {
         return fullname;
@@ -119,4 +130,7 @@ public class GlobalData extends Application {
         Iconify
                 .with(new FontAwesomeModule());
     }
+
+
+
 }

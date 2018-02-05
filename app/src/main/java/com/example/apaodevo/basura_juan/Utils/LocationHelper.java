@@ -16,6 +16,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+import static android.support.v7.appcompat.R.styleable.AlertDialog;
+
 /**
  * Created by apaodevo on 1/8/2018.
  */

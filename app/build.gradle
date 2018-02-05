@@ -59,9 +59,11 @@ dependencies {
     compile 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2'
     compile files('libs/ImageBase64Encoder.jar')
     compile 'com.macroyau:blue2serial:0.1.5'
+    compile 'com.github.halysongoncalves:pugnotification:1.8.1'
     compile 'com.github.delight-im:Android-SimpleLocation:v1.0.1'
     compile 'com.google.android.gms:play-services-location:10.2.4'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+    compile 'com.github.lamydev:android-notification:3.0'
     compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
 }

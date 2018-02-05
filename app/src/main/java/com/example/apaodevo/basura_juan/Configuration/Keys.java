@@ -49,11 +49,11 @@ public class Keys{
 
     /*Deploy Bin Tags*/
 
-    public static final String TAG_DEPLOYMENT_DATESTART = "dateStart";
-    public static final String TAG_DEPLOYMENT_DATEEND = "dateEnd";
-    public static final String TAG_DEPLOYMENT_TIMESTART = "timeStart";
-    public static final String TAG_DEPLOYMENT_TIMEEND = "timeEnd";
     public static final String TAG_DEPLOYMENT_LOCATION = "location";
 
-
+    /* Notification tags*/
+    public static final String TAG_NOTIFICATION_CATEGORY = "category";
+    public static final String TAG_NOTIFICATION_MESSAGE = "notificationMessage";
+    public static final String TAG_NOTIFICATION_TIME= "notificationTime";
+    public static final String TAG_NOTIFICATION_DATE = "notificationDate";
 }

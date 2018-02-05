@@ -37,6 +37,10 @@
     <EditText
         android:id="@+id/etActualLocation"
         android:layout_width="180dp"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:layout_height="wrap_content"
         android:background="@android:drawable/screen_background_light"
         android:backgroundTint="@color/colorWhite"

@@ -144,7 +144,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         RelativeLayout badgeLayout = (RelativeLayout)  menu.findItem(R.id.menu_notification).getActionView();
         TextView counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
         counter.setText("10");
-        counter.setVisibility(View.GONE);
         iconButton = (IconButton) badgeLayout.findViewById(R.id.badge_icon_button);
         homeButton = (IconButton) badgeLayout.findViewById(R.id.badge_home_button);
         homeButton.setText("{fa-home}");
@@ -195,8 +194,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         } else if (id == R.id.nav_bin_list) {
             startActivity(new Intent(getApplicationContext(), BinListActivity.class));
         } else if (id == R.id.nav_deployment_history) {
-            navItemIndex = 2;
-            startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+
+            startActivity(new Intent(getApplicationContext(), DeploymentHistory.class));
         } else if (id == R.id.nav_logout) {
             signOut();
         }

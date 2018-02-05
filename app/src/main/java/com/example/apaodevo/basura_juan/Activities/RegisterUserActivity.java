@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 
-import android.graphics.drawable.GradientDrawable;
 
 
 import android.net.Uri;
@@ -31,7 +30,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -69,9 +67,9 @@ public class RegisterUserActivity extends AppCompatActivity {
     private TextView tvImageUserProfile;
     //public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
 
-//    public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
+    public static String REGISTER_URL = "http://192.168.43.138/registration.php"; //WEB Service URL
 
-    public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
+    //public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
     private Uri uri;
     private String displayName;
 

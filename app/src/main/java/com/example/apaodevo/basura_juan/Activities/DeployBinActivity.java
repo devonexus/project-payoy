@@ -21,13 +21,16 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.example.apaodevo.basura_juan.Utils.LocationHelper;
@@ -42,17 +45,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import im.delight.android.location.SimpleLocation;
 
 
 public class DeployBinActivity extends NavigationDrawerActivity {
 
-    private static String BIN_REG_URL = "http://basurajuan.x10host.com/bin-registration.php";
-    private static String BIN_COORDINATES_URL = "http://basurajuan.x10host.com/bin-coordinates.php";
-    private Button btnDeploy;
+    private static String BIN_REG_URL = "http://172.17.152.98/bin-registration.php";
+    //private static String BIN_DEPLOYMENT_URL = "http://basurajuan.x10host.com/bin-deployment.php";
+   /* private static String BIN_REG_URL = "http://192.168.43.163/bin-registration.php";
+    private static String BIN_DEPLOYMENT_URL = "http://192.168.43.163/bin-deployment.php";*/
+    private static String BIN_DEPLOYMENT_URL = "http://172.17.152.98/bin-deployment.php";
+   private Button btnDeploy;
     private Spinner dropdown;
     private ArrayList<String> binNames = new ArrayList<>();
     private EditText etActualLocation;
@@ -62,9 +71,13 @@ public class DeployBinActivity extends NavigationDrawerActivity {
     private String strAddress;
     private ProgressDialog pDialog;
     Intent devicelist;
-    public static String deploy = "";
+    public static String deploy = "", server_response = "";
     private SimpleLocation simpleLocation;
     private double latitude, longitude;
+    private static String selectedBinId = "";
+    private String binId;
+    private String cancelIdRequests = "ID";
+    private String deployRequests = "deploy";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,9 +96,8 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         fab.setImageResource(R.drawable.deploy);
         fab.setVisibility(View.GONE);
         loadBinNames();
-
         pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Fetching location...");
+        pDialog.setMessage("Deploying bin, Please wait...");
         pDialog.setCancelable(false);
 
         // construct a new instance of SimpleLocation
@@ -97,22 +109,51 @@ public class DeployBinActivity extends NavigationDrawerActivity {
             // ask the user to enable location access
             SimpleLocation.openSettings(this);
         }
+
+        if (simpleLocation.hasLocationEnabled()) {
+
+
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                /*String selectedItem = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getApplicationContext(), ""+selectedItem, Toast.LENGTH_SHORT).show();*/
-
+                final String selectedBinName = parent.getItemAtPosition(position).toString();
+               // Toast.makeText(getApplicationContext(), ""+selectedItem, Toast.LENGTH_SHORT).show();
+                getBinId(selectedBinName);
                 latitude = simpleLocation.getLatitude();
                 longitude = simpleLocation.getLongitude();
-                getLocationName(latitude, longitude);
+
+                Thread thread = new Thread() {
+
+                    @Override
+                    public void run() {
+
+                        // Block this thread for 2 seconds.al
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getLocationName(latitude, longitude);
+                            }
+                        });
+                    }
+                };
+                thread.start();
+
+
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                Toast.makeText(getApplicationContext(), "No registered bins yet!!!", Toast.LENGTH_SHORT).show();
             }
         });
+        }
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
 
                 .setBackgroundDrawable(R.drawable.deploy)
@@ -205,16 +246,42 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         btnDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  latitude = simpleLocation.getLatitude();
-                longitude = simpleLocation.getLongitude();
-                getLocationName(latitude, longitude);
-                Toast.makeText(getApplicationContext(), "Latitude: "+latitude+" Longitude"+longitude, Toast.LENGTH_SHORT).show();*/
-                deploy = "deploy";
-                devicelist = new Intent(DeployBinActivity.this, DeviceList.class);
-                startActivity(devicelist);
+
+
+
+               if(!validateDeploymentFields()){
+                   return;
+               }
+                //Toast.makeText(getApplicationContext(), ""+globalData.getBinId(), Toast.LENGTH_SHORT).show();
+                deployBin(globalData.getUserid(), globalData.getBinId(), etActualLocation.getText().toString());
+                Thread thread = new Thread() {
+
+                    @Override
+                    public void run() {
+
+                        // Block this thread for 4 seconds.al
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                deploy = "deploy";
+                                devicelist = new Intent(DeployBinActivity.this, DeviceList.class);
+                                startActivity(devicelist);
+                            }
+                        });
+                    }
+                };
+                thread.start();
             }
         });
     }
+
 
     private void getLocationName(double lat, double longi){
         Geocoder gc = new Geocoder(getApplicationContext());
@@ -295,10 +362,136 @@ public class DeployBinActivity extends NavigationDrawerActivity {
             }
         };
     }*/
+    private void deployBin(final String uid, final String bid, final String location){
+        showpDialog();
+        final CustomJSONRequest deployBinRequest  = new CustomJSONRequest(Request.Method.POST, BIN_DEPLOYMENT_URL, null,
+                new Response.Listener<JSONObject>(){
 
+                    @Override
+                    public void onResponse(final JSONObject response) {
+
+
+                        Thread thread = new Thread() {
+
+                            @Override
+                            public void run() {
+
+                                // Block this thread for 4 seconds.al
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                                // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Bin successfully deployed!!!", Toast.LENGTH_LONG).show();
+                                        hidepDialog();
+                                    }
+                                });
+                            }
+                        };
+                        thread.start();
+
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error.", Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+
+                hidepDialog();
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_USER_ID, uid);
+                params.put(Keys.TAG_BIN_ID, bid);
+                params.put(Keys.TAG_DEPLOYMENT_LOCATION, location);
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(deployBinRequest);
+    }
+
+    private void getBinId(final String binName){
+        CustomJSONRequest binIdRequest  = new CustomJSONRequest(Request.Method.POST, BIN_DEPLOYMENT_URL, null,
+                new Response.Listener<JSONObject>(){
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            selectedBinId = response.getString(Keys.TAG_BIN_ID);
+                            globalData.setBinId(selectedBinId);
+                            VolleySingleton.getInstance(getApplicationContext()).cancelPendingRequests(cancelIdRequests);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error.", Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+                VolleySingleton.getInstance(getApplicationContext()).cancelPendingRequests(cancelIdRequests);
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_BIN_NAME, binName);
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(binIdRequest);
+    }
     private void loadBinNames() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, BIN_REG_URL,
+                new Response.Listener<String>() {
 
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, BIN_REG_URL, null,
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+
+                              for (int i = 0; i < response.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                //binNames.add(jsonObject.getString(Keys.TAG_BIN_NAME));
+                                BinModel binModel = new BinModel();
+                                binModel.setBinName(jsonObject.optString(Keys.TAG_BIN_NAME));
+                                binNames.add(jsonObject.getString(Keys.TAG_BIN_NAME));
+                                Log.d("XXX", jsonObject.getString(Keys.TAG_BIN_NAME));
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(DeployBinActivity.this, android.R.layout.simple_spinner_dropdown_item, binNames);
+                        dropdown.setAdapter(adapter);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_USER_ID, globalData.getUserid());
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+       /* final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, BIN_REG_URL, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -341,9 +534,9 @@ public class DeployBinActivity extends NavigationDrawerActivity {
             }
         });
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
-
-
+*/
     }/*This will load bin names to the drop down*/
+
     private void showpDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
@@ -353,7 +546,18 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
+    private boolean validateDeploymentFields() {
+        String locationName = etActualLocation.getText().toString();
 
+        if (locationName.isEmpty()) {
+            etActualLocation.setError(getString(R.string.actual_location));
+            return false;
+        } else {
+            etActualLocation.setError(null);
+        }
+
+        return true;
+    }//Validate lastname
 
 
 }
