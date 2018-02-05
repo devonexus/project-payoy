@@ -56,11 +56,10 @@ import im.delight.android.location.SimpleLocation;
 
 public class DeployBinActivity extends NavigationDrawerActivity {
 
-    private static String BIN_REG_URL = "http://172.17.152.98/bin-registration.php";
-    //private static String BIN_DEPLOYMENT_URL = "http://basurajuan.x10host.com/bin-deployment.php";
-   /* private static String BIN_REG_URL = "http://192.168.43.163/bin-registration.php";
-    private static String BIN_DEPLOYMENT_URL = "http://192.168.43.163/bin-deployment.php";*/
-    private static String BIN_DEPLOYMENT_URL = "http://172.17.152.98/bin-deployment.php";
+    //private static String BIN_REG_URL = "http://172.17.152.98/bin-registration.php";
+    private static String BIN_DEPLOYMENT_URL = "http://basurajuan.x10host.com/bin-deployment.php";
+    private static String BIN_REG_URL = "http://basurajuan.x10host.com/bin-registration.php";
+
    private Button btnDeploy;
     private Spinner dropdown;
     private ArrayList<String> binNames = new ArrayList<>();

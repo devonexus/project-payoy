@@ -57,8 +57,8 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
     private List<BinModel> binList;
     private CoordinatorLayout coordinatorLayout;
     private EditText binSearch;
-    private static final String BIN_LIST_URL = "http://172.17.152.98/bin-list.php";
-    //private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
+    //private static final String BIN_LIST_URL = "http://172.17.152.98/bin-list.php";
+    private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
     private String binId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

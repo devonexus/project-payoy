@@ -26,7 +26,7 @@ import br.com.goncalves.pugnotification.notification.PugNotification;
 
 public class NotificationActivity extends NavigationDrawerActivity{
     private ArrayList<String> notification  = new ArrayList<>();
-    private static String NOTIFICATION_URL = "http://100.94.15.114/basura_juan/notification-list.php";
+    private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
     private String category = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class NotificationActivity extends NavigationDrawerActivity{
                                 category = jsonObject.getString(Keys.TAG_NOTIFICATION_CATEGORY);
                                 if(jsonArray.length() > 0) {
                                     if(category.toString().equals("Battery")) {
-                                        Toast.makeText(getApplicationContext(), "Number: " + countNotif, Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(getApplicationContext(), "Number: " + countNotif, Toast.LENGTH_SHORT).show();
                                         PugNotification.with(getApplicationContext())
                                                 .load()
                                                 .title("Battery Status")

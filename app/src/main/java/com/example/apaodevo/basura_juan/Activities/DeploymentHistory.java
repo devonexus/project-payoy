@@ -41,7 +41,7 @@ public class DeploymentHistory extends NavigationDrawerActivity{
     private List<DeploymentModel> deploymentList;
     private CoordinatorLayout coordinatorLayout;
     private EditText deploymentSearch;
-    private static String DEPLOYMENT_URL = "http://100.94.49.148/basura_juan/bin-deployment.php";
+    private static String DEPLOYMENT_URL = "http://basurajuan.x10host.com/bin-deployment.php";
 
 
     @Override
