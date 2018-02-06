@@ -56,7 +56,6 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
             viewBackground = (RelativeLayout) view.findViewById(R.id.view_background);
             viewForeground = (RelativeLayout) view.findViewById(R.id.view_foreground);
             btnEditBin     = (Button) view.findViewById(R.id.edit_bin);
-
         }
 
     }
