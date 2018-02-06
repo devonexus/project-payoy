@@ -51,7 +51,6 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
             super(view);
             textViewBinName = (TextView) view.findViewById(R.id.binlist_bin_name);
             textViewBinId = (TextView) view.findViewById(R.id.binlist_bin_id);
-            textViewBinIpAddress = (TextView) view.findViewById(R.id.binlist_ip_address);
             thumbNail      = (ImageView) view.findViewById(R.id.thumbnail);
             viewBackground = (RelativeLayout) view.findViewById(R.id.view_background);
             viewForeground = (RelativeLayout) view.findViewById(R.id.view_foreground);
@@ -73,14 +72,12 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
         final BinModel binModel = binList.get(position);
         holder.textViewBinName.setText(binModel.getBinName());
         holder.textViewBinId.setVisibility(View.GONE);
-        holder.textViewBinIpAddress.setText(binModel.getBinIpAddress());
         holder.textViewBinId.setText(binModel.getBinId());
         holder.btnEditBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendIntent = new Intent(new Intent(context, RegisterBin.class));
                 sendIntent.putExtra(Keys.TAG_BIN_UPDATE, "Update");
-                sendIntent.putExtra(Keys.TAG_IP_ADDRESS, binModel.getBinIpAddress());
                 sendIntent.putExtra(Keys.TAG_BIN_NAME, binModel.getBinName());
                 sendIntent.putExtra(Keys.TAG_BIN_ID, binModel.getBinId());
                 context.startActivity(sendIntent);

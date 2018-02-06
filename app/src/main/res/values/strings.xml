@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Basura_Juan</string>
+    <string name="app_name">Basura Juan</string>
     <string name="hint_fname">First Name</string>
     <string name="hint_disconnect">Disconnect</string>
     <string name="hint_email">Email</string>
@@ -34,6 +34,7 @@
     <string name="paired_devices">Choose a paired Bluetooth device</string>
     <string name="binlist_activity">List of Bins</string>
     <string name="delete">DELETE</string>
+    <string name="search_deployed_bin">Search deployed bin</string>
     <string name="search_placeholder">Search bin name...</string>
     <string name="err_select_image">Select a picture</string>
     <string name="edit_bin">Edit bin</string>
@@ -46,4 +47,5 @@
     </string-array>
     <string name="notification_item">Notification</string>
     <string name="title_activity_maps">Map</string>
+    <string name="actual_location">Actual location required.</string>
 </resources>

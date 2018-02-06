@@ -50,8 +50,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         castObjects(); //Call cast object function
 
-
-
         // /Set text in navigation drawer header
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         buttonClick = new AlphaAnimation(1F, 0.2F);
@@ -115,8 +113,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         toggle.syncState();
 
         initializeProgressDialogState();
-
-
     }
 
     private void loadNavHeader(){
@@ -135,8 +131,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                 .into(img_login_user_image);
     }
 
-
-
     private void castObjects(){
         tv_fullname             = (TextView) findViewById(R.id.tvFullName);
         fab                     = (FloatingActionButton) findViewById(R.id.fab);
@@ -150,7 +144,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         RelativeLayout badgeLayout = (RelativeLayout)  menu.findItem(R.id.menu_notification).getActionView();
         TextView counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
         counter.setText("10");
-        counter.setVisibility(View.GONE);
         iconButton = (IconButton) badgeLayout.findViewById(R.id.badge_icon_button);
         homeButton = (IconButton) badgeLayout.findViewById(R.id.badge_home_button);
         homeButton.setText("{fa-home}");
@@ -201,8 +194,8 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         } else if (id == R.id.nav_bin_list) {
             startActivity(new Intent(getApplicationContext(), BinListActivity.class));
         } else if (id == R.id.nav_deployment_history) {
-            navItemIndex = 2;
-            startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+
+            startActivity(new Intent(getApplicationContext(), DeploymentHistory.class));
         } else if (id == R.id.nav_logout) {
             signOut();
         }
@@ -226,7 +219,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         builder.setCancelable(true);
         builder.setTitle(title);
-        builder.setIcon(R.drawable.ic_exit_to_app_white_48dp);
         builder.setMessage(Message);
         builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
             @Override

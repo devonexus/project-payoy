@@ -41,11 +41,12 @@ import java.util.Map;
 
 public class RegisterBin extends NavigationDrawerActivity implements View.OnClickListener{
     public static String BIN_REG_URL = "http://basurajuan.x10host.com/bin-registration.php";
-    //public static String BIN_REG_URL = "http://132.223.41.121/bin-registration.php";
-    private EditText etIpAddress, etBinName;
+    //public static String BIN_REG_URL = "http://192.168.43.163/bin-registration.php";
+    private EditText  etBinName;
     private Button btn_register_bin;
     private ProgressDialog pDialog;
     private String ip_address, bin_name;
+    private String logged_in_user_id = ""; //Id of the current user
     private String selectedBinId = "";
     /*private String ip_address, bin_name;*/ /* Variables  to store post data*/
     GlobalData globalData;
@@ -63,17 +64,17 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
         castObjects();
 
         globalData = (GlobalData) getApplicationContext();
+        logged_in_user_id = globalData.getUserid();
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
         bundle      = getIntent().getExtras();
         if(bundle != null){
             if(bundle.get(Keys.TAG_BIN_UPDATE).toString().equals("Update")){
                 setTitle(getString(R.string.edit_bin));
-                etIpAddress.setText(bundle.get(Keys.TAG_IP_ADDRESS).toString());
                 etBinName.setText(bundle.get(Keys.TAG_BIN_NAME).toString());
                 selectedBinId = bundle.get(Keys.TAG_BIN_ID).toString();
                 btn_register_bin.setText(getString(R.string.update_bin));
-                Toast.makeText(getApplicationContext(), ""+selectedBinId+" "+etBinName.getText().toString(), Toast.LENGTH_SHORT).show();
+
             }
         }
 
@@ -179,7 +180,6 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
     }
 
     public void castObjects(){
-        etIpAddress = (EditText) findViewById(R.id.et_ip_address);
         etBinName   = (EditText) findViewById(R.id.et_bin_name);
         btn_register_bin    = (Button) findViewById(R.id.btn_reg_bin);
     }
@@ -211,7 +211,6 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                                     public void run() {
                                         if(server_response.equals("1")){
                                             Toast.makeText(getApplicationContext(), "Bin successfully registered", Toast.LENGTH_SHORT).show();
-                                            etIpAddress.setText("");
                                             etBinName.setText("");
                                             hidepDialog();
                                         }
@@ -237,8 +236,8 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put(Keys.TAG_IP_ADDRESS, etIpAddress.getText().toString());
                 params.put(Keys.TAG_BIN_NAME, etBinName.getText().toString());
+                params.put(Keys.TAG_USER_ID, logged_in_user_id);
                 return params;
             }
         };
@@ -254,19 +253,7 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
-    private boolean validateIpAddress() {
-        ip_address = etIpAddress.getText().toString().trim();
 
-        if (ip_address.isEmpty()) {
-            etIpAddress.setError(getString(R.string.err_msg_ip_address));
-            requestFocus(etIpAddress);
-            return false;
-        } else {
-            etIpAddress.setError(null);
-        }
-
-        return true;
-    }//Validate ip_address
 
     private boolean validateBinName() {
         bin_name = etBinName.getText().toString().trim();
@@ -292,21 +279,19 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
         switch (v.getId()){
             case R.id.btn_reg_bin:
                 if(btn_register_bin.getText().toString().equals("Register Bin")){
-                    if(!validateIpAddress()){
-                        return;
-                    }
+
                     if(!validateBinName()){
                         return;
                     }
                     createBin();
                 }else if (btn_register_bin.getText().toString().equals(getString(R.string.update_bin))){
-                    updateBin(selectedBinId, etIpAddress.getText().toString(), etBinName.getText().toString());
+                    updateBin(selectedBinId, etBinName.getText().toString());
                 }
             break;
         }
     }
 
-    private void updateBin(final String binId, final String binIp, final String binName){
+    private void updateBin(final String binId, final String binName){
         showpDialog();
         pDialog.setMessage("Updating bin");
         CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_REG_URL, null,
@@ -333,7 +318,7 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                                         public void run() {
                                             if(server_response.equals("1")){
                                                 Toast.makeText(getApplicationContext(), "Bin successfully updated!!!", Toast.LENGTH_SHORT).show();
-                                                etIpAddress.setText("");
+                                                VolleySingleton.getInstance(getApplicationContext()).cancelPendingRequests("TAG");
                                                 etBinName.setText("");
                                                 hidepDialog();
                                             }
@@ -352,6 +337,7 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 hidepDialog();
+                VolleySingleton.getInstance(getApplicationContext()).cancelPendingRequests("TAG");
                 Log.d(Keys.TAG_ERRORS, error.getMessage());
                 Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
             }
@@ -360,7 +346,6 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put(Keys.TAG_BIN_ID, binId);
-                params.put(Keys.TAG_IP_ADDRESS, binIp);
                 params.put(Keys.TAG_BIN_NAME, binName);
 
                 return params;

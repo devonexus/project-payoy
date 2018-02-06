@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 
-import android.graphics.drawable.GradientDrawable;
 
 
 import android.net.Uri;
@@ -31,7 +30,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -69,9 +67,9 @@ public class RegisterUserActivity extends AppCompatActivity {
     private TextView tvImageUserProfile;
     //public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
 
-//    public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
+    public static String REGISTER_URL = "http://192.168.43.138/registration.php"; //WEB Service URL
 
-    public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
+    //public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
     private Uri uri;
     private String displayName;
 
@@ -140,7 +138,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         tv1.setHighlightColor(Color.TRANSPARENT);
         tv1.setText(content);
 
-
         img_user_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,23 +146,15 @@ public class RegisterUserActivity extends AppCompatActivity {
             }
         });
 
-
-
         bregister.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
                         submitForm();
-
-
                     }
                 }
         );  //Register user
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -176,8 +165,6 @@ public class RegisterUserActivity extends AppCompatActivity {
                 uri = data.getData();
                 image_path = PathUtil.getPathFromURI(RegisterUserActivity.this, uri);
                 File f = new File(uri.getPath());
-
-
 
                 displayName = null;
                 Picasso.with(this)
@@ -197,9 +184,7 @@ public class RegisterUserActivity extends AppCompatActivity {
                 } else if (uri.toString().startsWith("file://")) {
                     displayName = f.getName();
                 }
-
             }
-
         }
 
 

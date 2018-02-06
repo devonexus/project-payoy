@@ -5,7 +5,7 @@ package com.example.apaodevo.basura_juan.Models;
  */
 
 public class BinModel {
-    private String binName, binIpAddress, binId;
+    private String binName, binId;
 
 
 
@@ -18,15 +18,9 @@ public class BinModel {
         this.binName = binName;
     }
 
-    public String getBinIpAddress()
-    {
-        return binIpAddress;
-    }
 
-    public void setBinIpAdrress(String binIpAddress) {
 
-        this.binIpAddress = binIpAddress;
-    }
+
 
     public String getBinId() {
         return binId;

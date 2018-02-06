@@ -34,7 +34,9 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
     public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
-    //public static String LOGIN_URL = "http://132.223.41.121/login.php";
+    //private static String LOGIN_URL = "http://100.94.15.114/basura_juan/login.php";
+
+//    public static String LOGIN_URL = "http://100.94.33.24/login.php";
 
     protected String enteredUsername, enteredPassword;
     /*
@@ -217,7 +219,7 @@ public class LoginActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LoginActivity.this, "Could not get data from the server.", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, ""+error.getMessage(), Toast.LENGTH_LONG).show();
                 error.printStackTrace();
                 hidepDialog();
             }

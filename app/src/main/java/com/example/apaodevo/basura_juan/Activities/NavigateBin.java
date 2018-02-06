@@ -35,7 +35,7 @@ public class NavigateBin extends NavigationDrawerActivity {
         globalData = (GlobalData) getApplicationContext();
 
         //Intent newint = getIntent();
-       // globalData.address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
+        //globalData.address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
 
         if(globalData.address == null) {
             bluetooth = new Intent(NavigateBin.this, DeviceList.class);
@@ -48,7 +48,6 @@ public class NavigateBin extends NavigationDrawerActivity {
             startActivity(home);
         }
 
-        //setContentView(R.layout.activity_navigate_bin);
         //Set up navigation drawer
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_navigate_bin, null, false);
@@ -150,7 +149,6 @@ public class NavigateBin extends NavigationDrawerActivity {
                 Disconnect(); //close connection
             }
         });
-
         displayFloatingActionButton();
     }
     private void displayFloatingActionButton(){

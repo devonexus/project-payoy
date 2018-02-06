@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/deployment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padd_10">
+
+        <ImageView
+            android:id="@+id/deployment_bin_pic"
+            android:layout_width="@dimen/thumbnail"
+            android:layout_height="64dp"
+            android:layout_marginRight="@dimen/activity_padding_horizontal"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/deployment_date_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_toRightOf="@id/deployment_bin_pic"
+            android:text="@string/app_name" />
+
+
+        <TextView
+            android:id="@+id/deploy_time_start"
+            android:textColor="@color/colorBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/deployment_date_start"
+            android:text="@string/app_name" />
+
+        <TextView
+            android:id="@+id/deployment_date_end"
+            android:layout_width="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/deployment_date_start"
+            android:layout_toRightOf="@id/deployment_bin_pic"
+            android:text="@string/app_name" />
+
+        <TextView
+            android:id="@+id/deployment_time_end"
+            android:layout_width="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/deploy_time_start"
+            android:layout_marginLeft="@dimen/padd_10"
+            android:layout_toRightOf="@+id/deployment_date_end"
+            android:text="@string/app_name" />
+
+        <TextView
+            android:id="@+id/binName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            android:layout_below="@+id/deployment_date_end"
+            android:layout_toRightOf="@id/deployment_bin_pic"
+            android:text="@string/app_name" />
+
+        <TextView
+            android:id="@+id/binLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/binName"
+            android:textColor="@color/colorBlack"
+            android:layout_toRightOf="@id/deployment_bin_pic"
+            android:text="@string/app_name" />
+    </RelativeLayout>
+</FrameLayout>
