@@ -15,7 +15,6 @@ import com.joanzapata.iconify.fonts.SimpleLineIconsModule;
 import com.joanzapata.iconify.fonts.TypiconsModule;
 import com.joanzapata.iconify.fonts.WeathericonsModule;
 
-import zemin.notification.NotificationDelegater;
 
 /**
  * Created by apaodevo on 11/15/2017.

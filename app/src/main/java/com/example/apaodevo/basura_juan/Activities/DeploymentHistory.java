@@ -56,7 +56,6 @@ public class DeploymentHistory extends NavigationDrawerActivity{
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         deploymentList = new ArrayList<>();
-
         initializeAdapter();
         showDeployedBinListItem(globalData.getUserid());
     }
