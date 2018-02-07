@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.apaodevo.basura_juan.Activities.NotificationActivity">
 
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/notificationListToolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#009688"
-        />
+        android:id="@+id/app_bar"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/notificationListToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#009688"
+            />
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            app:tabMode="fixed"
+            app:tabGravity="fill"/>
+    </android.support.design.widget.AppBarLayout>
 
 
-    <it.neokree.materialtabs.MaterialTabHost
-        android:id="@+id/tabHost"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@+id/notificationListToolbar"
-        app:primaryColor="@color/colorNotificationBody"
-        app:accentColor="#ffc400" />
+
+
+
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+        android:layout_below="@id/app_bar"
+
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/tabHost" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <ImageView
-        android:layout_below="@id/pager"
-        android:id="@+id/imageId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    </android.support.v4.view.ViewPager>
 
-</RelativeLayout>
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -21,4 +21,5 @@
     <color name="colorBinIpAddress">#006400</color>
     <color name="colorNotificationBell">#F08080</color>
     <color name="colorNotificationBody">#87CEFA</color>
+    <color name="colorRoyalBlue">#4169E1</color>
 </resources>

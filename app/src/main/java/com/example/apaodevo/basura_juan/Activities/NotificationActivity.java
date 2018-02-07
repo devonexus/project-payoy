@@ -2,49 +2,50 @@ package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.Notification;
 import android.content.Context;
-import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Fragment.BatteryFragment;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
-import com.example.apaodevo.basura_juan.Utils.FragmentText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
-import it.neokree.materialtabs.MaterialTab;
-import it.neokree.materialtabs.MaterialTabHost;
-import it.neokree.materialtabs.MaterialTabListener;
 
-public class NotificationActivity extends NavigationDrawerActivity implements MaterialTabListener{
+public class NotificationActivity extends NavigationDrawerActivity{
     private ArrayList<String> notification  = new ArrayList<>();
     private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
     private String category = "";
-    MaterialTabHost tabHost;
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    Context c = this;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private int[] tabIcons = {
+            R.drawable.battery_notif,
+            R.drawable.ic_delete_black_24dp
+    };
+
+    Context context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,95 +56,66 @@ public class NotificationActivity extends NavigationDrawerActivity implements Ma
         View contentView = inflater.inflate(R.layout.activity_notification, null, false);
         drawer.addView(contentView, 0);
         fab.setVisibility(View.INVISIBLE);
-        tabHost = (MaterialTabHost) findViewById(R.id.tabHost);
 
-        pager = (ViewPager) findViewById(R.id.pager );
 
-        // init view pager
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        pager.setAdapter(adapter);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
 
-       /* ImageView img = (ImageView) findViewById(R.id.imageId);
-        img.setImageDrawable(getResources().getDrawable(R.drawable.battery_notif, null));*/
-        /* pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-           @Override
-           public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-           }
-
-           @Override
-           public void onPageSelected(int position) {
-               tabHost.setSelectedNavigationItem(position);
-           }
-
-           @Override
-           public void onPageScrollStateChanged(int state) {
-
-           }
-       });*/
-        // insert all tabs from pagerAdapter data
-        for (int i = 0; i < adapter.getCount(); i++) {
-            tabHost.addTab(
-                    tabHost.newTab()
-                            .setText(adapter.getPageTitle(i))
-                            .setTabListener(this)
-            );
-
-        }
-        //loadUnreadNotifications();
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        setupTabIcons();
+        loadUnreadNotifications();
 
     }
 
-    @Override
-    public void onTabSelected(MaterialTab tab) {
-        pager.setCurrentItem(tab.getPosition());
-        if(tab.getPosition() == 0){
-            Toast.makeText(getApplicationContext(), "Selection 1", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getApplicationContext(), "Selection 2", Toast.LENGTH_SHORT).show();
-        }
-
+    public static Drawable changeDrawableColor(Context context,int icon, int newColor) {
+        Drawable mDrawable = ContextCompat.getDrawable(context, icon).mutate();
+        mDrawable.setColorFilter(new PorterDuffColorFilter(newColor, PorterDuff.Mode.SRC_IN));
+        return mDrawable;
     }
 
-    @Override
-    public void onTabReselected(MaterialTab tab) {
-        //Toast.makeText(getApplicationContext(), "Reselection", Toast.LENGTH_SHORT).show();
+
+    private void setupTabIcons() {
+
+
+        tabLayout.getTabAt(0).setIcon(changeDrawableColor(getApplicationContext(), tabIcons[0], Color.BLUE));
+        //tabLayout.getTabAt(1).setIcon(changeDrawableColor(getApplicationContext(), tabIcons[1], Color.BLUE));
     }
-
-    @Override
-    public void onTabUnselected(MaterialTab tab) {
-
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new BatteryFragment(), "Battery Status");
+        //adapter.addFragment(new BatteryFragment(), "Bin Capacity");
+        viewPager.setAdapter(adapter);
     }
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
-    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
-
-        public ViewPagerAdapter(FragmentManager fm) {
-            super(fm);
-
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
         }
 
         @Override
-        public android.support.v4.app.Fragment getItem(int position) {
-            return new FragmentText();
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
         }
-
 
         @Override
         public int getCount() {
-            return 2;
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch(position) {
-                case 0: return "Battery Status";
-                case 1: return "Bin Capacity";
-                default: return null;
-            }
+            //return mFragmentTitleList.get(position);
+            return null;
         }
-
     }
-
     private void loadUnreadNotifications(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, NOTIFICATION_URL,
                 new Response.Listener<String>() {
@@ -205,15 +177,6 @@ public class NotificationActivity extends NavigationDrawerActivity implements Ma
     }
 
 
-    /*private Drawable getIcon(int position) {
-        Drawable drawable = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-             drawable = getResources().getDrawable(R.drawable.ic_battery_alert_black_24dp,null);
 
-        }
-        return drawable;
-
-
-    }*/
 
 }

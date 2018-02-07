@@ -7,6 +7,18 @@ package com.example.apaodevo.basura_juan.Models;
 public class NotificationModel {
     private String notificationMessage;
     private String notificationDate;
+    private String notificationTime;
+    private String notificationTitle;
+    public String getNotificationTitle() {
+        return notificationTitle;
+    }
+
+    public void setNotificationTitle(String notificationTitle) {
+        this.notificationTitle = notificationTitle;
+    }
+
+
+
 
     public String getNotificationMessage() {
         return notificationMessage;
@@ -32,5 +44,5 @@ public class NotificationModel {
         this.notificationTime = notificationTime;
     }
 
-    private String notificationTime;
+
 }

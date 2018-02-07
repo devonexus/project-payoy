@@ -66,7 +66,7 @@
             android:label="@string/user_profile_activity"
             android:launchMode="singleTask"></activity>
         <activity android:name=".Activities.NotificationActivity"
-
+            android:theme="@style/AppTheme"
             android:launchMode="singleTask"
             android:label="@string/notification_item"></activity>
 

@@ -43,7 +43,7 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
         void onBinSelected(BinModel binModel);
     }
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        public TextView textViewBinName, textViewBinIpAddress, textViewBinId;
+        public TextView textViewBinName, textViewBinId;
         public ImageView thumbNail;
         public RelativeLayout viewBackground, viewForeground;
         public Button btnEditBin;

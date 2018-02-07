@@ -24,5 +24,7 @@
         <item name="android:textColorPrimary">@color/colorWhite</item>
         <item name="android:background">@color/colorBlack</item>
     </style>
-
+    <style name="generalnotitle">
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

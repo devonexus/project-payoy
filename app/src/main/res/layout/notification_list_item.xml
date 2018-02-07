@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -29,7 +30,7 @@
 
 
             <TextView
-                android:id="@+id/note_title"
+                android:id="@+id/notifTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
@@ -42,17 +43,17 @@
                 android:textColor="#ff000000"
                 android:textStyle="bold" />
             <TextView
-                android:id="@+id/notificationDateTIme"
+                android:id="@+id/notifDateTime"
                 android:layout_width="wrap_content"
                 android:text="Date and Time"
                 android:textStyle="bold"
                 android:layout_alignParentRight="true"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/note_content"
+                android:id="@+id/notifContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/note_title"
+                android:layout_below="@+id/notifTitle"
                 android:text="Notification Content"
                 android:layout_marginLeft="16dp"
                 android:paddingTop="@dimen/padd_10"
@@ -66,7 +67,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/note_content"
+                android:layout_below="@+id/notifContent"
                 android:layout_toRightOf="@+id/notification_marker"
                 android:text="MARK AS READ"
                 android:paddingLeft="0dip"
