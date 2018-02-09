@@ -34,17 +34,17 @@ import java.util.Map;
  * Created by apaodevo on 2/7/2018.
  */
 
-public class BatteryFragment extends Fragment {
+public class BinCapacityFragment extends Fragment {
     private static List<NotificationModel> notificationModelList;
     private static RecyclerView recyclerView;
     private static NotificationAdapter notificationAdapter;
     private static String NOTIFICATION_URLS = "http://132.223.41.121/notification-list.php";
-    public BatteryFragment() {
+    public BinCapacityFragment() {
         // Required empty public constructor
 
     }
-   /* public static BatteryFragment newInstance() {
-        BatteryFragment fragment = new BatteryFragment();
+   /* public static BinCapacityFragment newInstance() {
+        BinCapacityFragment fragment = new BinCapacityFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -80,7 +80,7 @@ public class BatteryFragment extends Fragment {
         notificationAdapter = new NotificationAdapter(getActivity(), notificationModelList);
         recyclerView.setAdapter(notificationAdapter);
     }
-        private void shownotificationModelListItem() {
+    private void shownotificationModelListItem() {
         notificationModelList = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, NOTIFICATION_URLS,
                 new Response.Listener<String>() {
@@ -106,7 +106,7 @@ public class BatteryFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put(Keys.TAG_NOTIFICATION_CATEGORY, "Battery Status");
+                params.put(Keys.TAG_NOTIFICATION_CATEGORY, "Bin Capacity");
                 return params;
             }
         };

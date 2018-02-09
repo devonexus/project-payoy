@@ -15,12 +15,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Fragment.BatteryFragment;
+import com.example.apaodevo.basura_juan.Fragment.BinCapacityFragment;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 
@@ -29,20 +33,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
 
 public class NotificationActivity extends NavigationDrawerActivity{
     private ArrayList<String> notification  = new ArrayList<>();
-    private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
+    //private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
+    private static String NOTIFICATION_URL = "http://132.223.41.121/notification-list.php";
+
     private String category = "";
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private int[] tabIcons = {
             R.drawable.battery_notif,
-            R.drawable.ic_delete_black_24dp
+            R.drawable.delete_notif
     };
 
     Context context = this;
@@ -79,12 +87,12 @@ public class NotificationActivity extends NavigationDrawerActivity{
 
 
         tabLayout.getTabAt(0).setIcon(changeDrawableColor(getApplicationContext(), tabIcons[0], Color.BLUE));
-        //tabLayout.getTabAt(1).setIcon(changeDrawableColor(getApplicationContext(), tabIcons[1], Color.BLUE));
+        tabLayout.getTabAt(1).setIcon(changeDrawableColor(getApplicationContext(), tabIcons[1], Color.BLUE));
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new BatteryFragment(), "Battery Status");
-        //adapter.addFragment(new BatteryFragment(), "Bin Capacity");
+        adapter.addFragment(new BinCapacityFragment(), "Bin Capacity");
         viewPager.setAdapter(adapter);
     }
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -123,6 +131,7 @@ public class NotificationActivity extends NavigationDrawerActivity{
                     @Override
                     public void onResponse(String response) {
                         //int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+
                         try {
                             JSONArray jsonArray = new JSONArray(response);
 
@@ -130,9 +139,9 @@ public class NotificationActivity extends NavigationDrawerActivity{
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 Random r = new Random();
                                 int countNotif = r.nextInt(9999 - 1000) + 9999;
-                                category = jsonObject.getString(Keys.TAG_NOTIFICATION_CATEGORY);
+                                category = jsonObject.getString(Keys.TAG_NOTIFICATION);
                                 if(jsonArray.length() > 0) {
-                                    if(category.toString().equals("Battery")) {
+                                    if(category.toString().equals("Battery Status")) {
                                         //Toast.makeText(getApplicationContext(), "Number: " + countNotif, Toast.LENGTH_SHORT).show();
                                         PugNotification.with(getApplicationContext())
                                                 .load()
@@ -151,7 +160,7 @@ public class NotificationActivity extends NavigationDrawerActivity{
                                                 .title("Bin Capacity")
                                                 .identifier(countNotif)
                                                 .message(jsonObject.getString(Keys.TAG_NOTIFICATION_MESSAGE))
-                                                .largeIcon(R.drawable.bin_full)
+                                                .largeIcon(R.drawable.bin_capacity)
                                                 .smallIcon(R.mipmap.ic_launcher)
                                                 .flags(Notification.DEFAULT_ALL)
                                                 .autoCancel(true)
@@ -160,6 +169,7 @@ public class NotificationActivity extends NavigationDrawerActivity{
                                     }
 
                                 }
+                                Toast.makeText(getApplicationContext(), ""+category, Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
@@ -170,9 +180,16 @@ public class NotificationActivity extends NavigationDrawerActivity{
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
-        });
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_NOTIFICATION_CATEGORY, "All");
+                return params;
+            }
+        };
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 

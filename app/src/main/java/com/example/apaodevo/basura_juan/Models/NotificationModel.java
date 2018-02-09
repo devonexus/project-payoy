@@ -9,6 +9,21 @@ public class NotificationModel {
     private String notificationDate;
     private String notificationTime;
     private String notificationTitle;
+    private int notificationCount;
+    public int getNotificationCount() {
+        return notificationCount;
+    }
+
+    public void setNotificationCount(int notificationCount) {
+        this.notificationCount = notificationCount;
+    }
+
+
+    public NotificationModel(){
+
+    }
+
+
     public String getNotificationTitle() {
         return notificationTitle;
     }

@@ -70,7 +70,9 @@
             android:launchMode="singleTask"
             android:label="@string/notification_item"></activity>
 
-        <activity android:name=".Activities.DeploymentHistory">
+        <activity
+            android:launchMode="singleTask"
+            android:name=".Activities.DeploymentHistory">
 
         </activity>
         <!--

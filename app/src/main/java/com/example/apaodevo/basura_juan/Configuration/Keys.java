@@ -56,4 +56,6 @@ public class Keys{
     public static final String TAG_NOTIFICATION_MESSAGE = "notificationMessage";
     public static final String TAG_NOTIFICATION_TIME= "notificationTime";
     public static final String TAG_NOTIFICATION_DATE = "notificationDate";
+    public static final String TAG_NOTIFICATION_COUNT = "notificationCount";
+    public static final String TAG_NOTIFICATION = "notificationTitle";
 }

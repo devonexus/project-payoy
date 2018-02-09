@@ -39,6 +39,7 @@
     <string name="err_select_image">Select a picture</string>
     <string name="edit_bin">Edit bin</string>
     <string name="update_bin">Update bin</string>
+    <string name="deployment_history_toolbar_title">Deployment</string>
     <string-array name="nav_item_activity_titles">
         <item>Account Settings</item>
         <item>List of Registered Bins</item>

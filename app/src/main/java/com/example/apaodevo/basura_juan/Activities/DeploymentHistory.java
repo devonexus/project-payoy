@@ -47,7 +47,11 @@ public class DeploymentHistory extends NavigationDrawerActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeDrawer();
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View contentView = inflater.inflate(R.layout.activity_deployment_history, null, false);
+        drawer.addView(contentView, 0);
+        fab.setVisibility(View.INVISIBLE);
         recyclerView = (RecyclerView) findViewById(R.id.deployment_recycler_view);
         deploymentSearch = (EditText) findViewById(R.id.search_bin_deployment);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -96,11 +100,6 @@ public class DeploymentHistory extends NavigationDrawerActivity{
         recyclerView.setAdapter(deploymentHistoryAdapter);
     }
     private void initializeDrawer(){
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View contentView = inflater.inflate(R.layout.activity_deployment_history, null, false);
-        drawer.addView(contentView, 0);
-        fab.setImageResource(R.drawable.floating_navigate_bin);
-        fab.setVisibility(View.GONE);
+
     }
 }
