@@ -23,7 +23,7 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 public class NavigateBin extends NavigationDrawerActivity {
 
-    private Button                btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect;
+    private Button                btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect,btnStopDeployment;
     GlobalData                    globalData;
     private String                auto = "Pause Automation";
     Intent bluetooth,home;
@@ -61,8 +61,9 @@ public class NavigateBin extends NavigationDrawerActivity {
         btnLeft            = (Button)   findViewById(R.id.btnLeft);
         btnForward         = (Button)   findViewById(R.id.btnForward);
         btnDisconnect      = (Button)   findViewById(R.id.btnDisconnect);
-        btnAutomationpause = (Button)  findViewById(R.id.btnAutomationPause);
+        btnAutomationpause = (Button)   findViewById(R.id.btnAutomationPause);
         binConnected       = (TextView) findViewById(R.id.txtBinConnected);
+        btnStopDeployment  = (Button)   findViewById(R.id.btnStopDeployment);
 
         binConnected.setText(globalData.name);
         if(auto == "Pause Automation") {
@@ -115,6 +116,12 @@ public class NavigateBin extends NavigationDrawerActivity {
             @Override
             public void onClick(View v) {
                 forward();
+            }
+        });
+        btnStopDeployment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StopDeployment();
             }
         });
         btnAutomationpause.setOnClickListener(new View.OnClickListener() {
@@ -255,6 +262,21 @@ public class NavigateBin extends NavigationDrawerActivity {
             try
             {
                 DeviceList.btSocket.getOutputStream().write("2".toString().getBytes());
+            }
+            catch (IOException e)
+            {
+                globalData.msg("Error");
+            }
+        }
+    }
+
+    private void StopDeployment()
+    {
+        if (DeviceList.btSocket!=null)
+        {
+            try
+            {
+                DeviceList.btSocket.getOutputStream().write("5".toString().getBytes());
             }
             catch (IOException e)
             {
