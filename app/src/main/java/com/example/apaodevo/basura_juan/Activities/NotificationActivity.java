@@ -43,7 +43,7 @@ import br.com.goncalves.pugnotification.notification.PugNotification;
 public class NotificationActivity extends NavigationDrawerActivity{
     private ArrayList<String> notification  = new ArrayList<>();
     //private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
-    private static String NOTIFICATION_URL = "http://132.223.41.121/notification-list.php";
+    private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
 
     private String category = "";
     private TabLayout tabLayout;
@@ -131,7 +131,7 @@ public class NotificationActivity extends NavigationDrawerActivity{
 
                     @Override
                     public void onResponse(String response) {
-                        //int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+
 
                         try {
                             JSONArray jsonArray = new JSONArray(response);
@@ -178,15 +178,15 @@ public class NotificationActivity extends NavigationDrawerActivity{
 
 
 
-                                Toast.makeText(getApplicationContext(), ""+category, Toast.LENGTH_SHORT).show();
+
                             }
 
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    }
 
+                    }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
