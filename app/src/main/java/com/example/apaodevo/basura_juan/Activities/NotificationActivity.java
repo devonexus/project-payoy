@@ -15,13 +15,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Fragment.BatteryFragment;
+import com.example.apaodevo.basura_juan.Fragment.BinCapacityFragment;
+import com.example.apaodevo.basura_juan.Models.NotificationModel;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 
 import org.json.JSONArray;
@@ -29,7 +35,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
@@ -79,12 +87,12 @@ public class NotificationActivity extends NavigationDrawerActivity{
 
 
         tabLayout.getTabAt(0).setIcon(changeDrawableColor(getApplicationContext(), tabIcons[0], Color.BLUE));
-        //tabLayout.getTabAt(1).setIcon(changeDrawableColor(getApplicationContext(), tabIcons[1], Color.BLUE));
+        tabLayout.getTabAt(1).setIcon(changeDrawableColor(getApplicationContext(), tabIcons[1], Color.BLUE));
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new BatteryFragment(), "Battery Status");
-        //adapter.addFragment(new BatteryFragment(), "Bin Capacity");
+        adapter.addFragment(new BatteryFragment(),  "Battery Status");
+        adapter.addFragment(new BinCapacityFragment(), "Bin Capacity");
         viewPager.setAdapter(adapter);
     }
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -130,9 +138,9 @@ public class NotificationActivity extends NavigationDrawerActivity{
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 Random r = new Random();
                                 int countNotif = r.nextInt(9999 - 1000) + 9999;
-                                category = jsonObject.getString(Keys.TAG_NOTIFICATION_CATEGORY);
-                                if(jsonArray.length() > 0) {
-                                    if(category.toString().equals("Battery")) {
+                                category = jsonObject.getString(Keys.TAG_NOTIFICATION);
+                                //if(jsonArray.length() > 0) {
+                                    if(category.toString().equals("Battery Status")) {
                                         //Toast.makeText(getApplicationContext(), "Number: " + countNotif, Toast.LENGTH_SHORT).show();
                                         PugNotification.with(getApplicationContext())
                                                 .load()
@@ -160,7 +168,9 @@ public class NotificationActivity extends NavigationDrawerActivity{
                                     }
 
                                 }
-                            }
+
+
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -172,7 +182,14 @@ public class NotificationActivity extends NavigationDrawerActivity{
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_NOTIFICATION_CATEGORY, "All");
+                return params;
+            }
+        };
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 

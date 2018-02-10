@@ -20,7 +20,6 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/notification_marker"
-                android:src="@drawable/low_battery"
                 android:layout_centerVertical="true"
                 android:layout_height="wrap_content"
                 android:layout_width="50dp">

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.apaodevo.basura_juan.Models.NotificationModel;
@@ -28,11 +29,13 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView notificationTitle, notificationMessage, notificationDateTime;
+        public ImageView imageView;
         public MyViewHolder(View view){
             super(view);
             notificationTitle = (TextView) view.findViewById(R.id.notifTitle);
             notificationMessage = (TextView) view.findViewById(R.id.notifContent);
             notificationDateTime = (TextView) view.findViewById(R.id.notifDateTime);
+            imageView       = (ImageView) view.findViewById(R.id.notification_marker);
         }
 
     }
@@ -53,6 +56,12 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
         holder.notificationTitle.setText(notificationModel.getNotificationTitle());
         holder.notificationMessage.setText(notificationModel.getNotificationMessage());
         holder.notificationDateTime.setText(notificationModel.getNotificationDate()+" at "+notificationModel.getNotificationTime());
+        if(notificationModel.getNotificationTitle().equals("Battery Status")){
+            holder.imageView.setImageResource(R.drawable.low_battery);
+        }else if(notificationModel.getNotificationTitle().equals("Bin Capacity")){
+            holder.imageView.setImageResource(R.drawable.bin_full);
+        }
+
 
     }
 

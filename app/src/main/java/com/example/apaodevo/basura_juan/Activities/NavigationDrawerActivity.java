@@ -20,11 +20,22 @@ import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Models.NotificationModel;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
+import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.joanzapata.iconify.widget.IconButton;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -43,6 +54,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     GlobalData globalData;
     private IconButton iconButton, homeButton;
     private ActionBarDrawerToggle toggle;
+    private int notifCount;
+    public static NotificationModel notifModel = new NotificationModel();
+    private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +101,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-        drawer.setDrawerListener(toggle);
+
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -113,6 +127,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         toggle.syncState();
 
         initializeProgressDialogState();
+        getUnreadNotifications();
     }
 
     private void loadNavHeader(){
@@ -143,7 +158,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         getMenuInflater().inflate(R.menu.navigation_drawer, menu);
         RelativeLayout badgeLayout = (RelativeLayout)  menu.findItem(R.id.menu_notification).getActionView();
         TextView counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
-        counter.setText("10");
+        counter.setText(""+notifModel.getNotificationCount());
         iconButton = (IconButton) badgeLayout.findViewById(R.id.badge_icon_button);
         homeButton = (IconButton) badgeLayout.findViewById(R.id.badge_home_button);
         homeButton.setText("{fa-home}");
@@ -282,6 +297,30 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         if (pDialog.isShowing())
             pDialog.dismiss();
     }//Dismiss progressDialog
+
+    private void getUnreadNotifications(){
+        CustomJSONRequest countNotifRequest = new CustomJSONRequest(Request.Method.POST, NOTIFICATION_URL, null,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            notifCount = Integer.valueOf(response.getString(Keys.TAG_NOTIFICATION_COUNT));
+                            notifModel.setNotificationCount(notifCount);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(countNotifRequest);
+    }
 }
 //package com.example.apaodevo.basura_juan.Activities;
 //

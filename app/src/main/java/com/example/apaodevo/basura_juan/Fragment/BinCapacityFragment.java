@@ -1,5 +1,9 @@
 package com.example.apaodevo.basura_juan.Fragment;
 
+/**
+ * Created by Brylle on 2/10/2018.
+ */
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -30,16 +34,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
 /**
  * Created by apaodevo on 2/7/2018.
  */
 
-public class BatteryFragment extends Fragment {
+public class BinCapacityFragment extends Fragment {
     private static List<NotificationModel> notificationModelList;
     private RecyclerView recyclerView;
     private NotificationAdapter notificationAdapter;
     private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
-    public BatteryFragment() {
+    public BinCapacityFragment() {
         // Required empty public constructor
     }
 
@@ -55,18 +61,19 @@ public class BatteryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_battery, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_battery, container, false);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.notification_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        notificationModelList = new ArrayList<>();
+        shownotificationModelListItem();
+        initializeAdapter();
+        return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        recyclerView = (RecyclerView) getActivity().findViewById(R.id.notification_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        notificationModelList = new ArrayList<>();
-        initializeAdapter();
-        shownotificationModelListItem();
 
     }
     private void initializeAdapter(){
@@ -79,7 +86,6 @@ public class BatteryFragment extends Fragment {
 
                     @Override
                     public void onResponse(String response) {
-                        //Toast.makeText(getContext(), "Data: "+response.toString(), Toast.LENGTH_SHORT).show();
                         Log.d("Recycler View Contents", response.toString());
                         List<NotificationModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<NotificationModel>>() {
 
@@ -98,7 +104,8 @@ public class BatteryFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put(Keys.TAG_NOTIFICATION_CATEGORY, "Battery Status");
+                params.put(Keys.TAG_NOTIFICATION_CATEGORY, "Bin Capacity");
+
                 return params;
             }
         };
@@ -106,35 +113,6 @@ public class BatteryFragment extends Fragment {
 
     }
 
-    /*private void showUnreadNotifications {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, BIN_LIST_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("Recycler View Contents", response.toString());
-                        List<BinModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<BinModel>>() {
 
-                        }.getType());
-                        Log.d("Passed to RecyclerView", items.toString());
-                        notificationModelList.clear();
-                        notificationModelList.addAll(items);
-                        notificationModelListAdapter.notifyDataSetChanged();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put(Keys.TAG_USER_ID, globalData.getUserid());
-                return params;
-            }
-        };
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
-
-    }*/
 }
