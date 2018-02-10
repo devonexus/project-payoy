@@ -36,6 +36,7 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
             notificationMessage = (TextView) view.findViewById(R.id.notifContent);
             notificationDateTime = (TextView) view.findViewById(R.id.notifDateTime);
             imageView       = (ImageView) view.findViewById(R.id.notification_marker);
+
         }
 
     }
@@ -55,11 +56,20 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
         final NotificationModel notificationModel = notificationModelList.get(position);
         holder.notificationTitle.setText(notificationModel.getNotificationTitle());
         holder.notificationMessage.setText(notificationModel.getNotificationMessage());
+
         holder.notificationDateTime.setText(notificationModel.getNotificationDate()+" at "+notificationModel.getNotificationTime());
         if(notificationModel.getNotificationTitle().equals("Battery Status")){
             holder.imageView.setImageResource(R.drawable.low_battery);
         }else if(notificationModel.getNotificationTitle().equals("Bin Capacity")){
             holder.imageView.setImageResource(R.drawable.bin_full);
+        }
+
+
+        holder.notificationDateTime.setText(notificationModel.getNotificationDate()+" "+notificationModel.getNotificationTime());
+        if(notificationModel.getNotificationTitle().equals("Battery Status")){
+            holder.imageView.setImageResource(R.drawable.low_battery);
+        }else{
+            holder.imageView.setImageResource(R.drawable.bin_capacity);
         }
 
 

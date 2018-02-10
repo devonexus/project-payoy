@@ -12,8 +12,9 @@ public class NotificationModel {
 
 
 
-    private int notificationCount;
 
+
+    private int notificationCount;
 
     public int getNotificationCount() {
         return notificationCount;
@@ -22,6 +23,16 @@ public class NotificationModel {
     public void setNotificationCount(int notificationCount) {
         this.notificationCount = notificationCount;
     }
+
+
+
+
+    public NotificationModel(){
+
+    }
+
+
+
     public String getNotificationTitle() {
         return notificationTitle;
     }

@@ -1,5 +1,6 @@
 package com.example.apaodevo.basura_juan.Fragment;
 
+
 /**
  * Created by Brylle on 2/10/2018.
  */
@@ -35,24 +36,27 @@ import java.util.List;
 import java.util.Map;
 
 
-
 /**
  * Created by apaodevo on 2/7/2018.
  */
 
 public class BinCapacityFragment extends Fragment {
     private static List<NotificationModel> notificationModelList;
+
     private RecyclerView recyclerView;
     private NotificationAdapter notificationAdapter;
-    private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
     public BinCapacityFragment() {
         // Required empty public constructor
     }
+
+    private static String NOTIFICATION_URLS = "http://basurajuan.x10host.com/notification-list.php";
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
 
     }
@@ -68,6 +72,9 @@ public class BinCapacityFragment extends Fragment {
         notificationModelList = new ArrayList<>();
         shownotificationModelListItem();
         initializeAdapter();
+
+
+
         return rootView;
     }
 
@@ -80,12 +87,18 @@ public class BinCapacityFragment extends Fragment {
         notificationAdapter = new NotificationAdapter(getContext(), notificationModelList);
         recyclerView.setAdapter(notificationAdapter);
     }
+
+
     private void shownotificationModelListItem() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, NOTIFICATION_URL,
+        notificationModelList = new ArrayList<>();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, NOTIFICATION_URLS,
+
                 new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String response) {
+
+                        //Toast.makeText(getActivity(), "Data: "+response.toString(), Toast.LENGTH_SHORT).show();
                         Log.d("Recycler View Contents", response.toString());
                         List<NotificationModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<NotificationModel>>() {
 
@@ -98,13 +111,16 @@ public class BinCapacityFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
                 Toast.makeText(getContext(), "Sample "+error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error "+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put(Keys.TAG_NOTIFICATION_CATEGORY, "Bin Capacity");
+
 
                 return params;
             }

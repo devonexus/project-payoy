@@ -67,9 +67,9 @@ public class RegisterUserActivity extends AppCompatActivity {
     private TextView tvImageUserProfile;
     //public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
 
-    public static String REGISTER_URL = "http://192.168.43.138/registration.php"; //WEB Service URL
+    //public static String REGISTER_URL = "http://192.168.43.138/registration.php"; //WEB Service URL
 
-    //public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
+    public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
     private Uri uri;
     private String displayName;
 

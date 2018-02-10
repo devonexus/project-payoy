@@ -1,6 +1,7 @@
 package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+
+import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Models.NotificationModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
@@ -55,8 +58,11 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     private IconButton iconButton, homeButton;
     private ActionBarDrawerToggle toggle;
     private int notifCount;
-    public static NotificationModel notifModel = new NotificationModel();
     private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
+    private int notificationCount;
+    public static NotificationModel notifModel = new NotificationModel();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,10 +75,10 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         buttonClick = new AlphaAnimation(1F, 0.2F);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-        View header=navigationView.getHeaderView(0);
-        img_login_user_image    = (ImageView) header.findViewById(R.id.img_navigation_user_profile_image);
-        tv_fullname             = (TextView)header.findViewById(R.id.tvFullName);
-        tv_email                = (TextView) header.findViewById(R.id.tvEmail);
+        View header = navigationView.getHeaderView(0);
+        img_login_user_image = (ImageView) header.findViewById(R.id.img_navigation_user_profile_image);
+        tv_fullname = (TextView) header.findViewById(R.id.tvFullName);
+        tv_email = (TextView) header.findViewById(R.id.tvEmail);
         /*globalData = (GlobalData) getApplicationContext();
         fullName            = globalData.getSomeVariable();
         imageUrl            = globalData.getImageUrl().trim();
@@ -84,7 +90,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
-
         /*toolbar.setNavigationIcon(R.drawable.location_icon);
         toolbar.setTitle("Title");
         toolbar.setSubtitle("Sub");*/
@@ -101,6 +106,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
+        //drawer.setDrawerListener(toggle);
 
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -127,14 +133,40 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         toggle.syncState();
 
         initializeProgressDialogState();
-        getUnreadNotifications();
+        notificationCounter();
     }
 
-    private void loadNavHeader(){
+    private void notificationCounter() {
+        CustomJSONRequest notificationCountRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.NOTIFICATION_COUNT_URL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            notificationCount = Integer.parseInt(response.getString(Keys.TAG_NOTIFICATION_COUNT));
+                            notifModel.setNotificationCount(notificationCount);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Could not get data from server.", Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+                hidepDialog();
+            }
+        }
+        );
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(notificationCountRequest);
+    }
+
+    private void loadNavHeader() {
         globalData = (GlobalData) getApplicationContext();
-        fullName            = globalData.getFullname();
-        imageUrl            = globalData.getImageUrl().trim();
-        emailAddress        = globalData.getEmailAddress();
+        fullName = globalData.getFullname();
+        imageUrl = globalData.getImageUrl().trim();
+        emailAddress = globalData.getEmailAddress();
         tv_fullname.setText(fullName);
         tv_email.setText(emailAddress);
 
@@ -146,9 +178,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                 .into(img_login_user_image);
     }
 
-    private void castObjects(){
-        tv_fullname             = (TextView) findViewById(R.id.tvFullName);
-        fab                     = (FloatingActionButton) findViewById(R.id.fab);
+    private void castObjects() {
+        tv_fullname = (TextView) findViewById(R.id.tvFullName);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
     }//Cast objects and point it to the object name
 
@@ -156,7 +188,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation_drawer, menu);
-        RelativeLayout badgeLayout = (RelativeLayout)  menu.findItem(R.id.menu_notification).getActionView();
+        RelativeLayout badgeLayout = (RelativeLayout) menu.findItem(R.id.menu_notification).getActionView();
         TextView counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
         counter.setText(""+notifModel.getNotificationCount());
         iconButton = (IconButton) badgeLayout.findViewById(R.id.badge_icon_button);
@@ -209,7 +241,6 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         } else if (id == R.id.nav_bin_list) {
             startActivity(new Intent(getApplicationContext(), BinListActivity.class));
         } else if (id == R.id.nav_deployment_history) {
-
             startActivity(new Intent(getApplicationContext(), DeploymentHistory.class));
         } else if (id == R.id.nav_logout) {
             signOut();
@@ -221,16 +252,18 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    private void signOut(){
-        showMessage("Logout","Are you sure you want to logout?");
+
+    private void signOut() {
+        showMessage("Logout", "Are you sure you want to logout?");
     }
 
-    private void initializeProgressDialogState(){
+    private void initializeProgressDialogState() {
         pDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
         pDialog.setMessage("Signing out, Please wait...");
         pDialog.setCancelable(false);
     }
-    public void showMessage(String title,String Message){
+
+    public void showMessage(String title, String Message) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         builder.setCancelable(true);
         builder.setTitle(title);
@@ -284,7 +317,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     }
 
 
-    private void selectNavMenu(){
+    private void selectNavMenu() {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }//Selecting navigation drawer item
 
@@ -297,6 +330,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         if (pDialog.isShowing())
             pDialog.dismiss();
     }//Dismiss progressDialog
+
 
     private void getUnreadNotifications(){
         CustomJSONRequest countNotifRequest = new CustomJSONRequest(Request.Method.POST, NOTIFICATION_URL, null,
@@ -600,3 +634,4 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 //            pDialog.dismiss();
 //    }//Dismiss progressDialog
 //}
+
