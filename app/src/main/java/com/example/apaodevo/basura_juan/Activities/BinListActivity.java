@@ -8,6 +8,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +33,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Fragment.BatteryFragment;
+import com.example.apaodevo.basura_juan.Fragment.BinCapacityFragment;
+import com.example.apaodevo.basura_juan.Fragment.DeployedBinFragment;
+import com.example.apaodevo.basura_juan.Fragment.UndeployedBinFragment;
 import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.BinListAdapter;
@@ -49,17 +58,17 @@ import java.util.Map;
  * Created by apaodevo on 12/5/2017.
  */
 
-public class BinListActivity extends NavigationDrawerActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
+public class BinListActivity extends NavigationDrawerActivity{
 
     /*Declare variables here*/
-    private RecyclerView recyclerView;
-    private BinListAdapter binListAdapter;
-    private List<BinModel> binList;
+
     private CoordinatorLayout coordinatorLayout;
     private EditText binSearch;
     //private static final String BIN_LIST_URL = "http://172.17.152.98/bin-list.php";
-    private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
+
     private String binId;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +79,10 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         drawer.addView(contentView, 0);
         fab.setVisibility(View.INVISIBLE); // Hide floating action
 
-        /*
-        ** Cast objects here
-        */
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        //Cast objects here
+
+        /*recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         binSearch = (EditText) findViewById(R.id.search_bin);
 
         //Change as per key press
@@ -83,32 +92,66 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        binList = new ArrayList<>();
+        //recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        //binList = new ArrayList<>();
 
         // adding item touch helper
         // only ItemTouchHelper.LEFT added to detect Right to Left swipe
         // if you want both Right -> Left and Left -> Right
         // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);*/
 
         //Initialize bin list adapter
-        initializeAdapter();
+        //initializeAdapter();
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
 
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        setupViewPager(viewPager);
+        tabLayout.setTabTextColors(getColor(R.color.colorBlack), getColor(R.color.colorBlack));
+        tabLayout.setupWithViewPager(viewPager);
+        //setupTabIcons();
         //Retrieve bin list item
-        showBinListItem();
+        //showBinListItem();
 
     }
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-    /* private void initializeData(){
-         binList = new ArrayList<>();
-         binList.add(new BinModel("Emma Wilson", "23 years old", "1"));
-         binList.add(new BinModel("Lavery Maiss", "25 years old", "2"));
-         binList.add(new BinModel("Lillie Watts", "35 years old", "3"));
+        adapter.addFragment(new DeployedBinFragment(),  "Deployed Bins");
+        adapter.addFragment(new UndeployedBinFragment(), "Undeployed Bins");
+        viewPager.setAdapter(adapter);
+    }
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
-     }*/
-    private void showBinListItem() {
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+    /*private void showBinListItem() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BIN_LIST_URL,
                 new Response.Listener<String>() {
 
@@ -138,26 +181,26 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         };
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
 
-    }
+    }*/
 
     /**
      * Store array yo adapter
      * Set custom adapter for listview
      */
 
-    private void initializeAdapter() {
+    /*private void initializeAdapter() {
         binListAdapter = new BinListAdapter(BinListActivity.this, binList);
         recyclerView.setAdapter(binListAdapter);
-    }
+    }*/
 
-    boolean x = false;
+
 
     /**
      * callback when recycler view is swiped
      * item will be removed on swiped
      * undo option will be provided in snackbar to restore the item
      */
-    @Override
+   /* @Override
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction, int position) {
 
         if (viewHolder instanceof BinListAdapter.MyViewHolder) {
@@ -225,7 +268,7 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
 
             // remove the item from recycler view
 
-    }
+    }*/
     public void showMessage(String title,String Message){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         builder.setCancelable(true);
@@ -300,11 +343,11 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         @Override
         public void afterTextChanged(Editable s) {
 
-            filter(s.toString());
+          /*  filter(s.toString());*/
         }
     }
 
-    void filter(String s){
+    /*void filter(String s){
         List<BinModel> temp = new ArrayList();
         for(BinModel d: binList){
             //or use .equal(text) with you want equal match
@@ -315,11 +358,11 @@ public class BinListActivity extends NavigationDrawerActivity implements Recycle
         }
         //update recyclerview
         binListAdapter.updateList(temp);
-    }//This is used to filter the list....
+    }//This is used to filter the list....*/
 
     @Override
     protected void onResume() {
         super.onResume();
-        showBinListItem();
+        //showBinListItem();
     }
 }

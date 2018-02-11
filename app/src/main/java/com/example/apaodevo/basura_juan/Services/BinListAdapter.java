@@ -62,7 +62,7 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.bin_list_item, parent, false);
+                .inflate(R.layout.bin_list_items, parent, false);
 
 
         return new MyViewHolder(itemView);

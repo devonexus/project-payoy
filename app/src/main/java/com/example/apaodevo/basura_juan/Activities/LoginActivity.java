@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
@@ -33,7 +34,7 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
+    public static String LOGIN_URL = "http://192.168.1.19/basura_juan/login.php";
     //private static String LOGIN_URL = "http://100.94.15.114/basura_juan/login.php";
 
 //    public static String LOGIN_URL = "http://100.94.33.24/login.php";
@@ -46,8 +47,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText user, pass;
     private ProgressDialog pDialog;
     private String json_response;
-    private String image_url, email, username, password, firstName, lastName, middleInitial, userId; //Variables to store json response
+    private String image_url, email, username, password, firstName, lastName, middleInitial; //Variables to store json response
+    private int userId;
     private boolean clicked;
+    public static UserModel userModel;
     private String cancellationTag = "TAG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
         pass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         pass.setTransformationMethod(new PasswordTransformationMethod());
+        userModel = UserModel.getInstance();
     }
 
     private void loginUser(final String uname , final String pword){
@@ -170,13 +174,14 @@ public class LoginActivity extends AppCompatActivity {
                                 lastName = response.getString(Keys.TAG_LNAME);
                                 middleInitial = response.getString(Keys.TAG_MINITIAL);
                                 password = response.getString(Keys.TAG_PWORD);
-                                userId  = response.getString(Keys.TAG_USER_ID);
+                                userId  = Integer.parseInt(response.getString(Keys.TAG_USER_ID));
                                 final GlobalData globalData = (GlobalData) getApplicationContext();
                                 globalData.setFullname(json_response);
                                 globalData.setImageUrl(image_url);
                                 globalData.setEmailAddress(email);
-                                globalData.setUserid(userId);
+                                globalData.setUserid(String.valueOf(userId));
                                 globalData.setUsername(username);
+                                userModel.setUserId(userId);
                                 globalData.setMiddleInitial(middleInitial);
                                 globalData.setFirstname(firstName);
                                 globalData.setLastname(lastName);
@@ -185,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(i);
                                 finish();
                                 hidepDialog();
+                                Toast.makeText(getApplicationContext(), ""+userModel.getUserId(), Toast.LENGTH_SHORT).show();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

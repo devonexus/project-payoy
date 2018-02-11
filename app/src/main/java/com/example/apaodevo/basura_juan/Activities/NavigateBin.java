@@ -154,6 +154,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             {
                 Automation();
                 Disconnect(); //close connection
+                globalData.name = "";
             }
         });
         displayFloatingActionButton();
@@ -163,7 +164,6 @@ public class NavigateBin extends NavigationDrawerActivity {
                 .setBackgroundDrawable(R.drawable.floating_navigate_bin)
                 .build();
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
-        // repeat many times:
         ImageView itemIcon1 = new ImageView(this);
         itemIcon1.setImageResource(R.drawable.bin_location_icon);
 
@@ -179,7 +179,6 @@ public class NavigateBin extends NavigationDrawerActivity {
         final SubActionButton sabDeployBin = itemBuilder.setContentView(itemIcon2).build();
         final SubActionButton sabRegisterBin = itemBuilder.setContentView(itemIcon3).build();
 
-        //attach the sub buttons to the main button
         final FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(sabLocateBin)
                 .addSubActionView(sabDeployBin)
@@ -248,7 +247,10 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                globalData.msg("Error");
+                globalData.msg("Bluetooth Disconnected");
+                DeviceList.btSocket = null;
+                globalData.address = "";
+                globalData.name = "";
             }
         }
         finish(); //return to the first layout
@@ -265,7 +267,10 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                globalData.msg("Error");
+                globalData.msg("Bluetooth Disconnected");
+                DeviceList.btSocket = null;
+                globalData.address = "";
+                globalData.name = "";
             }
         }
     }
@@ -280,7 +285,10 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                globalData.msg("Error");
+                globalData.msg("Bluetooth Disconnected");
+                DeviceList.btSocket = null;
+                globalData.address = "";
+                globalData.name = "";
             }
         }
     }
@@ -295,7 +303,10 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                globalData.msg("Error");
+                globalData.msg("Bluetooth Disconnected");
+                DeviceList.btSocket = null;
+                globalData.address = "";
+                globalData.name = "";
             }
         }
     }
@@ -309,7 +320,10 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                globalData.msg("Error");
+                globalData.msg("Bluetooth Disconnected");
+                DeviceList.btSocket = null;
+                globalData.address = "";
+                globalData.name = "";
             }
         }
     }
@@ -324,7 +338,10 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                globalData.msg("Error");
+                globalData.msg("Bluetooth Disconnected");
+                DeviceList.btSocket = null;
+                globalData.address = "";
+                globalData.name = "";
             }
         }
     }
@@ -338,7 +355,10 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
             catch (IOException e)
             {
-                globalData.msg("Error");
+                globalData.msg("Bluetooth Disconnected");
+                DeviceList.btSocket = null;
+                globalData.address = "";
+                globalData.name = "";
             }
         }
     }

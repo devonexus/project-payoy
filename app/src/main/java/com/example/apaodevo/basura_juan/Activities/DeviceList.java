@@ -137,14 +137,10 @@ public class DeviceList extends NavigationDrawerActivity
     private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
     {
         private boolean ConnectSuccess = true; //if it's here, it's almost connected
-
-
         @Override
         protected void onPreExecute()
         {
-            //progress = new ProgressDialog(DeviceList.this,R.style.AppCompatAlertDialogStyle);
             progress = new ProgressDialog(DeviceList.this, R.style.AppCompatAlertDialogStyle);
-            //progress = ProgressDialog.show(DeviceList.this, "Connecting...", "Please wait!!!");  //show a progress dialog
             progress.setTitle("Connecting...");
             progress.setMessage("Please wait!!!");
             progress.setCancelable(false);
@@ -182,7 +178,6 @@ public class DeviceList extends NavigationDrawerActivity
             }
             else
             {
-                globalData.msg("Connected.");
                 isBtConnected = true;
                 // Make an intent to start next activity.
                 if(DeployBinActivity.deploy == "deploy")
@@ -196,7 +191,7 @@ public class DeviceList extends NavigationDrawerActivity
                             startActivity(deploy);
 
                         } catch (IOException e) {
-                            globalData.msg("Error");
+                            globalData.msg("Bluetooth Disconnected");
                         }
                     }
                 }

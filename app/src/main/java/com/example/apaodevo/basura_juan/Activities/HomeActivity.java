@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
@@ -33,7 +34,7 @@ public class HomeActivity extends NavigationDrawerActivity{
     private Button btn_bin_location, btn_deploy_bin, btn_register_bin, btn_navigate_bin;
     private ProgressDialog pDialog;
     GlobalData globalData;
-
+    public static UserModel userModel;
     private String BIN_LOCATION_URL = "http://basurajuan.x10host.com/bin-location.php";
     String jsonLatitude, jsonLongitude;
     @Override
@@ -46,9 +47,11 @@ public class HomeActivity extends NavigationDrawerActivity{
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_home, null, false);
         drawer.addView(contentView, 0);
+
         globalData = (GlobalData) getApplicationContext();
         fab.setImageResource(R.drawable.floating_navigate_bin);
         fab.setVisibility(View.GONE);
+
         getCoordinates();
 
         //        //Go to bin location interface
