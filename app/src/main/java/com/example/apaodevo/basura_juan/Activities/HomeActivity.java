@@ -113,8 +113,7 @@ public class HomeActivity extends NavigationDrawerActivity{
 
 
     }
-
-    private void getCoordinates(){
+        private void getCoordinates(){
         CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_LOCATION_URL, null,
                 new Response.Listener<JSONObject>(){
                     @Override

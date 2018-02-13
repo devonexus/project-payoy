@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
@@ -34,10 +35,6 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static String LOGIN_URL = "http://192.168.1.19/basura_juan/login.php";
-    //private static String LOGIN_URL = "http://100.94.15.114/basura_juan/login.php";
-
-//    public static String LOGIN_URL = "http://100.94.33.24/login.php";
 
     protected String enteredUsername, enteredPassword;
     /*
@@ -127,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser(final String uname , final String pword){
 
         showpDialog();
-        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, LOGIN_URL, null,
+        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.LOGIN_URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(final JSONObject response) {

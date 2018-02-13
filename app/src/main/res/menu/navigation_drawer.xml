@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search"
+        android:orderInCategory="1"
+        android:hint="@string/search_placeholder"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom"
+        android:title="Search" />
     <item
         android:id="@+id/menu_notification"
-        app:showAsAction="always"
+        android:orderInCategory="2"
         android:title="@string/notification_item"
-        app:actionLayout="@layout/toolbar_item_panel">
-    </item>
+        app:actionLayout="@layout/toolbar_item_panel"
+        app:showAsAction="always"></item>
 
-    <!--<item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />-->
+
 </menu>

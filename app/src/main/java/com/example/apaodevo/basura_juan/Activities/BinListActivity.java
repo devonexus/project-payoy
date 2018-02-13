@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -22,8 +23,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -45,6 +52,7 @@ import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.example.apaodevo.basura_juan.Utils.RecyclerItemTouchHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.joanzapata.iconify.widget.IconButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -65,10 +73,11 @@ public class BinListActivity extends NavigationDrawerActivity{
     private CoordinatorLayout coordinatorLayout;
     private EditText binSearch;
     //private static final String BIN_LIST_URL = "http://172.17.152.98/bin-list.php";
-
+    private AlphaAnimation buttonClick;
     private String binId;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private IconButton iconButton, homeButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +88,7 @@ public class BinListActivity extends NavigationDrawerActivity{
         drawer.addView(contentView, 0);
         fab.setVisibility(View.INVISIBLE); // Hide floating action
 
-
+        buttonClick = new AlphaAnimation(1F, 0.2F);
         //Cast objects here
 
         /*recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -108,13 +117,16 @@ public class BinListActivity extends NavigationDrawerActivity{
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         setupViewPager(viewPager);
-        tabLayout.setTabTextColors(getColor(R.color.colorBlack), getColor(R.color.colorBlack));
+        //tabLayout.setTabTextColors(getColor(R.color.colorBlack), getColor(R.color.colorBlack));
+
         tabLayout.setupWithViewPager(viewPager);
         //setupTabIcons();
         //Retrieve bin list item
         //showBinListItem();
 
     }
+
+
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -150,6 +162,8 @@ public class BinListActivity extends NavigationDrawerActivity{
             return mFragmentTitleList.get(position);
         }
     }
+
+
 
     /*private void showBinListItem() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BIN_LIST_URL,
