@@ -154,7 +154,6 @@ public class NavigateBin extends NavigationDrawerActivity {
             {
                 Automation();
                 Disconnect(); //close connection
-                globalData.name = "";
             }
         });
         displayFloatingActionButton();
@@ -235,13 +234,15 @@ public class NavigateBin extends NavigationDrawerActivity {
 
     private void Disconnect()
     {
-        if (DeviceList.btSocket!=null) //If the btSocket is busy
+        if (DeviceList.btSocket!=null)
         {
             try
             {
+                DeviceList.btSocket.getOutputStream().write("7".toString().getBytes());
                 DeviceList.btSocket.close(); //close connection
                 DeviceList.btSocket = null;
                 globalData.address = "";
+                globalData.name = "";
                 home = new Intent(NavigateBin.this, HomeActivity.class);
                 startActivity(home);
             }
@@ -254,7 +255,6 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
         }
         finish(); //return to the first layout
-
     }
 
     private void forward()

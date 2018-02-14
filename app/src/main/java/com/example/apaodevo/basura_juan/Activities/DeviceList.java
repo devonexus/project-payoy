@@ -186,6 +186,7 @@ public class DeviceList extends NavigationDrawerActivity
                         try
                         {
                             btSocket.getOutputStream().write("0".toString().getBytes());
+                            btSocket.getOutputStream().write("6".toString().getBytes());
                             DeployBinActivity.deploy = "";
                             deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
                             startActivity(deploy);
@@ -196,8 +197,15 @@ public class DeviceList extends NavigationDrawerActivity
                     }
                 }
                 else {
-                    navigate = new Intent(DeviceList.this, NavigateBin.class);
-                    startActivity(navigate);
+                    if (btSocket != null) {
+                        try {
+                            btSocket.getOutputStream().write("6".toString().getBytes());
+                            navigate = new Intent(DeviceList.this, NavigateBin.class);
+                            startActivity(navigate);
+                        } catch (IOException e) {
+                            globalData.msg("Bluetooth Disconnected");
+                        }
+                    }
                 }
             }
             progress.dismiss();

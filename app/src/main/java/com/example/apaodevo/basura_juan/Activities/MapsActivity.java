@@ -270,7 +270,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
 //        Toast.makeText(getApplicationContext(), "DATA "+globalData.getLatitude()+" "+globalData.getLongitude(), Toast.LENGTH_SHORT).show();
         //Toast.makeText(getApplicationContext(), jsonLatitude + " Sample" + jsonLongitude, Toast.LENGTH_SHORT).show();
 
-        mMap.addMarker(new MarkerOptions().position(bin_location).title("BasuraJuan"));
+        mMap.addMarker(new MarkerOptions().position(bin_location).title("Basura Juan"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bin_location));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bin_location, 15));
         mMap.setMapType(mMap.MAP_TYPE_HYBRID);

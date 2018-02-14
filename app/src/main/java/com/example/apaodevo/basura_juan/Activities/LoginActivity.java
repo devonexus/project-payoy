@@ -34,7 +34,8 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static String LOGIN_URL = "http://192.168.1.19/basura_juan/login.php";
+    //public static String LOGIN_URL = "http://192.168.1.19/basura_juan/login.php";
+    public static String LOGIN_URL = "http://basurajuan.x10host.com/login.php";
     //private static String LOGIN_URL = "http://100.94.15.114/basura_juan/login.php";
 
 //    public static String LOGIN_URL = "http://100.94.33.24/login.php";
