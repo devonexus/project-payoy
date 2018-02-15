@@ -3,15 +3,11 @@ package com.example.apaodevo.basura_juan.Activities;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,7 +19,6 @@ import android.widget.Toast;
 
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
-import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +57,7 @@ public class DeviceList extends NavigationDrawerActivity
 
         globalData = (GlobalData) getApplicationContext();
         //Calling widgets
-        btnPaired     = (Button) findViewById(R.id.button);
+        btnPaired     = (Button) findViewById(R.id.btnNotifRead);
         devicelist    = (ListView) findViewById(R.id.listView);
         getDevicelist = (ListView) findViewById(R.id.listView1);
         //if the device has bluetooth

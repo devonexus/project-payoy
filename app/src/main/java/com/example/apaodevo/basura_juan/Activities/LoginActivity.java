@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //Cast objects
-        blogin      = (Button) findViewById(R.id.button);
+        blogin      = (Button) findViewById(R.id.btnNotifRead);
         bregister   = (Button) findViewById(R.id.button2);
         user  = (EditText) findViewById(R.id.editText);
         pass  = (EditText) findViewById(R.id.editText2);
@@ -189,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(i);
                                 finish();
                                 hidepDialog();
-                                Toast.makeText(getApplicationContext(), ""+userModel.getUserId(), Toast.LENGTH_SHORT).show();
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

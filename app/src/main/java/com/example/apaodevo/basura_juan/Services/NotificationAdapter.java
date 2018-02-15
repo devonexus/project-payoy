@@ -2,25 +2,42 @@ package com.example.apaodevo.basura_juan.Services;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
+import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.Models.NotificationModel;
+import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by apaodevo on 2/7/2018.
  */
 
 public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder>{
-    private Context context;
+    public Context context;
     private List<NotificationModel> notificationModelList;
-
+    public static UserModel userModel;
+    private int notificationId;
     public NotificationAdapter(Context context, List<NotificationModel> notificationModelList) {
         this.context = context;
         this.notificationModelList = notificationModelList;
@@ -30,13 +47,14 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView notificationTitle, notificationMessage, notificationDateTime;
         public ImageView imageView;
+        public Button btnMarkAsRead;
         public MyViewHolder(View view){
             super(view);
             notificationTitle = (TextView) view.findViewById(R.id.notifTitle);
             notificationMessage = (TextView) view.findViewById(R.id.notifContent);
             notificationDateTime = (TextView) view.findViewById(R.id.notifDateTime);
             imageView       = (ImageView) view.findViewById(R.id.notification_marker);
-
+            btnMarkAsRead   = (Button) view.findViewById(R.id.btnNotifRead);
         }
 
     }
@@ -46,7 +64,7 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.notification_list_item, parent, false);
-
+        userModel = UserModel.getInstance();
         MyViewHolder viewHolder = new MyViewHolder(itemView);
         return viewHolder;
     }
@@ -56,7 +74,6 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
         final NotificationModel notificationModel = notificationModelList.get(position);
         holder.notificationTitle.setText(notificationModel.getNotificationTitle());
         holder.notificationMessage.setText(notificationModel.getNotificationMessage());
-
         holder.notificationDateTime.setText(notificationModel.getNotificationDate()+" at "+notificationModel.getNotificationTime());
         if(notificationModel.getNotificationTitle().equals("Battery Status")){
             holder.imageView.setImageResource(R.drawable.low_battery);
@@ -72,7 +89,14 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
             holder.imageView.setImageResource(R.drawable.bin_capacity);
         }
 
+        holder.btnMarkAsRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeItem(position);
 
+                //updateNotificationStatusToRead(notificationModel.getNotificationId(), userModel.getUserId());
+            }
+        });
     }
 
     @Override
@@ -85,7 +109,35 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
-   
+    public void removeItem(int position){
+        notificationModelList.remove(position);
+        notifyItemRemoved(position);
+    }
+    private void updateNotificationStatusToRead(final int notificationId, final int userId){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServiceUrl.NOTIFICATION_COUNT_URL,
+                new Response.Listener<String>() {
 
-    
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(context, ""+response.toString(), Toast.LENGTH_SHORT).show();
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Error "+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Keys.TAG_NOTIFICATION_ID, String.valueOf(notificationId));
+                params.put(Keys.TAG_USER_ID, String.valueOf(userId));
+                return params;
+            }
+        };
+//       VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
+        VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
 }

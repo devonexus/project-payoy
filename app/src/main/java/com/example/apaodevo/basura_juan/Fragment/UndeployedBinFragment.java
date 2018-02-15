@@ -53,7 +53,7 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
     private List<BinModel> binList;
     public static UserModel userModel;
     private CoordinatorLayout coordinatorLayout;
-    private static String BIN_LIST_URL = "http://132.223.41.121/bin-list.php";
+    private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
     public UndeployedBinFragment() {
         // Required empty public constructor
     }
@@ -125,7 +125,6 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
 
     @Override
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        Toast.makeText(getActivity(), "Data", Toast.LENGTH_SHORT).show();
         if (viewHolder instanceof BinListAdapter.MyViewHolder) {
             // get the removed bin id to display it in snack bar
             binId = binList.get(viewHolder.getAdapterPosition()).getBinId();
@@ -143,8 +142,8 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
+                    showBinListItem();
                     //binListAdapter.restoreItem(deletedBin, deletedIndex);
-                    onResume();
                 }
             });
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

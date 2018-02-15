@@ -10,11 +10,23 @@ public class NotificationModel {
     private String notificationTime;
     private String notificationTitle;
 
-
-
-
-
+    private int notificationId;
     private int notificationCount;
+
+
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
+    }
+
+
+
+
+
+
 
     public int getNotificationCount() {
         return notificationCount;

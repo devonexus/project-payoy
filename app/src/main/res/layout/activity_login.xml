@@ -66,12 +66,12 @@
         android:inputType="textPassword"
         tools:layout_editor_absoluteX="62dp"
         tools:layout_editor_absoluteY="373dp"
-        android:layout_above="@+id/button"
+        android:layout_above="@+id/btnNotifRead"
         android:layout_alignEnd="@+id/img_navigation_user_profile_image"
         android:layout_marginBottom="36dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnNotifRead"
         android:backgroundTint="@color/colorDeepSkyblueButton"
         android:layout_width="260dp"
         android:layout_height="45dp"

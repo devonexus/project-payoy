@@ -39,7 +39,7 @@ public class DeployedBinFragment extends Fragment{
     private BinListAdapter binListAdapter;
     private List<BinModel> binList;
     public static UserModel userModel;
-    private static String BIN_LIST_URL = "http://132.223.41.121/bin-list.php";
+    private static String BIN_LIST_URL = "http://basurajuan.x10host.com/bin-list.php";
     public DeployedBinFragment() {
         // Required empty public constructor
     }
@@ -60,9 +60,9 @@ public class DeployedBinFragment extends Fragment{
         showBinListItem();
         binListAdapter = new BinListAdapter(getActivity(), binList);
         recyclerView.setAdapter(binListAdapter);
-
         return rootView;
     }
+
 
     private void showBinListItem() {
         binList = new ArrayList<>();
@@ -97,4 +97,6 @@ public class DeployedBinFragment extends Fragment{
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
     }
+
+
 }

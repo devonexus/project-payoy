@@ -34,7 +34,7 @@ import java.util.Map;
  * Created by apaodevo on 2/7/2018.
  */
 
-public class BatteryFragment extends Fragment {
+public class    BatteryFragment extends Fragment {
     private static List<NotificationModel> notificationModelList;
 
     private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
@@ -64,9 +64,14 @@ public class BatteryFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.notification_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        notificationModelList = new ArrayList<>();
         shownotificationModelListItem();
         notificationAdapter = new NotificationAdapter(getActivity(), notificationModelList);
         recyclerView.setAdapter(notificationAdapter);
+
+        if(notificationModelList.size() == 0){
+            Toast.makeText(getActivity(), "No more battery status notifications left", Toast.LENGTH_SHORT).show();
+        }
         return rootView;
     }
 
@@ -81,13 +86,13 @@ public class BatteryFragment extends Fragment {
     }
 
     private void shownotificationModelListItem() {
-        notificationModelList = new ArrayList<>();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, NOTIFICATION_URL,
                 new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String response) {
-
+                        Toast.makeText(getActivity(), ""+response.toString(), Toast.LENGTH_SHORT).show();
                         Log.d("Recycler View Contents", response.toString());
                         List<NotificationModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<NotificationModel>>() {
 
