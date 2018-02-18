@@ -13,6 +13,25 @@ public class DeploymentModel {
     private String location;
 
 
+
+    private String stopDeployment;
+    public static DeploymentModel deploymentModelInstance;
+    public static DeploymentModel getInstance()
+    {
+        if(deploymentModelInstance == null)
+        {
+            return deploymentModelInstance = new DeploymentModel();
+        }
+        return deploymentModelInstance;
+    }
+
+    public String getStopDeployment() {
+        return stopDeployment;
+    }
+
+    public void setStopDeployment(String stopDeployment) {
+        this.stopDeployment = stopDeployment;
+    }
     public String getBinName() {
         return binName;
     }

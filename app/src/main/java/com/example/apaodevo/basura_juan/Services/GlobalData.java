@@ -25,9 +25,9 @@ public class GlobalData extends Application {
     private String       image_url;
     private String       userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
     private String       latitude, longitude;
-    public String        address  = "";
-    public String        name;
-    private String      binId;
+    public  String        address  = "";
+    public  String        name;
+    private String        binId;
 
     public void setBinId(String binId) {
         this.binId = binId;

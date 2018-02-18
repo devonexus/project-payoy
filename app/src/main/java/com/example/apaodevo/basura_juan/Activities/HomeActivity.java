@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
@@ -35,7 +36,7 @@ public class HomeActivity extends NavigationDrawerActivity{
     private ProgressDialog pDialog;
     GlobalData globalData;
     public static UserModel userModel;
-    private String BIN_LOCATION_URL = "http://basurajuan.x10host.com/bin-location.php";
+
     String jsonLatitude, jsonLongitude;
     @Override
 
@@ -114,7 +115,7 @@ public class HomeActivity extends NavigationDrawerActivity{
 
     }
         private void getCoordinates(){
-        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_LOCATION_URL, null,
+        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.BIN_LOCATION_URL, null,
                 new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
@@ -124,6 +125,7 @@ public class HomeActivity extends NavigationDrawerActivity{
                             final GlobalData globalData = (GlobalData) getApplicationContext();
                             globalData.setLatitude(jsonLatitude);
                             globalData.setLongitude(jsonLongitude);
+                            Toast.makeText(getApplicationContext(), "Data: "+response.toString(), Toast.LENGTH_SHORT).show();
                             // lati = Double.parseDouble(jsonLatitude);
                             // longitude = Double.parseDouble(jsonLongitude);
                             //   globalData = (GlobalData) getApplicationContext();
@@ -138,7 +140,7 @@ public class HomeActivity extends NavigationDrawerActivity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext(), ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Data: "+error.toString(), Toast.LENGTH_SHORT).show();
             }
         }){
 

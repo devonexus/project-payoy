@@ -24,7 +24,6 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 public class MapsActivity extends NavigationDrawerActivity implements OnMapReadyCallback {
 
     GoogleMap mMap;
-    private String BIN_LOCATION_URL = "http://basurajuan.x10host.com/bin-location.php";
    // private double setLatitude = 10.262542, setLongitude = 123.952021;/*This is static longitude*/
 
     public static GlobalData globalData;

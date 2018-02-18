@@ -23,11 +23,11 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 public class NavigateBin extends NavigationDrawerActivity {
 
-    private Button                btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect,btnStopDeployment;
-    GlobalData                    globalData;
-    private String                auto = "Pause Automation";
-    Intent bluetooth,home;
-    TextView binConnected;
+    private Button  btnRight,btnLeft,btnAutomationpause,btnForward,btnDisconnect,btnStopDeployment;
+    GlobalData      globalData;
+    private String  auto = "Pause Automation";
+    Intent          bluetooth,home;
+    TextView        binConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +71,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             btnLeft.setEnabled(false);
             btnRight.setEnabled(false);
         }
-        else
-        {
+        else {
             btnForward.setEnabled(true);
             btnLeft.setEnabled(true);
             btnRight.setEnabled(true);
@@ -135,8 +134,7 @@ public class NavigateBin extends NavigationDrawerActivity {
                     btnLeft.setEnabled(true);
                     btnRight.setEnabled(true);
                 }
-                else if(auto == "Automatic")
-                {
+                else if(auto == "Automatic") {
                     Automation();
                     btnAutomationpause.setText("Pause Automation");
                     auto = "Pause Automation";
@@ -146,7 +144,6 @@ public class NavigateBin extends NavigationDrawerActivity {
                 }
             }
         });
-
         btnDisconnect.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -232,13 +229,11 @@ public class NavigateBin extends NavigationDrawerActivity {
         });
     }//Display floating action button with circular animation
 
-    private void Disconnect()
-    {
-        if (DeviceList.btSocket!=null)
-        {
-            try
-            {
+    private void Disconnect() {
+        if (DeviceList.btSocket!=null) {
+            try {
                 DeviceList.btSocket.getOutputStream().write("7".toString().getBytes());
+                DeviceList.btSocket.getOutputStream().write("0".toString().getBytes());
                 DeviceList.btSocket.close(); //close connection
                 DeviceList.btSocket = null;
                 globalData.address = "";
@@ -246,8 +241,7 @@ public class NavigateBin extends NavigationDrawerActivity {
                 home = new Intent(NavigateBin.this, HomeActivity.class);
                 startActivity(home);
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 globalData.msg("Bluetooth Disconnected");
                 DeviceList.btSocket = null;
                 globalData.address = "";
@@ -257,16 +251,12 @@ public class NavigateBin extends NavigationDrawerActivity {
         finish(); //return to the first layout
     }
 
-    private void forward()
-    {
-        if (DeviceList.btSocket!=null)
-        {
-            try
-            {
+    private void forward() {
+        if (DeviceList.btSocket!=null) {
+            try {
                 DeviceList.btSocket.getOutputStream().write("2".toString().getBytes());
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 globalData.msg("Bluetooth Disconnected");
                 DeviceList.btSocket = null;
                 globalData.address = "";
@@ -275,16 +265,12 @@ public class NavigateBin extends NavigationDrawerActivity {
         }
     }
 
-    private void StopDeployment()
-    {
-        if (DeviceList.btSocket!=null)
-        {
-            try
-            {
+    private void StopDeployment() {
+        if (DeviceList.btSocket!=null) {
+            try {
                 DeviceList.btSocket.getOutputStream().write("5".toString().getBytes());
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 globalData.msg("Bluetooth Disconnected");
                 DeviceList.btSocket = null;
                 globalData.address = "";
@@ -293,16 +279,12 @@ public class NavigateBin extends NavigationDrawerActivity {
         }
     }
 
-    public void turnLeft()
-    {
-        if (DeviceList.btSocket!=null)
-        {
-            try
-            {
+    public void turnLeft() {
+        if (DeviceList.btSocket!=null) {
+            try {
                 DeviceList.btSocket.getOutputStream().write("3".toString().getBytes());
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 globalData.msg("Bluetooth Disconnected");
                 DeviceList.btSocket = null;
                 globalData.address = "";
@@ -310,16 +292,12 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
         }
     }
-    private void turnRight()
-    {
-        if (DeviceList.btSocket!=null)
-        {
-            try
-            {
+    private void turnRight() {
+        if (DeviceList.btSocket!=null) {
+            try {
                 DeviceList.btSocket.getOutputStream().write("4".toString().getBytes());
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 globalData.msg("Bluetooth Disconnected");
                 DeviceList.btSocket = null;
                 globalData.address = "";
@@ -328,16 +306,12 @@ public class NavigateBin extends NavigationDrawerActivity {
         }
     }
 
-    private void StopAutomate()
-    {
-        if (DeviceList.btSocket!=null)
-        {
-            try
-            {
+    private void StopAutomate() {
+        if (DeviceList.btSocket!=null) {
+            try {
                 DeviceList.btSocket.getOutputStream().write("1".toString().getBytes());
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 globalData.msg("Bluetooth Disconnected");
                 DeviceList.btSocket = null;
                 globalData.address = "";
@@ -345,16 +319,12 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
         }
     }
-    public void Automation()
-    {
-        if (DeviceList.btSocket!=null)
-        {
-            try
-            {
+    public void Automation() {
+        if (DeviceList.btSocket!=null) {
+            try {
                 DeviceList.btSocket.getOutputStream().write("0".toString().getBytes());
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 globalData.msg("Bluetooth Disconnected");
                 DeviceList.btSocket = null;
                 globalData.address = "";

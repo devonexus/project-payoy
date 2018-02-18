@@ -26,9 +26,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="47dp"
-                android:inputType="textCapSentences"
                 android:hint="@string/hint_fname"
-                android:maxLines="1" />
+                android:inputType="textCapWords"
+                android:maxLines="1"></EditText>
 
 
         </android.support.design.widget.TextInputLayout>
@@ -47,7 +47,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="@string/hint_mname"
-            android:inputType="textCapSentences"/>
+            android:inputType="textCapWords"></EditText>
         <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content" />

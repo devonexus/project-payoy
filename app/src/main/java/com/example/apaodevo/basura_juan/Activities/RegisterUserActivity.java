@@ -16,8 +16,11 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
@@ -35,6 +38,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.PathUtil;
@@ -43,6 +47,7 @@ import com.kosalgeek.android.imagebase64encoder.ImageBase64;
 import com.squareup.picasso.Picasso;
 
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +55,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -65,22 +72,11 @@ public class RegisterUserActivity extends AppCompatActivity {
     private TextInputLayout inputFname, inputLname, inputMinitial, inputUsername, inputPassword, inputEmail;
     private ProgressDialog pDialog;
     private TextView tvImageUserProfile;
-    //public static String REGISTER_URL = "http://132.223.41.121/registration.php"; //WEB Service URL
-
-    //public static String REGISTER_URL = "http://192.168.43.138/registration.php"; //WEB Service URL
-
-    public static String REGISTER_URL = "http://basurajuan.x10host.com/registration.php"; //WEB Service URL
     private Uri uri;
     private String displayName;
-
-    private int success; //JSON Result
-
     private static int RESULT_LOAD_IMAGE = 1;
-    //Post data variables
-
     private static String image_path;
     private static String encodedImage;
-    private String response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +150,21 @@ public class RegisterUserActivity extends AppCompatActivity {
                     }
                 }
         );  //Register user
-    }
+
+
+        /*
+        ** Characters and specials characters are disabled
+        */
+
+
+        etFname.setFilters(new InputFilter[]{getEditTextFilter()});
+        etLname.setFilters(new InputFilter[]{getEditTextFilter()});
+        etFname.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        etMinitial.setFilters(new InputFilter[] {new InputFilter.LengthFilter(1), getEditTextFilter()});
+        setCapitalizeTextWatcher(etFname);
+        setCapitalizeTextWatcher(etLname);
+        setCapitalizeTextWatcher(etMinitial);
+        }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -192,7 +202,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     private void registerUser(final String lastName, final String firstName, final String middleInitial, final String email, final String uName, final String pWord, final String imagePath, final String imageName){
         showpDialog();
-        final CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, REGISTER_URL, null, new Response.Listener<JSONObject>() {
+        final CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.REGISTER_URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 String server_response;
@@ -363,6 +373,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     }   //Validate password
 
     private boolean validateUsername() {
+
         if (etUsername.getText().toString().trim().isEmpty()) {
             etUsername.setError(getString(R.string.err_msg_name));
             requestFocus(etUsername);
@@ -484,7 +495,86 @@ public class RegisterUserActivity extends AppCompatActivity {
 
 
     }
+    public static void setCapitalizeTextWatcher(final EditText editText) {
+        final TextWatcher textWatcher = new TextWatcher() {
 
+            int mStart = 0;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mStart = start + count;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //Use WordUtils.capitalizeFully if you only want the first letter of each word to be capitalized
+                String capitalizedText = WordUtils.capitalize(editText.getText().toString());
+                if (!capitalizedText.equals(editText.getText().toString())) {
+                    editText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            editText.setSelection(mStart);
+                            editText.removeTextChangedListener(this);
+                        }
+                    });
+                    editText.setText(capitalizedText);
+                }
+            }
+        };
+
+        editText.addTextChangedListener(textWatcher);
+    }
+    /*EditText should accept only alphabets and space */
+    public static InputFilter getEditTextFilter() {
+        return new InputFilter() {
+
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+                boolean keepOriginal = true;
+                StringBuilder sb = new StringBuilder(end - start);
+                for (int i = start; i < end; i++) {
+                    char c = source.charAt(i);
+                    if (isCharAllowed(c)) // put your condition here
+                        sb.append(c);
+                    else
+                        keepOriginal = false;
+                }
+                if (keepOriginal)
+                    return null;
+                else {
+                    if (source instanceof Spanned) {
+                        SpannableString sp = new SpannableString(sb);
+                        TextUtils.copySpansFrom((Spanned) source, start, sb.length(), null, sp, 0);
+                        return sp;
+                    } else {
+                        return sb;
+                    }
+                }
+            }
+
+            private boolean isCharAllowed(char c) {
+                Pattern ps = Pattern.compile("^[a-zA-Z ]+$");
+                Matcher ms = ps.matcher(String.valueOf(c));
+                return ms.matches();
+            }
+        };
+    }
     private void clearRegistrationActivity(){
         etFname.setText("");
         etLname.setText("");

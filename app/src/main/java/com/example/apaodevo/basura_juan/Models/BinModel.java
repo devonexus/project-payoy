@@ -6,7 +6,15 @@ package com.example.apaodevo.basura_juan.Models;
 
 public class BinModel {
     private String binName, binId;
+    private String binStatus;
 
+    public String getBinStatus() {
+        return binStatus;
+    }
+
+    public void setBinStatus(String binStatus) {
+        this.binStatus = binStatus;
+    }
 
 
 

@@ -23,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Models.NotificationModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.NotificationAdapter;
@@ -48,8 +49,6 @@ public class BinCapacityFragment extends Fragment {
     public BinCapacityFragment() {
         // Required empty public constructor
     }
-
-    private static String NOTIFICATION_URLS = "http://basurajuan.x10host.com/notification-list.php";
 
 
     @Override
@@ -91,14 +90,13 @@ public class BinCapacityFragment extends Fragment {
 
     private void shownotificationModelListItem() {
         notificationModelList = new ArrayList<>();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, NOTIFICATION_URLS,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServiceUrl.NOTIFICATION_URL,
 
                 new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String response) {
 
-                        //Toast.makeText(getActivity(), "Data: "+response.toString(), Toast.LENGTH_SHORT).show();
                         Log.d("Recycler View Contents", response.toString());
                         List<NotificationModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<NotificationModel>>() {
 
@@ -111,9 +109,7 @@ public class BinCapacityFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
-                Toast.makeText(getContext(), "Sample "+error.getMessage(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), "Error "+error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error Bin Capacity"+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override

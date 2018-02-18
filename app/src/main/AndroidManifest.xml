@@ -35,10 +35,9 @@
         </activity>
         <activity
             android:name=".Activities.BinListActivity"
-            android:launchMode="singleTask"
             android:label="@string/binlist_activity"></activity>
         <activity android:name=".Activities.HomeActivity"
-            android:label="  Basura Juan"
+            android:label="  Home"
             android:launchMode="singleTask"
          ></activity>
         <activity
@@ -60,7 +59,9 @@
         <activity android:name=".Activities.DeviceList"
             android:label="Device List">
         </activity>
-        <activity android:name=".Activities.NavigateBin" />
+        <activity android:name=".Activities.NavigateBin"
+            android:label="@string/activity_navigate_bin"
+            />
         <activity
             android:name=".Activities.UserProfileActivity"
             android:label="@string/user_profile_activity"
@@ -71,6 +72,7 @@
             android:label="@string/notification_item"></activity>
 
         <activity android:name=".Activities.DeploymentHistory"
+            android:label="@string/activity_deployment_history"
             android:launchMode="singleTask">
 
 

@@ -10,13 +10,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.widget.DrawerLayout;
+import android.text.InputFilter;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,15 +28,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.PathUtil;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.kosalgeek.android.imagebase64encoder.ImageBase64;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
-import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -44,6 +44,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -57,7 +59,6 @@ public class UserProfileActivity extends NavigationDrawerActivity{
     private Button btn_update;
     private ImageView imageView;
     private Uri uri;
-    public static String UPDATE_USER_URL= "http://basurajuan.x10host.com/update-user.php"; //WEB Service URL
     private static int RESULT_LOAD_IMAGE = 1;
     private String image_path, displayName, encodedImage;
     private static String lastName, firstName, middleInitial, email, userName, passWord, imageUrl; /*Store user profile data*/
@@ -137,6 +138,12 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         pDialog.setMessage("Updating user profile...");
         pDialog.setCancelable(false);
 
+        /*
+        ** Characters and specials characters are disabled
+        */
+        etfname.setFilters(new InputFilter[]{getEditTextFilter()});
+        etlname.setFilters(new InputFilter[]{getEditTextFilter()});
+        etminitial.setFilters(new InputFilter[]{getEditTextFilter()});
         btn_update.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -193,6 +200,45 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                 }
         );//Check changes for user profile, update else no changes made
     }
+
+
+
+    /*EditText should accept only alphabets and space */
+    public static InputFilter getEditTextFilter() {
+        return new InputFilter() {
+
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+                boolean keepOriginal = true;
+                StringBuilder sb = new StringBuilder(end - start);
+                for (int i = start; i < end; i++) {
+                    char c = source.charAt(i);
+                    if (isCharAllowed(c)) // put your condition here
+                        sb.append(c);
+                    else
+                        keepOriginal = false;
+                }
+                if (keepOriginal)
+                    return null;
+                else {
+                    if (source instanceof Spanned) {
+                        SpannableString sp = new SpannableString(sb);
+                        TextUtils.copySpansFrom((Spanned) source, start, sb.length(), null, sp, 0);
+                        return sp;
+                    } else {
+                        return sb;
+                    }
+                }
+            }
+
+            private boolean isCharAllowed(char c) {
+                Pattern ps = Pattern.compile("^[a-zA-Z ]+$");
+                Matcher ms = ps.matcher(String.valueOf(c));
+                return ms.matches();
+            }
+        };
+    }
     private void getUserInfo(){
         globalData = (GlobalData) getApplicationContext();
         lastName        = globalData.getLastname();
@@ -212,7 +258,6 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         Picasso.with(this).load(imageUrl)
                 .transform(new CropCircleTransformation())
                 .fit()
-                .rotate(90f)
                 .error(R.drawable.user_profile_placeholder)
                 .into(imageView);
     }
@@ -276,7 +321,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
     }
     private void updateUserProfile(final String lastName, final String firstName, final String middleInitial, final String email, final String uName, final String pWord, final String imagePath, final String imageName){
         showpDialog();
-        final CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, UPDATE_USER_URL, null, new Response.Listener<JSONObject>() {
+        final CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.UPDATE_USER_URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(final JSONObject response) {
                 String server_response;
@@ -388,7 +433,7 @@ public class UserProfileActivity extends NavigationDrawerActivity{
 
     private void updateUserProfileExceptImage(final String lastName, final String firstName, final String middleInitial, final String email, final String uName, final String pWord){
         showpDialog();
-        final CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, UPDATE_USER_URL, null, new Response.Listener<JSONObject>() {
+        final CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.UPDATE_USER_URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(final JSONObject response) {
                 String server_response;

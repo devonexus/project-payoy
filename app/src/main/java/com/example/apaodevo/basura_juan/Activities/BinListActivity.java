@@ -1,66 +1,30 @@
 package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.example.apaodevo.basura_juan.Configuration.Keys;
-import com.example.apaodevo.basura_juan.Fragment.BatteryFragment;
-import com.example.apaodevo.basura_juan.Fragment.BinCapacityFragment;
 import com.example.apaodevo.basura_juan.Fragment.DeployedBinFragment;
 import com.example.apaodevo.basura_juan.Fragment.UndeployedBinFragment;
-import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.R;
-import com.example.apaodevo.basura_juan.Services.BinListAdapter;
-import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
-import com.example.apaodevo.basura_juan.Services.VolleySingleton;
-import com.example.apaodevo.basura_juan.Utils.RecyclerItemTouchHelper;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.joanzapata.iconify.widget.IconButton;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by apaodevo on 12/5/2017.
@@ -69,15 +33,15 @@ import java.util.Map;
 public class BinListActivity extends NavigationDrawerActivity{
 
     /*Declare variables here*/
-
+    private ViewPagerAdapter adapter;
     private CoordinatorLayout coordinatorLayout;
     private EditText binSearch;
-    //private static final String BIN_LIST_URL = "http://172.17.152.98/bin-list.php";
     private AlphaAnimation buttonClick;
     private String binId;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private IconButton iconButton, homeButton;
+    private ProgressDialog pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +51,7 @@ public class BinListActivity extends NavigationDrawerActivity{
         View contentView = inflater.inflate(R.layout.activity_bin_list, null, false);
         drawer.addView(contentView, 0);
         fab.setVisibility(View.INVISIBLE); // Hide floating action
-
+        //initializeProgressDialogState();
         buttonClick = new AlphaAnimation(1F, 0.2F);
         //Cast objects here
 
@@ -123,21 +87,23 @@ public class BinListActivity extends NavigationDrawerActivity{
         //setupTabIcons();
         //Retrieve bin list item
         //showBinListItem();
-
     }
-
-
+    private void initializeProgressDialogState() {
+        pDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
+        pDialog.setMessage("Signing out, Please wait...");
+        pDialog.setCancelable(false);
+    }
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-        adapter.addFragment(new DeployedBinFragment(),  "Deployed Bins");
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new DeployedBinFragment(),   "Deployed Bins");
         adapter.addFragment(new UndeployedBinFragment(), "Undeployed Bins");
+
         viewPager.setAdapter(adapter);
+
     }
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
-
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
@@ -146,6 +112,7 @@ public class BinListActivity extends NavigationDrawerActivity{
         public Fragment getItem(int position) {
             return mFragmentList.get(position);
         }
+
 
         @Override
         public int getCount() {
@@ -157,14 +124,13 @@ public class BinListActivity extends NavigationDrawerActivity{
             mFragmentTitleList.add(title);
         }
 
+       
+
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
     }
-
-
-
     /*private void showBinListItem() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, BIN_LIST_URL,
                 new Response.Listener<String>() {
@@ -206,8 +172,6 @@ public class BinListActivity extends NavigationDrawerActivity{
         binListAdapter = new BinListAdapter(BinListActivity.this, binList);
         recyclerView.setAdapter(binListAdapter);
     }*/
-
-
 
     /**
      * callback when recycler view is swiped
@@ -275,11 +239,7 @@ public class BinListActivity extends NavigationDrawerActivity{
                 }
             });
             builder.show();
-
-
         }
-
-
             // remove the item from recycler view
 
     }*/
@@ -297,10 +257,7 @@ public class BinListActivity extends NavigationDrawerActivity{
         builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-
                /* Thread thread = new Thread() {
-
                     @Override
                     public void run() {
 
@@ -326,57 +283,24 @@ public class BinListActivity extends NavigationDrawerActivity{
                             }
                         });
                     }
-
                 };
                 thread.start();*/
             }
 
         });
-
         builder.show();
     }
 
-    //Triggering function for keypress
-    private class SearchBinTextWatcher implements TextWatcher {
-        private View view;
-
-        private SearchBinTextWatcher(View view) {
-            this.view = view;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-          /*  filter(s.toString());*/
-        }
-    }
-
-    /*void filter(String s){
-        List<BinModel> temp = new ArrayList();
-        for(BinModel d: binList){
-            //or use .equal(text) with you want equal match
-            //use .toLowerCase() for better matches
-            if(d.getBinName().toLowerCase().contains(s)){
-                temp.add(d);
-            }
-        }
-        //update recyclerview
-        binListAdapter.updateList(temp);
-    }//This is used to filter the list....*/
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        //showBinListItem();
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

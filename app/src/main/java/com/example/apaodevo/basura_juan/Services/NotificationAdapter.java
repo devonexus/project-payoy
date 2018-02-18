@@ -25,6 +25,9 @@ import com.example.apaodevo.basura_juan.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +40,9 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
     public Context context;
     private List<NotificationModel> notificationModelList;
     public static UserModel userModel;
-    private int notificationId;
+    private int notificationId, userId, notificationCount;
+    public static NotificationModel notifModel = new NotificationModel();
+
     public NotificationAdapter(Context context, List<NotificationModel> notificationModelList) {
         this.context = context;
         this.notificationModelList = notificationModelList;
@@ -88,22 +93,31 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
         }else{
             holder.imageView.setImageResource(R.drawable.bin_capacity);
         }
-
+        notificationId = notificationModel.getNotificationId();
+        userId = userModel.getUserId();
         holder.btnMarkAsRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeItem(position);
 
-                //updateNotificationStatusToRead(notificationModel.getNotificationId(), userModel.getUserId());
+                //Toast.makeText(context, "Removed: "+notificationId+" Size: "+notificationModelList.size()+ "User :"+userModel.getUserId(), Toast.LENGTH_SHORT).show();
+
+                removeItem(position);
+                notificationModel.setNotificationCount(notificationModel.getNotificationCount() - 1);
+                updateNotificationStatusToRead(notificationId, userId);
+                notifyItemRangeRemoved(position, notificationModelList.size());
+
             }
         });
     }
+
+
 
     @Override
     public int getItemCount() {
 
         return notificationModelList.size();
     }
+
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -114,12 +128,11 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
         notifyItemRemoved(position);
     }
     private void updateNotificationStatusToRead(final int notificationId, final int userId){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServiceUrl.NOTIFICATION_COUNT_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServiceUrl.NOTIFICATION_URL,
                 new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(context, ""+response.toString(), Toast.LENGTH_SHORT).show();
 
                     }
                 }, new Response.ErrorListener() {

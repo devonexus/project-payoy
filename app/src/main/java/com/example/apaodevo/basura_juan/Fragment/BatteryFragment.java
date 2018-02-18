@@ -9,8 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -19,7 +23,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Models.NotificationModel;
+import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.NotificationAdapter;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
@@ -30,24 +36,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by apaodevo on 2/7/2018.
- */
-
 public class    BatteryFragment extends Fragment {
     private static List<NotificationModel> notificationModelList;
-
-    private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
-
-    private static RecyclerView recyclerView;
-    private static NotificationAdapter notificationAdapter;
-
-
+    private static RecyclerView            recyclerView;
+    private static NotificationAdapter     notificationAdapter;
+    public static UserModel userModel;
     public BatteryFragment() {
         // Required empty public constructor
-
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,9 +54,8 @@ public class    BatteryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View rootView = inflater.inflate(R.layout.fragment_battery, container, false);
-
+        userModel = UserModel.getInstance();
         recyclerView = (RecyclerView) rootView.findViewById(R.id.notification_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -68,10 +63,6 @@ public class    BatteryFragment extends Fragment {
         shownotificationModelListItem();
         notificationAdapter = new NotificationAdapter(getActivity(), notificationModelList);
         recyclerView.setAdapter(notificationAdapter);
-
-        if(notificationModelList.size() == 0){
-            Toast.makeText(getActivity(), "No more battery status notifications left", Toast.LENGTH_SHORT).show();
-        }
         return rootView;
     }
 
@@ -85,14 +76,12 @@ public class    BatteryFragment extends Fragment {
         recyclerView.setAdapter(notificationAdapter);
     }
 
+
     private void shownotificationModelListItem() {
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, NOTIFICATION_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServiceUrl.NOTIFICATION_URL,
                 new Response.Listener<String>() {
-
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getActivity(), ""+response.toString(), Toast.LENGTH_SHORT).show();
                         Log.d("Recycler View Contents", response.toString());
                         List<NotificationModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<NotificationModel>>() {
 
@@ -105,7 +94,7 @@ public class    BatteryFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(), "Sample " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error Battery Status " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Override
@@ -116,6 +105,7 @@ public class    BatteryFragment extends Fragment {
             }
         };
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
-
     }
+
+
 }

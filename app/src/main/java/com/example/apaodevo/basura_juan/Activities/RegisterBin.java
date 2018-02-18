@@ -25,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
@@ -40,7 +41,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterBin extends NavigationDrawerActivity implements View.OnClickListener{
-    public static String BIN_REG_URL = "http://basurajuan.x10host.com/bin-registration.php";
     //public static String BIN_REG_URL = "http://192.168.43.163/bin-registration.php";
     private EditText  etBinName;
     private Button btn_register_bin;
@@ -74,17 +74,10 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                 etBinName.setText(bundle.get(Keys.TAG_BIN_NAME).toString());
                 selectedBinId = bundle.get(Keys.TAG_BIN_ID).toString();
                 btn_register_bin.setText(getString(R.string.update_bin));
-
             }
         }
 
         btn_register_bin.setOnClickListener(this);
-      /*  btn_register_bin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
 
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
 
@@ -123,7 +116,6 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                 .attachTo(actionButton)
                 .build();
 
-
         sabNavigateBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,12 +150,10 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                 sabNavigateBin.setVisibility(View.INVISIBLE);
                 sabDeployBin.setVisibility(View.INVISIBLE);
             }
-
             @Override
             public void onDrawerOpened(View drawerView) {
 
             }
-
             @Override
             public void onDrawerClosed(View drawerView) {
                 actionButton.setVisibility(View.VISIBLE);
@@ -171,10 +161,8 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                 sabNavigateBin.setVisibility(View.VISIBLE);
                 sabDeployBin.setVisibility(View.VISIBLE);
             }
-
             @Override
             public void onDrawerStateChanged(int newState) {
-
             }
         });
     }
@@ -184,27 +172,23 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
         btn_register_bin    = (Button) findViewById(R.id.btn_reg_bin);
     }
 
-
     private void createBin() {
         pDialog.setMessage("Creating bin...");
         showpDialog();
-        CustomJSONRequest request = new CustomJSONRequest(Request.Method.POST, BIN_REG_URL, null, new Response.Listener<JSONObject>() {
+        CustomJSONRequest request = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.BIN_REG_URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     final String server_response = response.getString(Keys.TAG_SUCCESS);
                     Thread thread = new Thread() {
-
                             @Override
                             public void run() {
-
                                 // Block this thread for 4 seconds.al
                                 try {
                                     Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-
                                 // After sleep finished blocking, create a Runnable to run on the UI Thread.
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -212,6 +196,9 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                                         if(server_response.equals("1")){
                                             Toast.makeText(getApplicationContext(), "Bin successfully registered", Toast.LENGTH_SHORT).show();
                                             etBinName.setText("");
+                                            hidepDialog();
+                                        }else if(server_response.equals("0")){
+                                            etBinName.setError(getString(R.string.err_bin_name));
                                             hidepDialog();
                                         }
                                     }
@@ -254,7 +241,6 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
             pDialog.dismiss();
     }
 
-
     private boolean validateBinName() {
         bin_name = etBinName.getText().toString().trim();
 
@@ -286,6 +272,8 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                     createBin();
                 }else if (btn_register_bin.getText().toString().equals(getString(R.string.update_bin))){
                     updateBin(selectedBinId, etBinName.getText().toString());
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), BinListActivity.class));
                 }
             break;
         }
@@ -294,24 +282,21 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
     private void updateBin(final String binId, final String binName){
         showpDialog();
         pDialog.setMessage("Updating bin");
-        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, BIN_REG_URL, null,
+        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.BIN_REG_URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             final String server_response = response.getString(Keys.TAG_SUCCESS);
                             Thread thread = new Thread() {
-
                                 @Override
                                 public void run() {
-
                                     // Block this thread for 4 seconds.al
                                     try {
                                         Thread.sleep(1000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
-
                                     // After sleep finished blocking, create a Runnable to run on the UI Thread.
                                     runOnUiThread(new Runnable() {
                                         @Override
@@ -321,6 +306,9 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                                                 VolleySingleton.getInstance(getApplicationContext()).cancelPendingRequests("TAG");
                                                 etBinName.setText("");
                                                 hidepDialog();
+                                            }else if(server_response.equals("0")){
+                                                    etBinName.setError(getString(R.string.err_bin_name));
+                                                    hidepDialog();
                                             }
                                         }
                                     });
@@ -347,11 +335,25 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                 Map<String, String> params = new HashMap<String, String>();
                 params.put(Keys.TAG_BIN_ID, binId);
                 params.put(Keys.TAG_BIN_NAME, binName);
-
+                params.put(Keys.TAG_USER_ID, globalData.getUserid());
                 return params;
             }
         };
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(customJSONRequest);
         // showing snack bar with Undo opt
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+
 }
