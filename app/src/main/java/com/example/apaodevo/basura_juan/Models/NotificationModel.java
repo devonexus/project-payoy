@@ -12,8 +12,15 @@ public class NotificationModel {
 
     private int notificationId;
     private int notificationCount;
-
-
+    public static NotificationModel notificationInstance;
+    public static NotificationModel getInstance()
+    {
+        if(notificationInstance == null)
+        {
+            return notificationInstance = new NotificationModel();
+        }
+        return notificationInstance;
+    }
     public int getNotificationId() {
         return notificationId;
     }

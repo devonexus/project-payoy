@@ -32,10 +32,13 @@ import com.example.apaodevo.basura_juan.Configuration.Keys;
 
 import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Models.NotificationModel;
+import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.BinListAdapter;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
+import com.example.apaodevo.basura_juan.Utils.Refresher;
 import com.joanzapata.iconify.widget.IconButton;
 import com.squareup.picasso.Picasso;
 
@@ -50,7 +53,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     protected DrawerLayout drawer;
     protected FloatingActionButton fab;
     private NavigationView navigationView;
-    private TextView tv_fullname, tv_email;
+    private TextView tv_fullname, tv_email, counter;
     private String fullName, imageUrl, emailAddress;    //Navigation Header data
     private ImageView img_login_user_image;
     private ProgressDialog pDialog;
@@ -61,8 +64,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     private ActionBarDrawerToggle toggle;
     private int notifCount;
 
-    private int notificationCount;
-    public static NotificationModel notifModel = new NotificationModel();
+    public static NotificationModel notifModel;
 
 
     @Override
@@ -71,13 +73,15 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         setContentView(R.layout.activity_navigation_drawer);
 
         castObjects(); //Call cast object function
-
         // /Set text in navigation drawer header
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         buttonClick = new AlphaAnimation(1F, 0.2F);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
         View header = navigationView.getHeaderView(0);
+        Toast.makeText(getApplicationContext(), "Revisited Counter", Toast.LENGTH_SHORT).show();
+
+
         img_login_user_image = (ImageView) header.findViewById(R.id.img_navigation_user_profile_image);
         tv_fullname = (TextView) header.findViewById(R.id.tvFullName);
         tv_email = (TextView) header.findViewById(R.id.tvEmail);
@@ -103,7 +107,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                         .setAction("Action", null).show();
             }
         });
-
+        notifModel = NotificationModel.getInstance();
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -138,14 +142,14 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         notificationCounter();
     }
 
+
     private void notificationCounter() {
         CustomJSONRequest notificationCountRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.NOTIFICATION_URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            notificationCount = Integer.parseInt(response.getString(Keys.TAG_NOTIFICATION_COUNT));
-                            notifModel.setNotificationCount(notificationCount);
+                            notifModel.setNotificationCount(Integer.parseInt(response.getString(Keys.TAG_NOTIFICATION_COUNT)));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -194,12 +198,13 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         MenuItem item = menu.findItem(R.id.action_search);
         item.setVisible(false);
         RelativeLayout badgeLayout = (RelativeLayout) menu.findItem(R.id.menu_notification).getActionView();
+        Toast.makeText(getApplicationContext(), "Notification Count: "+notifModel.getNotificationCount(), Toast.LENGTH_SHORT).show();
+        counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
 
-        TextView counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
-        counter.setText(""+notifModel.getNotificationCount());
-        if(notifModel.getNotificationCount() == 0){
+      /*  if(notificationCount == 0){
             counter.setVisibility(View.GONE);
-        }
+        }*/
+        counter.setText(""+notifModel.getNotificationCount());
         iconButton = (IconButton) badgeLayout.findViewById(R.id.badge_icon_button);
         homeButton = (IconButton) badgeLayout.findViewById(R.id.badge_home_button);
         homeButton.setText("{fa-home}");
@@ -246,19 +251,19 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (id == R.id.nav_account) {
             startActivity(new Intent(getApplicationContext(), UserProfileActivity.class));
+            drawer.closeDrawers();
             // Handle the camera action
         } else if (id == R.id.nav_bin_list) {
-            startActivity(new Intent(this, BinListActivity.class));
+            Intent intent = new Intent(getApplicationContext(), BinListActivity.class);
+            startActivity(intent);
+            drawer.closeDrawers();
         } else if (id == R.id.nav_deployment_history) {
             startActivity(new Intent(getApplicationContext(), DeploymentHistory.class));
+            drawer.closeDrawers();
         } else if (id == R.id.nav_logout) {
             signOut();
         }
-            /*
-        } else if (id == R.id.nav_share) {
-        } else if (id == R.id.nav_send) {
-        }*/
-        drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 

@@ -121,7 +121,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 getBinId(selectedBinName);
                 latitude  = simpleLocation.getLatitude();
                 longitude = simpleLocation.getLongitude();
-
+                Toast.makeText(getApplicationContext(), "Location: "+latitude+" Longitude: "+longitude, Toast.LENGTH_SHORT).show();
                 Thread thread = new Thread() {
 
                     @Override
@@ -286,7 +286,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
 
                 etActualLocation.setText(strAddress);
             }
-            catch (IOException e) {
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }

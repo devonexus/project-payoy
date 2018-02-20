@@ -1,6 +1,8 @@
 package com.example.apaodevo.basura_juan.Services;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,12 +18,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.apaodevo.basura_juan.Activities.NavigationDrawerActivity;
+import com.example.apaodevo.basura_juan.Activities.NotificationActivity;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.Models.NotificationModel;
 import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Utils.Refresher;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -41,8 +46,9 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
     private List<NotificationModel> notificationModelList;
     public static UserModel userModel;
     private int notificationId, userId, notificationCount;
+    private Intent sendIntent;
     public static NotificationModel notifModel = new NotificationModel();
-
+    private NotificationActivity notificationActivity;
     public NotificationAdapter(Context context, List<NotificationModel> notificationModelList) {
         this.context = context;
         this.notificationModelList = notificationModelList;
@@ -99,13 +105,9 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
             @Override
             public void onClick(View v) {
 
-                //Toast.makeText(context, "Removed: "+notificationId+" Size: "+notificationModelList.size()+ "User :"+userModel.getUserId(), Toast.LENGTH_SHORT).show();
-
-                removeItem(position);
-                notificationModel.setNotificationCount(notificationModel.getNotificationCount() - 1);
                 updateNotificationStatusToRead(notificationId, userId);
-                notifyItemRangeRemoved(position, notificationModelList.size());
-
+                //notificationModel.setNotificationCount(notificationModel.getNotificationCount()-1);
+                Refresher.recreateActivityCompat(((NotificationActivity)context));
             }
         });
     }

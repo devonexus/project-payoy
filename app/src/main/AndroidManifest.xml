@@ -38,11 +38,9 @@
             android:label="@string/binlist_activity"></activity>
         <activity android:name=".Activities.HomeActivity"
             android:label="  Home"
-            android:launchMode="singleTask"
          ></activity>
         <activity
             android:name=".Activities.NavigationDrawerActivity"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme" />
         <!-- android:label="@string/title_toolbar" -->
         <activity android:name=".Activities.MapsActivity"
@@ -68,7 +66,6 @@
             android:launchMode="singleTask"></activity>
         <activity android:name=".Activities.NotificationActivity"
             android:theme="@style/AppTheme"
-            android:launchMode="singleTask"
             android:label="@string/notification_item"></activity>
 
         <activity android:name=".Activities.DeploymentHistory"

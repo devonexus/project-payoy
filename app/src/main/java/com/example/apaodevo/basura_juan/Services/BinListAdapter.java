@@ -27,15 +27,18 @@ import com.example.apaodevo.basura_juan.Activities.BinListActivity;
 import com.example.apaodevo.basura_juan.Activities.DeviceList;
 import com.example.apaodevo.basura_juan.Activities.HomeActivity;
 import com.example.apaodevo.basura_juan.Activities.NavigateBin;
+import com.example.apaodevo.basura_juan.Activities.NotificationActivity;
 import com.example.apaodevo.basura_juan.Activities.RegisterBin;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Fragment.DeployedBinFragment;
+import com.example.apaodevo.basura_juan.Fragment.UndeployedBinFragment;
 import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.Models.DeploymentModel;
 import com.example.apaodevo.basura_juan.Models.NotificationModel;
 import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Utils.Refresher;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -60,18 +63,13 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
     private List<BinModel> binList;
     private Intent sendIntent,home;
     GlobalData globalData;
-    public static DeploymentModel deploymentModel;
-    private BinListAdapter binlistAdapter;
-    public static UserModel userModel;
 
     public BinListAdapter(Context context, List<BinModel> binList) {
         this.context = context;
         this.binList = binList;
     }
 
-    public interface BinListAdapterListener {
-        void onBinSelected(BinModel binModel);
-    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView textViewBinName, textViewBinId;
         public ImageView thumbNail;
@@ -92,8 +90,8 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
     public MyViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.bin_list_items, parent, false);
-
-        return new MyViewHolder(itemView);
+        MyViewHolder viewHolder = new MyViewHolder(itemView);
+        return viewHolder;
     }
     @Override
     public void onBindViewHolder(final BinListAdapter.MyViewHolder holder, final int position) {
@@ -107,7 +105,6 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
         }else{
             holder.btnEditBin.setText("Edit Bin");
         }
-
         holder.btnEditBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,15 +133,31 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
                                         DeviceList.btSocket = null;
                                     }
                                 }*/
-                                removeItem(holder.getAdapterPosition());
+                                //removeItem(holder.getAdapterPosition());
+                                //notifyItemRangeRemoved(position, binList.size());
                                 stopBinDeployment(Integer.parseInt(binModel.getBinId()));
-                                notifyItemRangeRemoved(position, binList.size());
+                                sendIntent = new Intent(context, BinListActivity.class);
+                                sendIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                ((BinListActivity)context).finish();
+                                ((BinListActivity)context).overridePendingTransition(0, 0);
+                                context.startActivity(sendIntent);
+                                ((BinListActivity) context).overridePendingTransition(0, 0);
+
+
                             }
                         });
                         builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
+                                //Toast.makeText(context, "Bin Id: "+binModel.getBinId(), Toast.LENGTH_SHORT).show();
+                                //sendIntent = new Intent(context, BinListActivity.class);
+
+                               /* sendIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                ((BinListActivity)context).finish();
+                                ((BinListActivity)context).overridePendingTransition(0, 0);
+                                context.startActivity(sendIntent);
+                                ((BinListActivity) context).overridePendingTransition(0, 0);*/
                             }
                         });
                         builder.show();
@@ -188,6 +201,7 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(context, "Bin status changed to Undeployed.", Toast.LENGTH_SHORT).show();
+
                     }
                 }, new Response.ErrorListener(){
             @Override
@@ -214,37 +228,5 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
         binList = list;
         notifyDataSetChanged();
     }//This is used to update the list after triggering edit text
-    private void showBinListItem() {
-        binList = new ArrayList<>();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServiceUrl.BIN_LIST_URL,
-                new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("Recycler View Contents", response.toString());
-                        List<BinModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<BinModel>>() {
-
-                        }.getType());
-                        Log.d("Passed to RecyclerView", items.toString());
-                        binList.clear();
-                        binList.addAll(items);
-                        binlistAdapter.notifyDataSetChanged();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put(Keys.TAG_USER_ID, String.valueOf(userModel.getUserId()));
-                params.put(Keys.TAG_BIN_STATUS, "Deployed");
-                return params;
-            }
-        };
-        VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
-
-    }
 }

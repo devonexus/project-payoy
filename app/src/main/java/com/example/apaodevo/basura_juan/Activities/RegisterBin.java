@@ -272,9 +272,7 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                     createBin();
                 }else if (btn_register_bin.getText().toString().equals(getString(R.string.update_bin))){
                     updateBin(selectedBinId, etBinName.getText().toString());
-                    finish();
-                    startActivity(new Intent(getApplicationContext(), BinListActivity.class));
-                }
+                                    }
             break;
         }
     }
@@ -306,6 +304,9 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                                                 VolleySingleton.getInstance(getApplicationContext()).cancelPendingRequests("TAG");
                                                 etBinName.setText("");
                                                 hidepDialog();
+                                                finish();
+                                                startActivity(new Intent(getApplicationContext(), BinListActivity.class));
+
                                             }else if(server_response.equals("0")){
                                                     etBinName.setError(getString(R.string.err_bin_name));
                                                     hidepDialog();

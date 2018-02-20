@@ -37,7 +37,7 @@ public class Keys{
     public static final String TAG_BIN_NAME = "binName";
     public static final String TAG_BIN_ID = "binId";
     public static final String TAG_BIN_UPDATE = "updateBin";
-
+    public static final String TAG_BIN_UNDEPLOYED = "undeployedBinCount";
     /*Error log tag*/
     public static final String TAG_ERRORS = "error";
 

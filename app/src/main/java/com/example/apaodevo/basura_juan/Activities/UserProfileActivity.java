@@ -10,10 +10,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.design.widget.TextInputLayout;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,7 @@ import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.kosalgeek.android.imagebase64encoder.ImageBase64;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,7 +58,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class UserProfileActivity extends NavigationDrawerActivity{
     private GlobalData globalData;
-    private TextView etlname, etfname, etminitial, etuname, etpword, etemail;
+    private EditText etlname, etfname, etminitial, etuname, etpword, etemail;
     private Button btn_update;
     private ImageView imageView;
     private Uri uri;
@@ -143,7 +146,11 @@ public class UserProfileActivity extends NavigationDrawerActivity{
         */
         etfname.setFilters(new InputFilter[]{getEditTextFilter()});
         etlname.setFilters(new InputFilter[]{getEditTextFilter()});
-        etminitial.setFilters(new InputFilter[]{getEditTextFilter()});
+        etminitial.setFilters(new InputFilter[] {new InputFilter.LengthFilter(1), getEditTextFilter()});
+
+        setCapitalizeTextWatcher(etfname);
+        setCapitalizeTextWatcher(etlname);
+        setCapitalizeTextWatcher(etminitial);
         btn_update.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -199,9 +206,54 @@ public class UserProfileActivity extends NavigationDrawerActivity{
                     }
                 }
         );//Check changes for user profile, update else no changes made
+
+
     }
 
+    public static void setCapitalizeTextWatcher(final EditText editText) {
+        final TextWatcher textWatcher = new TextWatcher() {
 
+            int mStart = 0;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mStart = start + count;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //Use WordUtils.capitalizeFully if you only want the first letter of each word to be capitalized
+                String capitalizedText = WordUtils.capitalize(editText.getText().toString());
+                if (!capitalizedText.equals(editText.getText().toString())) {
+                    editText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            editText.setSelection(mStart);
+                            editText.removeTextChangedListener(this);
+                        }
+                    });
+                    editText.setText(capitalizedText);
+                }
+            }
+        };
+
+        editText.addTextChangedListener(textWatcher);
+    }
 
     /*EditText should accept only alphabets and space */
     public static InputFilter getEditTextFilter() {

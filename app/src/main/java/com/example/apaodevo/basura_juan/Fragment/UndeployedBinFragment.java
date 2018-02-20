@@ -69,7 +69,8 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
+
+}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,7 +92,6 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
         showBinListItem();
 
         binListAdapter = new BinListAdapter(getActivity(), binList);
-
         recyclerView.setAdapter(binListAdapter);
         return rootView;
     }
@@ -207,7 +207,17 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-
+                                    try {
+                                        if(response.getString(Keys.TAG_BIN_UNDEPLOYED).equals("0")){
+                                            imageLabel.setVisibility(View.VISIBLE);
+                                            tvLabel.setVisibility(View.VISIBLE);
+                                            etBinSearch.setVisibility(View.INVISIBLE);
+                                            imageLabel.setImageResource(R.drawable.deploy_list);
+                                            tvLabel.setText("No undeployed bins");
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }, new Response.ErrorListener() {
                         @Override
@@ -219,6 +229,7 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
                         protected Map<String, String> getParams() throws AuthFailureError {
                             Map<String, String> params = new HashMap<String, String>();
                             params.put(Keys.TAG_BIN_ID, binId);
+                            params.put(Keys.TAG_USER_ID, String.valueOf(userModel.getUserId()));
                             return params;
                         }
                     };//Remove items from the database
@@ -240,12 +251,6 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
         }
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
 
-        }
-    }
 }
 

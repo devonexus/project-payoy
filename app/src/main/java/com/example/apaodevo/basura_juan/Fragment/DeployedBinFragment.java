@@ -1,6 +1,7 @@
 package com.example.apaodevo.basura_juan.Fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,18 +25,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Models.BinModel;
-import com.example.apaodevo.basura_juan.Models.DeploymentModel;
 import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.BinListAdapter;
-import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,8 +54,13 @@ public class DeployedBinFragment extends Fragment{
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -69,14 +69,14 @@ public class DeployedBinFragment extends Fragment{
         View rootView  =  inflater.inflate(R.layout.content_bin_list, container, false);
         userModel      = UserModel.getInstance();
         recyclerView   = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         tvLabel        = (TextView) rootView.findViewById(R.id.tvMarker);
         etBinSearch    = (EditText) rootView.findViewById(R.id.search_bin);
         imageLabel     = (ImageView) rootView.findViewById(R.id.image_list_bins);
-
-
         etBinSearch.addTextChangedListener(new SearchBinTextWatcher(etBinSearch));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        Toast.makeText(getContext(), "Goes to Deploy bin fragment", Toast.LENGTH_SHORT).show();
+        binList = new ArrayList<>();
         showBinListItem();
         binListAdapter = new BinListAdapter(getActivity(), binList);
         recyclerView.setAdapter(binListAdapter);
@@ -104,14 +104,14 @@ public class DeployedBinFragment extends Fragment{
     }
 
     private void showBinListItem() {
-        binList = new ArrayList<>();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServiceUrl.BIN_LIST_URL,
                 new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String response) {
-
-                        JSONArray jsonArray = null;
+                        Toast.makeText(getContext(), "Data goes here: "+response.toString(), Toast.LENGTH_SHORT).show();
+                        /*JSONArray jsonArray = null;
                         try {
                             jsonArray = new JSONArray(response);
 
@@ -119,7 +119,7 @@ public class DeployedBinFragment extends Fragment{
                                 etBinSearch.setVisibility(View.INVISIBLE);
                                 imageLabel.setImageResource(R.drawable.deploy_list);
                                 tvLabel.setText("No deployed bins");
-                            } else {
+                            } else {*/
                                   Log.d("Recycler View Contents", response.toString());
                                     List<BinModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<BinModel>>() {
 
@@ -130,12 +130,12 @@ public class DeployedBinFragment extends Fragment{
                                     binListAdapter.notifyDataSetChanged();
                                     imageLabel.setVisibility(View.INVISIBLE);
                                     tvLabel.setVisibility(View.INVISIBLE);
-                            }
-                        }
+                            //}
+                       /* }
                         catch (JSONException e) {
                             e.printStackTrace();
 
-                        }
+                        }*/
                     }
                 }, new Response.ErrorListener() {
             @Override

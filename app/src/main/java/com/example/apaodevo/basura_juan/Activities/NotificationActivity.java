@@ -23,8 +23,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
+import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Fragment.BatteryFragment;
 import com.example.apaodevo.basura_juan.Fragment.BinCapacityFragment;
+import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 
@@ -42,9 +44,7 @@ import br.com.goncalves.pugnotification.notification.PugNotification;
 
 public class NotificationActivity extends NavigationDrawerActivity{
     private ArrayList<String> notification  = new ArrayList<>();
-    //private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
-    private static String NOTIFICATION_URL = "http://basurajuan.x10host.com/notification-list.php";
-
+    private Context context = this;
     private String category = "";
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -53,7 +53,7 @@ public class NotificationActivity extends NavigationDrawerActivity{
             R.drawable.delete_notif
     };
 
-    Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +126,7 @@ public class NotificationActivity extends NavigationDrawerActivity{
         }
     }
     private void loadUnreadNotifications(){
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, NOTIFICATION_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServiceUrl.NOTIFICATION_URL,
                 new Response.Listener<String>() {
 
                     @Override

@@ -125,7 +125,6 @@ public class HomeActivity extends NavigationDrawerActivity{
                             final GlobalData globalData = (GlobalData) getApplicationContext();
                             globalData.setLatitude(jsonLatitude);
                             globalData.setLongitude(jsonLongitude);
-                            Toast.makeText(getApplicationContext(), "Data: "+response.toString(), Toast.LENGTH_SHORT).show();
                             // lati = Double.parseDouble(jsonLatitude);
                             // longitude = Double.parseDouble(jsonLongitude);
                             //   globalData = (GlobalData) getApplicationContext();
