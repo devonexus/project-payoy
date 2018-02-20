@@ -139,7 +139,7 @@ public class HomeActivity extends NavigationDrawerActivity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Data: "+error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Data: "+error.toString(), Toast.LENGTH_SHORT).show();
             }
         }){
 

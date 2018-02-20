@@ -79,7 +79,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
         View header = navigationView.getHeaderView(0);
-        Toast.makeText(getApplicationContext(), "Revisited Counter", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Revisited Counter", Toast.LENGTH_SHORT).show();
 
 
         img_login_user_image = (ImageView) header.findViewById(R.id.img_navigation_user_profile_image);
@@ -198,7 +198,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         MenuItem item = menu.findItem(R.id.action_search);
         item.setVisible(false);
         RelativeLayout badgeLayout = (RelativeLayout) menu.findItem(R.id.menu_notification).getActionView();
-        Toast.makeText(getApplicationContext(), "Notification Count: "+notifModel.getNotificationCount(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Notification Count: "+notifModel.getNotificationCount(), Toast.LENGTH_SHORT).show();
         counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
 
       /*  if(notificationCount == 0){
