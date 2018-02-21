@@ -159,36 +159,22 @@ public class DeviceList extends NavigationDrawerActivity
             else {
                 isBtConnected = true;
                 // Make an intent to start next activity.
-                if(DeployBinActivity.deploy == "deploy") {
-                    if (btSocket != null) {
-                        try {
-                            btSocket.getOutputStream().write("0".toString().getBytes());
+                if (btSocket != null) {
+                    try {
+                        if(globalData.intentAddress == "DEPLOY")
+                        {
                             btSocket.getOutputStream().write("6".toString().getBytes());
-                            DeployBinActivity.deploy = "";
-                            deploy = new Intent(getApplicationContext(), HomeActivity.class);
+                            btSocket.getOutputStream().write("0".toString().getBytes());
+                            deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
                             startActivity(deploy);
-                        } catch (IOException e) {
-                            globalData.msg("Bluetooth Disconnected");
                         }
-                    }
-                }
-                else {
-                    if (btSocket != null) {
-                        try {
-                            if(globalData.intentAddress == "DEPLOY")
-                            {
-                                btSocket.getOutputStream().write("6".toString().getBytes());
-                                btSocket.getOutputStream().write("0".toString().getBytes());
-                                deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
-                                startActivity(deploy);
-                            }
-                            else if(globalData.intentAddress == "NAVIGATE"){
-                                navigate = new Intent(DeviceList.this, NavigateBin.class);
-                                startActivity(navigate);
-                            }
-                        } catch (IOException e) {
-                            globalData.msg("Bluetooth Disconnected");
+                        else if(globalData.intentAddress == "NAVIGATE"){
+                            btSocket.getOutputStream().write("6y".toString().getBytes());
+                            navigate = new Intent(DeviceList.this, NavigateBin.class);
+                            startActivity(navigate);
                         }
+                    } catch (IOException e) {
+                        globalData.msg("Bluetooth Disconnected");
                     }
                 }
             }
