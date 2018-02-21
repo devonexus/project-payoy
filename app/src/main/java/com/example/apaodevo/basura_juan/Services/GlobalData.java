@@ -26,6 +26,7 @@ public class GlobalData extends Application {
     private String       userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
     private String       latitude, longitude;
     public  String        address  = "";
+    public  String        intentAddress="";
     public  String        name;
     private String        binId;
 

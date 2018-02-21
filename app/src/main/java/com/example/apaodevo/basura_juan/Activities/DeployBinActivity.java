@@ -57,6 +57,7 @@ import im.delight.android.location.SimpleLocation;
 
 public class DeployBinActivity extends NavigationDrawerActivity {
     private Button             btnDeploy;
+    private Button             btn_connect_bin;
     private Spinner           dropdown;
     private ArrayList<String> binNames = new ArrayList<>();
     private EditText          etActualLocation;
@@ -233,36 +234,55 @@ public class DeployBinActivity extends NavigationDrawerActivity {
             }
         });
 
+        btn_connect_bin    = (Button) findViewById(R.id.btn_connect_bin);
+        btn_connect_bin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(DeviceList.btSocket == null) {
+                    globalData.intentAddress = "DEPLOY";
+                    startActivity(new Intent(getApplicationContext(), DeviceList.class));
+                } else
+                {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            devicelist = new Intent(DeployBinActivity.this, DeviceList.class);
+                            finish();
+                            startActivity(devicelist);
+                        }
+                    });
+                }
+            }
+        });
+
         btnDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                if(!validateDeploymentFields()){
                    return;
                }
-                //Toast.makeText(getApplicationContext(), ""+globalData.getBinId(), Toast.LENGTH_SHORT).show();
-                deployBin(globalData.getUserid(), globalData.getBinId(), etActualLocation.getText().toString());
-                Thread thread = new Thread() {
-                    @Override
-                    public void run() {
-                        // Block this thread for 4 seconds.al
-                        try {
-                            Thread.sleep(1500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        // After sleep finished blocking, create a Runnable to run on the UI Thread.
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                deploy = "deploy";
-                                devicelist = new Intent(DeployBinActivity.this, DeviceList.class);
-                                finish();
-                                startActivity(devicelist);
+                if(DeviceList.btSocket == null)
+                {
+                    globalData.msg("Please Connect to Bin!");
+                }
+                else {
+                    //Toast.makeText(getApplicationContext(), ""+globalData.getBinId(), Toast.LENGTH_SHORT).show();
+                    deployBin(globalData.getUserid(), globalData.getBinId(), etActualLocation.getText().toString());
+                    Thread thread = new Thread() {
+                        @Override
+                        public void run() {
+                            // Block this thread for 4 seconds.al
+                            try {
+                                Thread.sleep(1500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                        });
-                    }
-                };
-                thread.start();
+                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
+
+                        }
+                    };
+                   thread.start();
+                }
             }
         });
     }
@@ -490,7 +510,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         } else {
             etActualLocation.setError(null);
         }
-
         return true;
     }//Validate lastname
 }

@@ -176,8 +176,15 @@ public class DeviceList extends NavigationDrawerActivity
                     if (btSocket != null) {
                         try {
                             btSocket.getOutputStream().write("6".toString().getBytes());
-                            navigate = new Intent(DeviceList.this, NavigateBin.class);
-                            startActivity(navigate);
+                            if(globalData.intentAddress == "DEPLOY")
+                            {
+                                deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
+                                startActivity(deploy);
+                            }
+                            else if(globalData.intentAddress == "NAVIGATE"){
+                                navigate = new Intent(DeviceList.this, NavigateBin.class);
+                                startActivity(navigate);
+                            }
                         } catch (IOException e) {
                             globalData.msg("Bluetooth Disconnected");
                         }

@@ -102,6 +102,7 @@ public class HomeActivity extends NavigationDrawerActivity{
             @Override
             public void onClick(View v) {
                 if(DeviceList.btSocket == null) {
+                    globalData.intentAddress = "NAVIGATE";
                     startActivity(new Intent(getApplicationContext(), DeviceList.class));
                 } else
                 {
