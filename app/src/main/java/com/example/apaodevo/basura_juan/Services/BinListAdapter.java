@@ -150,14 +150,7 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
-                                //Toast.makeText(context, "Bin Id: "+binModel.getBinId(), Toast.LENGTH_SHORT).show();
-                                //sendIntent = new Intent(context, BinListActivity.class);
 
-                               /* sendIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                ((BinListActivity)context).finish();
-                                ((BinListActivity)context).overridePendingTransition(0, 0);
-                                context.startActivity(sendIntent);
-                                ((BinListActivity) context).overridePendingTransition(0, 0);*/
                             }
                         });
                         builder.show();

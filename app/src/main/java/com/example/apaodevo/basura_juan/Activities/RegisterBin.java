@@ -33,6 +33,7 @@ import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -194,7 +195,9 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                                     @Override
                                     public void run() {
                                         if(server_response.equals("1")){
-                                            Toast.makeText(getApplicationContext(), "Bin successfully registered", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
+                                            MDToast mdToast = MDToast.makeText(getApplicationContext(), "Bin successfully registered", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO);
+                                            mdToast.show();
                                             etBinName.setText("");
                                             hidepDialog();
                                         }else if(server_response.equals("0")){
@@ -344,11 +347,7 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
         // showing snack bar with Undo opt
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
-    }
+
 
     @Override
     public void onBackPressed() {

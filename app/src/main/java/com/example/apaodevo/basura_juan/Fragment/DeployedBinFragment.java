@@ -32,6 +32,9 @@ import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -110,8 +113,8 @@ public class DeployedBinFragment extends Fragment{
 
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getContext(), "Data goes here: "+response.toString(), Toast.LENGTH_SHORT).show();
-                        /*JSONArray jsonArray = null;
+
+                        JSONArray jsonArray = null;
                         try {
                             jsonArray = new JSONArray(response);
 
@@ -119,7 +122,7 @@ public class DeployedBinFragment extends Fragment{
                                 etBinSearch.setVisibility(View.INVISIBLE);
                                 imageLabel.setImageResource(R.drawable.deploy_list);
                                 tvLabel.setText("No deployed bins");
-                            } else {*/
+                            } else {
                                   Log.d("Recycler View Contents", response.toString());
                                     List<BinModel> items = new Gson().fromJson(response.toString(), new TypeToken<List<BinModel>>() {
 
@@ -130,12 +133,12 @@ public class DeployedBinFragment extends Fragment{
                                     binListAdapter.notifyDataSetChanged();
                                     imageLabel.setVisibility(View.INVISIBLE);
                                     tvLabel.setVisibility(View.INVISIBLE);
-                            //}
-                       /* }
+                            }
+                        }
                         catch (JSONException e) {
                             e.printStackTrace();
 
-                        }*/
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override

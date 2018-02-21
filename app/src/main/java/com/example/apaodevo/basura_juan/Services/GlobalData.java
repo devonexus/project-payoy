@@ -24,7 +24,6 @@ public class GlobalData extends Application {
     private String       fullname;
     private String       image_url;
     private String       userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
-    private String       latitude, longitude;
     public  String        address  = "";
     public  String        name;
     private String        binId;
@@ -48,21 +47,8 @@ public class GlobalData extends Application {
         return userid;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
 
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
@@ -110,9 +96,7 @@ public class GlobalData extends Application {
     public String getPassword(){
         return password;
     }
-    public String getLoginStatus(){
-        return login_status;
-    }
+
     public String getMinitial(){
         return middleInitial;
     }

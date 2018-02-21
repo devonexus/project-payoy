@@ -49,11 +49,10 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class NavigationDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private int navItemIndex = 0;
     protected DrawerLayout drawer;
     protected FloatingActionButton fab;
     private NavigationView navigationView;
-    private TextView tv_fullname, tv_email, counter;
+    private TextView tv_fullname, tv_email;
     private String fullName, imageUrl, emailAddress;    //Navigation Header data
     private ImageView img_login_user_image;
     private ProgressDialog pDialog;
@@ -62,8 +61,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     GlobalData globalData;
     private IconButton iconButton, homeButton;
     private ActionBarDrawerToggle toggle;
-    private int notifCount;
-
+    private int mNotifCount = 0;
     public static NotificationModel notifModel;
 
 
@@ -79,27 +77,16 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
         View header = navigationView.getHeaderView(0);
-        Toast.makeText(getApplicationContext(), "Revisited Counter", Toast.LENGTH_SHORT).show();
-
-
         img_login_user_image = (ImageView) header.findViewById(R.id.img_navigation_user_profile_image);
         tv_fullname = (TextView) header.findViewById(R.id.tvFullName);
         tv_email = (TextView) header.findViewById(R.id.tvEmail);
-        /*globalData = (GlobalData) getApplicationContext();
-        fullName            = globalData.getSomeVariable();
-        imageUrl            = globalData.getImageUrl().trim();
-        emailAddress        = globalData.getEmailAddress();
-        tv_fullname.setText(fullName);
-        tv_email.setText(emailAddress);*/
+
         loadNavHeader();
         //Create toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
-        /*toolbar.setNavigationIcon(R.drawable.location_icon);
-        toolbar.setTitle("Title");
-        toolbar.setSubtitle("Sub");*/
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,6 +137,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                     public void onResponse(JSONObject response) {
                         try {
                             notifModel.setNotificationCount(Integer.parseInt(response.getString(Keys.TAG_NOTIFICATION_COUNT)));
+                            setNotifCount(Integer.parseInt(response.getString(Keys.TAG_NOTIFICATION_COUNT)));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -185,10 +173,14 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     }
 
     private void castObjects() {
-        tv_fullname = (TextView) findViewById(R.id.tvFullName);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        tv_fullname     = (TextView) findViewById(R.id.tvFullName);
+        fab             = (FloatingActionButton) findViewById(R.id.fab);
 
     }//Cast objects and point it to the object name
+    private void setNotifCount(int count){
+        mNotifCount = count;
+        invalidateOptionsMenu();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -198,13 +190,13 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         MenuItem item = menu.findItem(R.id.action_search);
         item.setVisible(false);
         RelativeLayout badgeLayout = (RelativeLayout) menu.findItem(R.id.menu_notification).getActionView();
-        Toast.makeText(getApplicationContext(), "Notification Count: "+notifModel.getNotificationCount(), Toast.LENGTH_SHORT).show();
-        counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
-
-      /*  if(notificationCount == 0){
-            counter.setVisibility(View.GONE);
-        }*/
-        counter.setText(""+notifModel.getNotificationCount());
+        TextView counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
+        if(notifModel.getNotificationCount() == 0){
+            counter.setVisibility(View.INVISIBLE);
+        }else {
+            counter.setText(String.valueOf(mNotifCount));
+            counter.setVisibility(View.VISIBLE);
+        }
         iconButton = (IconButton) badgeLayout.findViewById(R.id.badge_icon_button);
         homeButton = (IconButton) badgeLayout.findViewById(R.id.badge_home_button);
         homeButton.setText("{fa-home}");
@@ -341,27 +333,5 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     }//Dismiss progressDialog
 
 
-    private void getUnreadNotifications(){
-        CustomJSONRequest countNotifRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.NOTIFICATION_URL, null,
-                new Response.Listener<JSONObject>() {
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            notifCount = Integer.valueOf(response.getString(Keys.TAG_NOTIFICATION_COUNT));
-                            notifModel.setNotificationCount(notifCount);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(countNotifRequest);
-    }
 }

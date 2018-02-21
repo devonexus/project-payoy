@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
@@ -57,23 +58,18 @@ public class NotificationActivity extends NavigationDrawerActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //Put navigation drawer on this layout
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_notification, null, false);
         drawer.addView(contentView, 0);
         fab.setVisibility(View.INVISIBLE);
-
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
         loadUnreadNotifications();
-
     }
 
     public static Drawable changeDrawableColor(Context context,int icon, int newColor) {
@@ -84,8 +80,6 @@ public class NotificationActivity extends NavigationDrawerActivity{
 
 
     private void setupTabIcons() {
-
-
         tabLayout.getTabAt(0).setIcon(changeDrawableColor(getApplicationContext(), tabIcons[0], Color.BLUE));
         tabLayout.getTabAt(1).setIcon(changeDrawableColor(getApplicationContext(), tabIcons[1], Color.BLUE));
     }
@@ -205,6 +199,9 @@ public class NotificationActivity extends NavigationDrawerActivity{
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-
+        return super.onCreateOptionsMenu(menu);
+    }
 }

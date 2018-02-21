@@ -25,7 +25,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
@@ -34,9 +33,6 @@ import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
-import com.example.apaodevo.basura_juan.Utils.LocationHelper;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
@@ -46,7 +42,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +57,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
     private EditText          etActualLocation;
     ArrayList<BinModel>       world;
     GlobalData                globalData;
-    private LocationHelper    locationHelper;
     private String            strAddress;
     private ProgressDialog    pDialog;
     Intent                    devicelist,naviagtenin;
@@ -84,7 +78,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         drawer.addView(contentView, 0);
 
         globalData       = (GlobalData) getApplicationContext();
-        locationHelper   = new LocationHelper(DeployBinActivity.this);
         //get the spinner from the xml.
         dropdown         = (Spinner) findViewById(R.id.spinner1);
         btnDeploy        = (Button) findViewById(R.id.btn_deploy);
@@ -271,8 +264,10 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         Geocoder gc = new Geocoder(getApplicationContext());
         if(gc.isPresent()){
             List<Address> list = null;
+
             try {
-                list = gc.getFromLocation(latitude, longitude,1);
+                list = gc.getFromLocation(lat, longi,1);
+
                 Address address = list.get(0);
 
               /*  str.append("Name: " + address.getLocality() + "\n");
@@ -284,9 +279,8 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 str.append("Country Code: " + address.getCountryCode() + "\n");*/
                 strAddress = address.getAddressLine(0);
 
-                etActualLocation.setText(strAddress);
-            }
-            catch (Exception e) {
+                etActualLocation.setText(address.getAdminArea());
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

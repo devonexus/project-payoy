@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.apaodevo.basura_juan.Activities.BinListActivity;
 import com.example.apaodevo.basura_juan.Activities.NavigationDrawerActivity;
 import com.example.apaodevo.basura_juan.Activities.NotificationActivity;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
@@ -104,10 +105,11 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
         holder.btnMarkAsRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+               // sendIntent = new Intent(context, NotificationActivity.class);
                 updateNotificationStatusToRead(notificationId, userId);
-                //notificationModel.setNotificationCount(notificationModel.getNotificationCount()-1);
                 Refresher.recreateActivityCompat(((NotificationActivity)context));
+                /*((NotificationActivity)context).finish();
+                context.startActivity(sendIntent);*/
             }
         });
     }

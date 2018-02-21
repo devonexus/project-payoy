@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
+import com.example.apaodevo.basura_juan.Models.LocationModel;
 import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
@@ -36,7 +37,7 @@ public class HomeActivity extends NavigationDrawerActivity{
     private ProgressDialog pDialog;
     GlobalData globalData;
     public static UserModel userModel;
-
+    public static LocationModel locationModel;
     String jsonLatitude, jsonLongitude;
     @Override
 
@@ -52,7 +53,7 @@ public class HomeActivity extends NavigationDrawerActivity{
         globalData = (GlobalData) getApplicationContext();
         fab.setImageResource(R.drawable.floating_navigate_bin);
         fab.setVisibility(View.GONE);
-
+        locationModel = LocationModel.getInstance();
         getCoordinates();
 
         //        //Go to bin location interface
@@ -123,8 +124,11 @@ public class HomeActivity extends NavigationDrawerActivity{
                             jsonLatitude = response.getString(Keys.TAG_BIN_LATITUDE);
                             jsonLongitude = response.getString(Keys.TAG_BIN_LONGITUDE);
                             final GlobalData globalData = (GlobalData) getApplicationContext();
-                            globalData.setLatitude(jsonLatitude);
-                            globalData.setLongitude(jsonLongitude);
+                            /*globalData.setLatitude(jsonLatitude);
+                            globalData.setLongitude(jsonLongitude);*/
+                            locationModel.setLatitude(Double.valueOf(jsonLatitude));
+                            locationModel.setLongitude(Double.valueOf(jsonLongitude));
+
                             // lati = Double.parseDouble(jsonLatitude);
                             // longitude = Double.parseDouble(jsonLongitude);
                             //   globalData = (GlobalData) getApplicationContext();
