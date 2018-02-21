@@ -110,7 +110,13 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         sabDeployBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+                if(DeviceList.btSocket != null)
+                {
+                    globalData.msg("Please disconnect connected bluetooth");
+                }
+                else {
+                    startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+                }
             }
         });
         sabRegisterBin.setOnClickListener(new View.OnClickListener() {

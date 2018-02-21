@@ -83,7 +83,13 @@ public class HomeActivity extends NavigationDrawerActivity{
         btn_deploy_bin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+                if(DeviceList.btSocket != null)
+                {
+                    globalData.msg("Please disconnect connected bluetooth");
+                }
+                else {
+                    startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+                }
             }
         });
         //Go to register bin interface
@@ -110,9 +116,7 @@ public class HomeActivity extends NavigationDrawerActivity{
                 }
             }
         });
-
         initializeProgressDialogState();
-
 
     }
         private void getCoordinates(){
