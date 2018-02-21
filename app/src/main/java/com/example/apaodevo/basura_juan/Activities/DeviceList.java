@@ -175,9 +175,10 @@ public class DeviceList extends NavigationDrawerActivity
                 else {
                     if (btSocket != null) {
                         try {
-                            btSocket.getOutputStream().write("6".toString().getBytes());
                             if(globalData.intentAddress == "DEPLOY")
                             {
+                                btSocket.getOutputStream().write("6".toString().getBytes());
+                                btSocket.getOutputStream().write("0".toString().getBytes());
                                 deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
                                 startActivity(deploy);
                             }
