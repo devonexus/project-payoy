@@ -49,12 +49,11 @@
         </activity>
         <activity
             android:name=".Activities.DeployBinActivity"
-            android:label="@string/deployment_history_activity"
-            android:launchMode="singleTask"></activity>
+            android:label="@string/deployment_history_activity">
+        </activity>
         <activity
             android:name=".Activities.RegisterBin"
-            android:label="Register Bin"
-            android:launchMode="singleTask" />
+            android:label="Register Bin" />
         <activity android:name=".Activities.DeviceList"
             android:label="Device List">
         </activity>

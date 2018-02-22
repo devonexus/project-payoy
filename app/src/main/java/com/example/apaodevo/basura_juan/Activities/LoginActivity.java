@@ -152,7 +152,9 @@ public class LoginActivity extends AppCompatActivity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            pass.setError("Invalid password");
+                                            MDToast mdToast = MDToast.makeText(getApplicationContext(), "Invalid password", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR);
+                                            mdToast.show();
+                                            requestFocus(pass);
                                             hidepDialog();
                                         }
                                     });
@@ -207,8 +209,8 @@ public class LoginActivity extends AppCompatActivity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            user.setError("Invalid username");
-                                            pass.setError("Invalid password");
+                                            MDToast mdToast = MDToast.makeText(getApplicationContext(), "Invalid username and password", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR);
+                                            mdToast.show();
                                             hidepDialog();
                                         }
                                     });
@@ -222,6 +224,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(LoginActivity.this, "Error: "+error.getMessage(), Toast.LENGTH_LONG).show();
+                MDToast mdToast = MDToast.makeText(getApplicationContext(), "Could not get data from server", MDToast.LENGTH_SHORT, MDToast.TYPE_WARNING);
+                mdToast.show();
                 error.printStackTrace();
                 hidepDialog();
             }

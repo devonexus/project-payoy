@@ -354,7 +354,11 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
         // showing snack bar with Undo opt
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
 
     @Override
     public void onBackPressed() {

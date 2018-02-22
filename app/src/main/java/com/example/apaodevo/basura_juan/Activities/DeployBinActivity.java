@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -29,6 +30,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Models.BinModel;
+import com.example.apaodevo.basura_juan.Models.LocationModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
@@ -45,6 +47,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import im.delight.android.location.SimpleLocation;
@@ -68,7 +71,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
     private String             binId;
     private String             cancelIdRequests = "ID";
     private String             deployRequests = "deploy";
-
+    public static LocationModel locationModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +80,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_deploy_bin, null, false);
         drawer.addView(contentView, 0);
-
+        locationModel = LocationModel.getInstance();
         globalData       = (GlobalData) getApplicationContext();
         //get the spinner from the xml.
         dropdown         = (Spinner) findViewById(R.id.spinner1);
@@ -113,9 +116,9 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                     final String selectedBinName = parent.getItemAtPosition(position).toString();
                     // Toast.makeText(getApplicationContext(), ""+selectedItem, Toast.LENGTH_SHORT).show();
                     getBinId(selectedBinName);
-                    latitude  = simpleLocation.getLatitude();
-                    longitude = simpleLocation.getLongitude();
-                    Toast.makeText(getApplicationContext(), "Location: "+latitude+" Longitude: "+longitude, Toast.LENGTH_SHORT).show();
+                    //latitude  = simpleLocation.getLatitude();
+                    //longitude = simpleLocation.getLongitude();
+                    //Toast.makeText(getApplicationContext(), "Location: "+latitude+" Longitude: "+longitude, Toast.LENGTH_SHORT).show();
                     Thread thread = new Thread() {
 
                         @Override
@@ -130,7 +133,8 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    getLocationName(latitude, longitude);
+
+                                    getLocationName(locationModel.getLatitude(), locationModel.getLongitude());
                                 }
                             });
                         }
@@ -281,31 +285,27 @@ public class DeployBinActivity extends NavigationDrawerActivity {
     }
 
     private void getLocationName(double lat, double longi){
-        Geocoder gc = new Geocoder(getApplicationContext());
-        if(gc.isPresent()){
-            List<Address> list = null;
+        Geocoder geocoder = new Geocoder(this, Locale.ENGLISH);
 
-            try {
-                list = gc.getFromLocation(lat, longi,1);
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, longi, 1);
 
-                Address address = list.get(0);
+            if(addresses != null && addresses.size() > 0) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("Address:\n");
 
-              /*  str.append("Name: " + address.getLocality() + "\n");
-                str.append("Sub-Admin Ares: " + address.getSubAdminArea() + "\n");
-                str.append("Admin Area: " + address.getAdminArea() + "\n");
-                str.append("Admin Area: " + address.getAddressLine(0) + "\n");
-                str.append("Admin Area: " + address + "\n");
-                str.append("Country: " + address.getCountryName() + "\n");str.append("Country Code: " + address.getCountryCode() + "\n");
-                str.append("Country Code: " + address.getCountryCode() + "\n");*/
-                strAddress = address.getAddressLine(0);
-
-                etActualLocation.setText(strAddress);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch(NullPointerException e){
-                e.printStackTrace();
+                Log.d("RESULT",strReturnedAddress.toString());
+                etActualLocation.setText(returnedAddress.getAddressLine(0));
             }
+            else{
+                Log.d("NO-RESULT","NO-RESULT");
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Log.d("NO-RESULT","NO-RESULT");
         }
+
     }
     protected boolean shouldAskPermissions() {
         return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
@@ -413,6 +413,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(), ""+response.toString(), Toast.LENGTH_SHORT).show();
                         try {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < response.length(); i++) {
