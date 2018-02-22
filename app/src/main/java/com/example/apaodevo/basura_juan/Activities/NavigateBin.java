@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.content.Intent;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -159,7 +160,15 @@ public class NavigateBin extends NavigationDrawerActivity {
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
                 .setBackgroundDrawable(R.drawable.floating_navigate_bin)
                 .build();
+        int blueSubActionButtonSize;
+        blueSubActionButtonSize = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_size);
+
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        FrameLayout.LayoutParams ContentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        itemBuilder.setLayoutParams(ContentParams);
+        // Set custom layout params
+        FrameLayout.LayoutParams conParams = new FrameLayout.LayoutParams(blueSubActionButtonSize,blueSubActionButtonSize);
+        itemBuilder.setLayoutParams(conParams);
         ImageView itemIcon1 = new ImageView(this);
         itemIcon1.setImageResource(R.drawable.bin_location_icon);
 
@@ -192,7 +201,13 @@ public class NavigateBin extends NavigationDrawerActivity {
         sabDeployBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+                if(DeviceList.btSocket != null)
+                {
+                    globalData.msg("Please disconnect connected bluetooth");
+                }
+                else {
+                    startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+                }
             }
         });
         sabRegisterBin.setOnClickListener(new View.OnClickListener() {
@@ -238,6 +253,7 @@ public class NavigateBin extends NavigationDrawerActivity {
                 DeviceList.btSocket = null;
                 globalData.address = "";
                 globalData.name = "";
+                globalData.msg("Bluetooth Disconnected");
                 home = new Intent(NavigateBin.this, HomeActivity.class);
                 startActivity(home);
             }

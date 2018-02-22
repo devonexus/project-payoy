@@ -83,12 +83,10 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
         btn_register_bin.setOnClickListener(this);
 
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
-
                 .setBackgroundDrawable(R.drawable.floating_action_register_bin)
                 .build();
-        int blueSubActionButtonSize,blueSubActionButtonContentMargin;
+        int blueSubActionButtonSize;
         blueSubActionButtonSize = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_size);
-        blueSubActionButtonContentMargin = getResources().getDimensionPixelSize(R.dimen.blue_sub_action_button_content_margin);
 
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         FrameLayout.LayoutParams ContentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
@@ -141,7 +139,13 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
         sabDeployBin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+                if(DeviceList.btSocket != null)
+                {
+                    globalData.msg("Please disconnect connected bluetooth");
+                }
+                else {
+                    startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
+                }
             }
         });
 
@@ -293,7 +297,7 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                             final String server_response = response.getString(Keys.TAG_SUCCESS);
                             Thread thread = new Thread() {
                                 @Override
-                                public void run() {
+                                 public void run() {
                                     // Block this thread for 4 seconds.al
                                     try {
                                         Thread.sleep(1000);

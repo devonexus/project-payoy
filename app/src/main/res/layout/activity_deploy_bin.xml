@@ -89,7 +89,15 @@
         android:layout_alignStart="@+id/textView4"
         android:layout_alignEnd="@+id/etActualLocation" />
 
-
+    <Button
+        android:id="@+id/btn_connect_bin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="39dp"
+        android:text="Connect to Bin"
+        android:layout_below="@+id/etActualLocation"
+        android:layout_alignEnd="@+id/btn_deploy"
+        android:layout_alignStart="@+id/etActualLocation" />
 
 
 </RelativeLayout>

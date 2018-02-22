@@ -25,22 +25,21 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
-public class DeviceList extends NavigationDrawerActivity
-{
+public class DeviceList extends NavigationDrawerActivity {
     //widgets
-    Button                         btnPaired;
-    ListView                       devicelist,getDevicelist;
+    Button btnPaired;
+    ListView devicelist, getDevicelist;
     //Bluetooth
-    private BluetoothAdapter       myBluetooth,myBlue;
-    private Set<BluetoothDevice>   pairedDevices;
+    private BluetoothAdapter myBluetooth, myBlue;
+    private Set<BluetoothDevice> pairedDevices;
 
-    public ProgressDialog          progress;
-    public static BluetoothSocket  btSocket ;
-    private boolean                isBtConnected = false;
+    public ProgressDialog progress;
+    public static BluetoothSocket btSocket;
+    private boolean isBtConnected = false;
     //SPP UUID. Look for it
-    static final UUID              myUUID  = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    GlobalData                     globalData;
-    Intent                         navigate,deploy;
+    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    GlobalData globalData;
+    Intent navigate, deploy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +53,11 @@ public class DeviceList extends NavigationDrawerActivity
         globalData = (GlobalData) getApplicationContext();
 
         //Calling widgets
-        btnPaired     = (Button) findViewById(R.id.btnNotifRead);
-        devicelist    = (ListView) findViewById(R.id.listView);
+        btnPaired = (Button) findViewById(R.id.btnNotifRead);
+        devicelist = (ListView) findViewById(R.id.listView);
         getDevicelist = (ListView) findViewById(R.id.listView1);
         //if the device has bluetooth
-        myBluetooth   = BluetoothAdapter.getDefaultAdapter();
+        myBluetooth = BluetoothAdapter.getDefaultAdapter();
 
         if (myBluetooth == null) {
             //Show a message that the device has no bluetooth adapter
@@ -78,42 +77,35 @@ public class DeviceList extends NavigationDrawerActivity
         });
     }
 
-    private void pairedDevicesList()
-    {
+    private void pairedDevicesList() {
         pairedDevices = myBluetooth.getBondedDevices();
         ArrayList list = new ArrayList();
-        if (pairedDevices.size()>0) {
-            for(BluetoothDevice bt: pairedDevices) {
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice bt : pairedDevices) {
                 list.add(bt.getName() + "\n" + bt.getAddress()); //Get the device's name and the address
             }
-        }
-        else
-        {
+        } else {
             Toast.makeText(getApplicationContext(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
         }
-        final ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, list);
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         devicelist.setAdapter(adapter);
         devicelist.setOnItemClickListener(myListClickListener); //Method called when the device from the list is clicked
     }
 
-    private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener()
-    {
-        public void onItemClick (AdapterView<?> av, View v, int arg2, long arg3)
-        {
+    private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
             // Get the device MAC address, the last 17 chars in the View
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
             globalData.address = address;
             globalData.name = info;
-            if(btSocket != null) {
+            if (btSocket != null) {
                 try {
                     btSocket.connect();//start connection
-                }
-                catch (Exception io) {
+                } catch (Exception io) {
                     globalData.msg("Bluetooth already connected!!!");
                 }
-            }
-            else {
+            } else {
                 new ConnectBT().execute(); //Call the class to connect
             }
         }
@@ -122,6 +114,7 @@ public class DeviceList extends NavigationDrawerActivity
     private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
     {
         private boolean ConnectSuccess = true; //if it's here, it's almost connected
+
         @Override
         protected void onPreExecute() {
             progress = new ProgressDialog(DeviceList.this, R.style.AppCompatAlertDialogStyle);
@@ -130,6 +123,7 @@ public class DeviceList extends NavigationDrawerActivity
             progress.setCancelable(false);
             progress.show();
         }
+
         @Override
         protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
         {
@@ -141,57 +135,52 @@ public class DeviceList extends NavigationDrawerActivity
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                     btSocket.connect();//start connection
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 ConnectSuccess = false;//if the try failed, you can check the exception here
             }
             return null;
         }
+
         @Override
         protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
         {
             super.onPostExecute(result);
-            if (!ConnectSuccess){
+            if (!ConnectSuccess) {
                 globalData.msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
                 btSocket = null;
-            }
-            else {
+            } else {
                 isBtConnected = true;
                 // Make an intent to start next activity.
-                if(DeployBinActivity.deploy == "deploy") {
-                    if (btSocket != null) {
-                        try {
-                            btSocket.getOutputStream().write("0".toString().getBytes());
+                if (btSocket != null) {
+                    try {
+                        if (globalData.intentAddress == "DEPLOY") {
+
                             btSocket.getOutputStream().write("6".toString().getBytes());
-                            DeployBinActivity.deploy = "";
-                            deploy = new Intent(getApplicationContext(), HomeActivity.class);
+                            deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
                             startActivity(deploy);
-                        } catch (IOException e) {
-                            globalData.msg("Bluetooth Disconnected");
                         }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }
-                else {
+                } else {
                     if (btSocket != null) {
                         try {
                             btSocket.getOutputStream().write("6".toString().getBytes());
-                            if(globalData.intentAddress == "DEPLOY")
-                            {
+                            if (globalData.intentAddress == "DEPLOY") {
                                 deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
                                 startActivity(deploy);
-                            }
-                            else if(globalData.intentAddress == "NAVIGATE"){
+                            } else if (globalData.intentAddress == "NAVIGATE") {
                                 navigate = new Intent(DeviceList.this, NavigateBin.class);
                                 startActivity(navigate);
                             }
+
                         } catch (IOException e) {
                             globalData.msg("Bluetooth Disconnected");
                         }
                     }
                 }
+                progress.dismiss();
             }
-            progress.dismiss();
         }
     }
 }

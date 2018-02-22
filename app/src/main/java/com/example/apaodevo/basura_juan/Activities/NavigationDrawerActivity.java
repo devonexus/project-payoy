@@ -196,6 +196,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
             counter.setText(String.valueOf(mNotifCount));
             counter.setVisibility(View.VISIBLE);
         }
+
         //Toast.makeText(getApplicationContext(), "Notification Count: "+notifModel.getNotificationCount(), Toast.LENGTH_SHORT).show();
         counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
 
