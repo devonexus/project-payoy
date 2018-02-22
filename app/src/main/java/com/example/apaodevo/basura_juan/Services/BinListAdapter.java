@@ -152,7 +152,6 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
-
                             }
                         });
                         builder.show();
@@ -168,7 +167,6 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
                     sendIntent.putExtra(Keys.TAG_BIN_ID, binModel.getBinId());
                     context.startActivity(sendIntent);
                 }
-
             }
         });
         Picasso.with(context)

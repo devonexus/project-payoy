@@ -15,7 +15,6 @@ import com.joanzapata.iconify.fonts.SimpleLineIconsModule;
 import com.joanzapata.iconify.fonts.TypiconsModule;
 import com.joanzapata.iconify.fonts.WeathericonsModule;
 
-
 /**
  * Created by apaodevo on 11/15/2017.
  */
@@ -119,7 +118,4 @@ public class GlobalData extends Application {
         Iconify
                 .with(new FontAwesomeModule());
     }
-
-
-
 }

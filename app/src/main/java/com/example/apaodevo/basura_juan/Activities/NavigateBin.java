@@ -281,7 +281,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
         }
     }
-
+    //Pause the bin
     private void StopDeployment() {
         if (DeviceList.btSocket!=null) {
             try {
@@ -295,7 +295,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
         }
     }
-
+    //Move to left the bin
     public void turnLeft() {
         if (DeviceList.btSocket!=null) {
             try {
@@ -309,6 +309,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
         }
     }
+    //Move to right the bin
     private void turnRight() {
         if (DeviceList.btSocket!=null) {
             try {
@@ -322,7 +323,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
         }
     }
-
+    // Stop the process of the bin
     private void StopAutomate() {
         if (DeviceList.btSocket!=null) {
             try {
@@ -336,6 +337,8 @@ public class NavigateBin extends NavigationDrawerActivity {
             }
         }
     }
+
+    // Automate the process of the bin
     public void Automation() {
         if (DeviceList.btSocket!=null) {
             try {

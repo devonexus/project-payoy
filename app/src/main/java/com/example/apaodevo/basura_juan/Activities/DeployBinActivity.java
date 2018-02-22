@@ -283,8 +283,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         List<Address> addresses = null;
         try {
             addresses = geocoder.getFromLocation(lat, longi, 1);
-
-
             if (addresses != null && addresses.size() > 0) {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder("Address:\n");
@@ -294,7 +292,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
 
             } else {
                 Log.d("NO-RESULT", "NO-RESULT");
-
             }
         }
         catch (IOException e) {
@@ -407,7 +404,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), ""+response.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), " "+response.toString(), Toast.LENGTH_SHORT).show();
                         try {
                             JSONArray jsonArray = new JSONArray(response);
                             for (int i = 0; i < response.length(); i++) {
