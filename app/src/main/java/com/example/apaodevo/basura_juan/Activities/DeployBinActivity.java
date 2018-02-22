@@ -284,12 +284,9 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         Geocoder gc = new Geocoder(getApplicationContext());
         if(gc.isPresent()){
             List<Address> list = null;
-
             try {
                 list = gc.getFromLocation(lat, longi,1);
-
                 Address address = list.get(0);
-
               /*  str.append("Name: " + address.getLocality() + "\n");
                 str.append("Sub-Admin Ares: " + address.getSubAdminArea() + "\n");
                 str.append("Admin Area: " + address.getAdminArea() + "\n");
@@ -297,9 +294,8 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 str.append("Admin Area: " + address + "\n");
                 str.append("Country: " + address.getCountryName() + "\n");str.append("Country Code: " + address.getCountryCode() + "\n");
                 str.append("Country Code: " + address.getCountryCode() + "\n");*/
-                strAddress = address.getAddressLine(0);
 
-                etActualLocation.setText(address.getAdminArea());
+                etActualLocation.setText(""+address.getAddressLine(0));
             } catch (IOException e) {
                 e.printStackTrace();
             }
