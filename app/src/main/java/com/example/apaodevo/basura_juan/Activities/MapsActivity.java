@@ -45,7 +45,6 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
         fab.setImageResource(R.drawable.floating_navigate_bin);
         fab.setVisibility(View.GONE);
         locationModel = LocationModel.getInstance();
-        Toast.makeText(getApplicationContext(), "Longitude: "+locationModel.getLatitude(), Toast.LENGTH_SHORT).show();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 

@@ -2,6 +2,7 @@ package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class NavigationDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -56,6 +58,12 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     private int mNotifCount = 0;
     public static NotificationModel notifModel;
     private Intent binListIntent, deploymentHistoryIntent, userProfileIntent, homeIntent, notificationIntent;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

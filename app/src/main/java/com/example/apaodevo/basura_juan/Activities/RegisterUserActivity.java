@@ -2,6 +2,7 @@ package com.example.apaodevo.basura_juan.Activities;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 
 import android.database.Cursor;
@@ -45,6 +46,7 @@ import com.example.apaodevo.basura_juan.Services.PathUtil;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.kosalgeek.android.imagebase64encoder.ImageBase64;
 import com.squareup.picasso.Picasso;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -59,6 +61,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class RegisterUserActivity extends AppCompatActivity {
@@ -77,6 +80,11 @@ public class RegisterUserActivity extends AppCompatActivity {
     private static int RESULT_LOAD_IMAGE = 1;
     private static String image_path;
     private static String encodedImage;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +181,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             if (requestCode == RESULT_LOAD_IMAGE) {
 
                 uri = data.getData();
+
                 image_path = PathUtil.getPathFromURI(RegisterUserActivity.this, uri);
                 File f = new File(uri.getPath());
 
@@ -202,73 +211,64 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     private void registerUser(final String lastName, final String firstName, final String middleInitial, final String email, final String uName, final String pWord, final String imagePath, final String imageName){
         showpDialog();
-        final CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.REGISTER_URL, null, new Response.Listener<JSONObject>() {
+        CustomJSONRequest customJSONRequest = new CustomJSONRequest(Request.Method.POST, WebServiceUrl.REGISTER_URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                String server_response;
+
                 try {
-                    server_response = response.getString(Keys.TAG_SUCCESS);
-                if(server_response.equals("0")){
-                    Thread thread = new Thread() {
-                        @Override
-                        public void run() {
-                            // Block this thread for 1.5 seconds.
-                            try {
-                                Thread.sleep(1500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
 
-                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    etUsername.setError("Username already exists");
-                                    hidepDialog();
-                                }
-                            });
-
-                        }
-
-                    };
-                    thread.start();
-                } else if(server_response.equals("1")){
-                    Thread thread = new Thread() {
-
-                        @Override
-                        public void run() {
-
-                            // Block this thread for 1.5 seconds.
-                            try {
-                                Thread.sleep(1500);
-                            } catch (InterruptedException e) {
-                            }
-
-                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(),
-                                            "User successfully registered",
-                                            Toast.LENGTH_LONG).show();
-                                    clearRegistrationActivity();
-                                    hidepDialog();
-                                }
-                            });
-
-                        }
-
-                    };
-                    thread.start();
-                }
+                    if(response.getString(Keys.TAG_SUCCESS).equals("0")){
+                        etUsername.setError("Duplicate username");
+                        requestFocus(etUsername);
+                        hidepDialog();
+                    }else if(response.getString(Keys.TAG_SUCCESS).equals("1")){
+                        MDToast mdToast = MDToast.makeText(getApplicationContext(), "User successfully registered", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO);
+                        mdToast.show();
+                        clearRegistrationActivity();
+                        hidepDialog();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                    /*final String server_response = response.getString(Keys.TAG_SUCCESS);
+                    Thread thread = new Thread() {
+                        @Override
+                        public void run() {
+                            // Block this thread for 4 seconds.al
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(server_response.equals("1")){
+                                        MDToast mdToast = MDToast.makeText(getApplicationContext(), "User successfully registered", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO);
+                                        mdToast.show();
+                                        clearRegistrationActivity();
+                                        hidepDialog();
+
+                                    }else if(server_response.equals("0")){
+                                       etUsername.setError("Duplicate username");
+                                        requestFocus(etUsername);
+                                        hidepDialog();
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    thread.start();*/
+
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(RegisterUserActivity.this, "Could not get data from server.", Toast.LENGTH_SHORT).show();
+                MDToast mdToast = MDToast.makeText(getApplicationContext(), "Could not process data to server", MDToast.LENGTH_SHORT, MDToast.TYPE_WARNING);
+                mdToast.show();
                 error.printStackTrace();
                 hidepDialog();
             }
@@ -302,6 +302,8 @@ public class RegisterUserActivity extends AppCompatActivity {
         }
     }
 
+
+
     private boolean validateImagePath(){
         if(image_path == null){
             tvImageUserProfile.setError(getString(R.string.err_select_image));
@@ -320,9 +322,11 @@ public class RegisterUserActivity extends AppCompatActivity {
         String userEmail        = etEmail.getText().toString();
         String userUsername     = etUsername.getText().toString();
         String userPassword     = etPassword.getText().toString();
+
         if(!validateImagePath()){
             return;
         }
+
         if(!validateFirstname()){
             return;
         }
@@ -355,7 +359,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         }
 
         registerUser(lastName, firstName, middleInitial, userEmail, userUsername, userPassword, encodedImage, displayName);
-
 
     }
 

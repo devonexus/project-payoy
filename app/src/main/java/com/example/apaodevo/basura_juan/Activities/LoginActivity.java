@@ -2,6 +2,7 @@ package com.example.apaodevo.basura_juan.Activities;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,15 +54,23 @@ public class LoginActivity extends AppCompatActivity {
     public static UserModel userModel;
     private String cancellationTag = "TAG";
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        /*Styling fonts*/
 
         //Cast objects
         blogin      = (Button) findViewById(R.id.btnNotifRead);
         bregister   = (Button) findViewById(R.id.button2);
         user  = (EditText) findViewById(R.id.editText);
         pass  = (EditText) findViewById(R.id.editText2);
+
+
 
         /*Initialize Progress Dialog*/
         pDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/userLayout"
-    android:background="@color/colorBg"
+    android:background="@color/colorWhite"
 
     app:layout_collapseParallaxMultiplier="0.9"
     tools:context="com.example.apaodevo.basura_juan.Activities.RegisterUserActivity">

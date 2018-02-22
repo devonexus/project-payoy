@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.StringBuilderPrinter;
 import android.widget.Toast;
 
+import com.example.apaodevo.basura_juan.R;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.EntypoModule;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
@@ -14,6 +15,8 @@ import com.joanzapata.iconify.fonts.MeteoconsModule;
 import com.joanzapata.iconify.fonts.SimpleLineIconsModule;
 import com.joanzapata.iconify.fonts.TypiconsModule;
 import com.joanzapata.iconify.fonts.WeathericonsModule;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 
 /**
@@ -113,6 +116,11 @@ public class GlobalData extends Application {
         super.onCreate();
         Iconify
                 .with(new FontAwesomeModule());
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/orkney-light.otf")
+                .setFontAttrId(R.attr.fontPath)
+                .build());
+
     }
 
 
