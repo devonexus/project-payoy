@@ -104,11 +104,10 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
             @Override
             public void onClick(View v) {
                 //sendIntent = new Intent(context, NotificationActivity.class);
+                //updateNotificationStatusToRead(notificationId, userId);
                 context.startActivity(new Intent(context, BinListActivity.class));
                 updateNotificationStatusToRead(notificationId, userId);
                 Refresher.recreateActivityCompat(((NotificationActivity)context));
-                /*((NotificationActivity)context).finish();
-                context.startActivity(sendIntent);*/
             }
         });
     }

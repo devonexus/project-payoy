@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,7 +62,8 @@ public class DeviceList extends NavigationDrawerActivity {
 
         if (myBluetooth == null) {
             //Show a message that the device has no bluetooth adapter
-            Toast.makeText(getApplicationContext(), "Bluetooth Device is not turn on", Toast.LENGTH_LONG).show();
+            MDToast mdToast = MDToast.makeText(getApplicationContext(), "Bluetooth Device is not turn on", MDToast.LENGTH_SHORT, MDToast.TYPE_WARNING);
+            mdToast.show();
             //finish apk
             finish();
         } else if (!myBluetooth.isEnabled()) {
