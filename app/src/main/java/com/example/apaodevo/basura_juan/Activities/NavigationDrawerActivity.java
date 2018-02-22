@@ -1,7 +1,6 @@
 package com.example.apaodevo.basura_juan.Activities;
 
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,12 +8,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,16 +25,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
-
 import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
 import com.example.apaodevo.basura_juan.Models.NotificationModel;
-import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
-import com.example.apaodevo.basura_juan.Services.BinListAdapter;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
-import com.example.apaodevo.basura_juan.Utils.Refresher;
 import com.joanzapata.iconify.widget.IconButton;
 import com.squareup.picasso.Picasso;
 
@@ -63,7 +55,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     private ActionBarDrawerToggle toggle;
     private int mNotifCount = 0;
     public static NotificationModel notifModel;
-
+    private Intent binListIntent, deploymentHistoryIntent, userProfileIntent, homeIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +69,9 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
         View header = navigationView.getHeaderView(0);
+        //Toast.makeText(getApplicationContext(), "Revisited Counter", Toast.LENGTH_SHORT).show();
+
+
         img_login_user_image = (ImageView) header.findViewById(R.id.img_navigation_user_profile_image);
         tv_fullname = (TextView) header.findViewById(R.id.tvFullName);
         tv_email = (TextView) header.findViewById(R.id.tvEmail);
@@ -101,6 +96,10 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         //drawer.setDrawerListener(toggle);
 
+        binListIntent = new Intent(getApplicationContext(), BinListActivity.class);
+        userProfileIntent = new Intent(getApplicationContext(), UserProfileActivity.class);
+        deploymentHistoryIntent = new Intent(getApplicationContext(), DeploymentHistory.class);
+        homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -197,13 +196,19 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
             counter.setText(String.valueOf(mNotifCount));
             counter.setVisibility(View.VISIBLE);
         }
+        //Toast.makeText(getApplicationContext(), "Notification Count: "+notifModel.getNotificationCount(), Toast.LENGTH_SHORT).show();
+        counter = (TextView) badgeLayout.findViewById(R.id.badge_textView);
+
+      /*  if(notificationCount == 0){
+            counter.setVisibility(View.GONE);
+        }*/
+        counter.setText(""+notifModel.getNotificationCount());
         iconButton = (IconButton) badgeLayout.findViewById(R.id.badge_icon_button);
         homeButton = (IconButton) badgeLayout.findViewById(R.id.badge_home_button);
         homeButton.setText("{fa-home}");
         homeButton.setTextColor(getResources().getColor(R.color.colorWhite));
         iconButton.setText("{fa-bell}");
         iconButton.setTextColor(getResources().getColor(R.color.colorWhite));
-        //final View menu_notifications = menu.findItem(R.id.menu_notification).getActionView();
         iconButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,7 +221,11 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
             @Override
             public void onClick(View v) {
                 v.startAnimation(buttonClick);
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                overridePendingTransition(0, 0);
+                startActivity(homeIntent);
+                overridePendingTransition(0, 0);
+
             }
         });
         return super.onCreateOptionsMenu(menu);
@@ -242,15 +251,24 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (id == R.id.nav_account) {
-            startActivity(new Intent(getApplicationContext(), UserProfileActivity.class));
+            userProfileIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            overridePendingTransition(0, 0);
+            startActivity(userProfileIntent);
+            overridePendingTransition(0, 0);
             drawer.closeDrawers();
             // Handle the camera action
         } else if (id == R.id.nav_bin_list) {
-            Intent intent = new Intent(getApplicationContext(), BinListActivity.class);
-            startActivity(intent);
+            binListIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            overridePendingTransition(0, 0);
+            startActivity(binListIntent);
+            overridePendingTransition(0, 0);
             drawer.closeDrawers();
         } else if (id == R.id.nav_deployment_history) {
             startActivity(new Intent(getApplicationContext(), DeploymentHistory.class));
+            deploymentHistoryIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            overridePendingTransition(0, 0);
+            startActivity(deploymentHistoryIntent);
+            overridePendingTransition(0, 0);
             drawer.closeDrawers();
         } else if (id == R.id.nav_logout) {
             signOut();

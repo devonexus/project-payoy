@@ -42,6 +42,7 @@ import com.example.apaodevo.basura_juan.Utils.Refresher;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -193,8 +194,8 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
                 new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(context, "Bin status changed to Undeployed.", Toast.LENGTH_SHORT).show();
-
+                        MDToast mdToast = MDToast.makeText(context, "Bin status changed to Undeployed", MDToast.LENGTH_LONG, MDToast.TYPE_SUCCESS);
+                        mdToast.show();
                     }
                 }, new Response.ErrorListener(){
             @Override

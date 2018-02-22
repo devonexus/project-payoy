@@ -1,5 +1,6 @@
 package com.example.apaodevo.basura_juan.Activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
+import com.example.apaodevo.basura_juan.Utils.Refresher;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
@@ -303,7 +305,8 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
                                         @Override
                                         public void run() {
                                             if(server_response.equals("1")){
-                                                Toast.makeText(getApplicationContext(), "Bin successfully updated!!!", Toast.LENGTH_SHORT).show();
+                                                MDToast mdToast = MDToast.makeText(getApplicationContext(), "Bin successfully updated", MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS);
+                                                mdToast.show();
                                                 VolleySingleton.getInstance(getApplicationContext()).cancelPendingRequests("TAG");
                                                 etBinName.setText("");
                                                 hidepDialog();

@@ -78,7 +78,7 @@
                 android:layout_toRightOf="@id/thumbnail"
                 android:text="Bin name"
                 android:textColor="@color/colorAccent"
-                android:textSize="24dp"
+                android:textSize="16dp"
                 android:textStyle="bold" />
 
             <Button

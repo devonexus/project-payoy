@@ -106,42 +106,42 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         }
 
         if (simpleLocation.hasLocationEnabled()) {
-        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                final String selectedBinName = parent.getItemAtPosition(position).toString();
-               // Toast.makeText(getApplicationContext(), ""+selectedItem, Toast.LENGTH_SHORT).show();
-                getBinId(selectedBinName);
-                latitude  = simpleLocation.getLatitude();
-                longitude = simpleLocation.getLongitude();
-                Toast.makeText(getApplicationContext(), "Location: "+latitude+" Longitude: "+longitude, Toast.LENGTH_SHORT).show();
-                Thread thread = new Thread() {
+            dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    final String selectedBinName = parent.getItemAtPosition(position).toString();
+                    // Toast.makeText(getApplicationContext(), ""+selectedItem, Toast.LENGTH_SHORT).show();
+                    getBinId(selectedBinName);
+                    latitude  = simpleLocation.getLatitude();
+                    longitude = simpleLocation.getLongitude();
+                    Toast.makeText(getApplicationContext(), "Location: "+latitude+" Longitude: "+longitude, Toast.LENGTH_SHORT).show();
+                    Thread thread = new Thread() {
 
-                    @Override
-                    public void run() {
-                        // Block this thread for 2 seconds.al
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        // After sleep finished blocking, create a Runnable to run on the UI Thread.
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getLocationName(latitude, longitude);
+                        @Override
+                        public void run() {
+                            // Block this thread for 2 seconds.al
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                        });
-                    }
-                };
-                thread.start();
-            }
+                            // After sleep finished blocking, create a Runnable to run on the UI Thread.
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getLocationName(latitude, longitude);
+                                }
+                            });
+                        }
+                    };
+                    thread.start();
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(getApplicationContext(), "No registered bins yet!!!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    Toast.makeText(getApplicationContext(), "No registered bins yet!!!", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         final FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
 
@@ -229,9 +229,9 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         btnDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if(!validateDeploymentFields()){
-                   return;
-               }
+                if(!validateDeploymentFields()){
+                    return;
+                }
                 //Toast.makeText(getApplicationContext(), ""+globalData.getBinId(), Toast.LENGTH_SHORT).show();
                 deployBin(globalData.getUserid(), globalData.getBinId(), etActualLocation.getText().toString());
                 Thread thread = new Thread() {
@@ -393,7 +393,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                     public void onResponse(String response) {
                         try {
                             JSONArray jsonArray = new JSONArray(response);
-                              for (int i = 0; i < response.length(); i++) {
+                            for (int i = 0; i < response.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 //binNames.add(jsonObject.getString(Keys.TAG_BIN_NAME));
                                 BinModel binModel = new BinModel();

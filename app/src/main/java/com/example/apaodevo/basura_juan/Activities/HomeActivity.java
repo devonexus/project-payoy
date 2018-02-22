@@ -103,6 +103,7 @@ public class HomeActivity extends NavigationDrawerActivity{
             @Override
             public void onClick(View v) {
                 if(DeviceList.btSocket == null) {
+                    globalData.intentAddress = "NAVIGATE";
                     startActivity(new Intent(getApplicationContext(), DeviceList.class));
                 } else
                 {
@@ -143,7 +144,7 @@ public class HomeActivity extends NavigationDrawerActivity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Data: "+error.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Data: "+error.toString(), Toast.LENGTH_SHORT).show();
             }
         }){
 

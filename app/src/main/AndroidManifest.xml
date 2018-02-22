@@ -62,15 +62,13 @@
             />
         <activity
             android:name=".Activities.UserProfileActivity"
-            android:label="@string/user_profile_activity"
-            android:launchMode="singleTask"></activity>
+            android:label="@string/user_profile_activity"></activity>
         <activity android:name=".Activities.NotificationActivity"
             android:theme="@style/AppTheme"
             android:label="@string/notification_item"></activity>
 
         <activity android:name=".Activities.DeploymentHistory"
-            android:label="@string/activity_deployment_history"
-            android:launchMode="singleTask">
+            android:label="@string/activity_deployment_history">
 
 
         </activity>

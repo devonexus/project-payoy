@@ -78,7 +78,6 @@ public class DeployedBinFragment extends Fragment{
         etBinSearch    = (EditText) rootView.findViewById(R.id.search_bin);
         imageLabel     = (ImageView) rootView.findViewById(R.id.image_list_bins);
         etBinSearch.addTextChangedListener(new SearchBinTextWatcher(etBinSearch));
-        Toast.makeText(getContext(), "Goes to Deploy bin fragment", Toast.LENGTH_SHORT).show();
         binList = new ArrayList<>();
         showBinListItem();
         binListAdapter = new BinListAdapter(getActivity(), binList);

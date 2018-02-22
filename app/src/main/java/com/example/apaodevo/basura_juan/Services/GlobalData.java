@@ -25,6 +25,7 @@ public class GlobalData extends Application {
     private String       image_url;
     private String       userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
     public  String        address  = "";
+    public  String        intentAddress="";
     public  String        name;
     private String        binId;
 

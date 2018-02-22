@@ -29,7 +29,6 @@ public class BinListActivity extends NavigationDrawerActivity{
 
     private ViewPagerAdapter adapter;
     private AlphaAnimation buttonClick;
-    private String binId;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
@@ -78,6 +77,7 @@ public class BinListActivity extends NavigationDrawerActivity{
             return mFragmentList.size();
         }
 
+
         public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
@@ -86,7 +86,7 @@ public class BinListActivity extends NavigationDrawerActivity{
 
 
         @Override
-        public CharSequence getPageTitle(int position) {
+        public CharSequence getPageTitle(int    position) {
             return mFragmentTitleList.get(position);
         }
     }

@@ -125,7 +125,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View widget) {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-
+                finish();
             }
         };
         content.setSpan(click, 25, content.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -617,5 +617,11 @@ public class RegisterUserActivity extends AppCompatActivity {
     private void hidepDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
