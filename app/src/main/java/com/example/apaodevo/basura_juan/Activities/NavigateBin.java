@@ -21,6 +21,7 @@ import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 public class NavigateBin extends NavigationDrawerActivity {
 
@@ -35,12 +36,9 @@ public class NavigateBin extends NavigationDrawerActivity {
         super.onCreate(savedInstanceState);
         globalData = (GlobalData) getApplicationContext();
 
-        //Intent newint = getIntent();
-        //globalData.address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
-
         if(globalData.address == null) {
             bluetooth = new Intent(NavigateBin.this, DeviceList.class);
-            Toast.makeText(getApplicationContext(), "Please Connect First to a SPP bluetooth", Toast.LENGTH_SHORT).show();
+            MDToast.makeText(getApplicationContext(),"Please Connect First to a SPP bluetooth", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
             startActivity(bluetooth);
         }
         if(DeviceList.btSocket == null)
@@ -68,14 +66,9 @@ public class NavigateBin extends NavigationDrawerActivity {
 
         binConnected.setText(globalData.name);
         if(auto == "Pause Automation") {
-            btnForward.setEnabled(false);
+            btnLeft.setEnabled(false);
             btnLeft.setEnabled(false);
             btnRight.setEnabled(false);
-        }
-        else {
-            btnForward.setEnabled(true);
-            btnLeft.setEnabled(true);
-            btnRight.setEnabled(true);
         }
 
         btnRight.setOnLongClickListener(new View.OnLongClickListener() {
@@ -210,7 +203,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             public void onClick(View v) {
                 if(DeviceList.btSocket != null)
                 {
-                    globalData.msg("Please disconnect currently connected bin");
+                    MDToast.makeText(getApplicationContext(),"Please disconnect currently connected bin", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 }
                 else {
                     startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
@@ -256,7 +249,7 @@ public class NavigateBin extends NavigationDrawerActivity {
             try {
                 DeviceList.btSocket.getOutputStream().write("7".toString().getBytes());
                 DeviceList.btSocket.getOutputStream().write("0".toString().getBytes());
-                globalData.msg(globalData.name + "Disconnected");
+                MDToast.makeText(getApplicationContext(), globalData.name + " Disconnected" , MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 DeviceList.btSocket.close(); //close connection
                 DeviceList.btSocket = null;
                 globalData.address = "";
@@ -266,7 +259,7 @@ public class NavigateBin extends NavigationDrawerActivity {
                 startActivity(home);
             }
             catch (IOException e) {
-                globalData.msg("Bin Disconnected");
+                MDToast.makeText(getApplicationContext(),"Bin Disconnected", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 DeviceList.btSocket = null;
                 globalData.address = "";
                 globalData.name = "";
@@ -281,48 +274,63 @@ public class NavigateBin extends NavigationDrawerActivity {
                 DeviceList.btSocket.getOutputStream().write("2".toString().getBytes());
             }
             catch (IOException e) {
-                globalData.msg("Bin Disconnected");
+                MDToast.makeText(getApplicationContext(),"Bin Disconnected", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 DeviceList.btSocket = null;
                 globalData.address = "";
                 globalData.name = "";
             }
         }
     }
-
+    //Pause the bin
     private void StopDeployment() {
         if (DeviceList.btSocket!=null) {
             try {
                 DeviceList.btSocket.getOutputStream().write("8".toString().getBytes());
             }
             catch (IOException e) {
-                globalData.msg("Bin Disconnected");
+                MDToast.makeText(getApplicationContext(),"Bin Disconnected", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 DeviceList.btSocket = null;
                 globalData.address = "";
                 globalData.name = "";
             }
         }
     }
-
+    //Move to left the bin
     public void turnLeft() {
         if (DeviceList.btSocket!=null) {
             try {
                 DeviceList.btSocket.getOutputStream().write("3".toString().getBytes());
             }
             catch (IOException e) {
-                globalData.msg("Bin Disconnected");
+                MDToast.makeText(getApplicationContext(),"Bin Disconnected", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 DeviceList.btSocket = null;
                 globalData.address = "";
                 globalData.name = "";
             }
         }
     }
+    //Move to right the bin
     private void turnRight() {
         if (DeviceList.btSocket!=null) {
             try {
                 DeviceList.btSocket.getOutputStream().write("4".toString().getBytes());
             }
             catch (IOException e) {
-                globalData.msg("Bin Disconnected");
+                MDToast.makeText(getApplicationContext(),"Bin Disconnected", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
+                DeviceList.btSocket = null;
+                globalData.address = "";
+                globalData.name = "";
+            }
+        }
+    }
+    // Stop the process of the bin
+    private void StopAutomate() {
+        if (DeviceList.btSocket!=null) {
+            try {
+                DeviceList.btSocket.getOutputStream().write("1".toString().getBytes());
+            }
+            catch (IOException e) {
+                MDToast.makeText(getApplicationContext(),"Bin Disconnected", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 DeviceList.btSocket = null;
                 globalData.address = "";
                 globalData.name = "";
@@ -330,26 +338,14 @@ public class NavigateBin extends NavigationDrawerActivity {
         }
     }
 
-    private void StopAutomate() {
-        if (DeviceList.btSocket!=null) {
-            try {
-                DeviceList.btSocket.getOutputStream().write("1".toString().getBytes());
-            }
-            catch (IOException e) {
-                globalData.msg("Bin Disconnected");
-                DeviceList.btSocket = null;
-                globalData.address = "";
-                globalData.name = "";
-            }
-        }
-    }
+    // Automate the process of the bin
     public void Automation() {
         if (DeviceList.btSocket!=null) {
             try {
                 DeviceList.btSocket.getOutputStream().write("0".toString().getBytes());
             }
             catch (IOException e) {
-                globalData.msg("Bin Disconnected");
+                MDToast.makeText(getApplicationContext(),"Bin Disconnected", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 DeviceList.btSocket = null;
                 globalData.address = "";
                 globalData.name = "";

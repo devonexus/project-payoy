@@ -17,7 +17,9 @@ import android.bluetooth.BluetoothDevice;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.apaodevo.basura_juan.Models.DeploymentModel;
 import com.example.apaodevo.basura_juan.R;
+import com.example.apaodevo.basura_juan.Services.BinListAdapter;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
@@ -41,7 +43,7 @@ public class DeviceList extends NavigationDrawerActivity {
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     GlobalData globalData;
     Intent navigate, deploy;
-
+    public static DeploymentModel deploymentModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +54,7 @@ public class DeviceList extends NavigationDrawerActivity {
         fab.setImageResource(R.drawable.floating_navigate_bin);
         fab.setVisibility(View.GONE);
         globalData = (GlobalData) getApplicationContext();
-
+        deploymentModel = DeploymentModel.getInstance();
         //Calling widgets
         btnPaired = (Button) findViewById(R.id.btnNotifRead);
         devicelist = (ListView) findViewById(R.id.listView);
@@ -87,7 +89,7 @@ public class DeviceList extends NavigationDrawerActivity {
                 list.add(bt.getName() + "\n" + bt.getAddress()); //Get the device's name and the address
             }
         } else {
-            Toast.makeText(getApplicationContext(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
+            MDToast.makeText(getApplicationContext(),"No Paired Bluetooth Devices Found.", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
         }
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         devicelist.setAdapter(adapter);
@@ -105,7 +107,7 @@ public class DeviceList extends NavigationDrawerActivity {
                 try {
                     btSocket.connect();//start connection
                 } catch (Exception io) {
-                    globalData.msg("Bluetooth already connected!!!");
+                    MDToast.makeText(getApplicationContext(),"Bluetooth already connected!!!", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 }
             } else {
                 new ConnectBT().execute(); //Call the class to connect
@@ -148,7 +150,7 @@ public class DeviceList extends NavigationDrawerActivity {
         {
             super.onPostExecute(result);
             if (!ConnectSuccess) {
-                globalData.msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
+                MDToast.makeText(getApplicationContext(),"Connection Failed. Is it a SPP Bluetooth? Try again.", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 btSocket = null;
             } else {
                 isBtConnected = true;
@@ -156,18 +158,23 @@ public class DeviceList extends NavigationDrawerActivity {
                     if (btSocket != null) {
                         try {
                             if (globalData.intentAddress == "DEPLOY") {
-                                btSocket.getOutputStream().write("6".toString().getBytes());
-                                btSocket.getOutputStream().write("0".toString().getBytes());
-                                deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
+                                deploy = new Intent(DeviceList.this, DeployBinActivity.class);
                                 startActivity(deploy);
-                            } else {
+                                globalData.intentAddress = "";
+                            }
+                            else if(deploymentModel.getDeploymentTrigger() == "STOP DEPLOYMENT") {
+                                deploy = new Intent(DeviceList.this, BinListActivity.class);
+                                startActivity(deploy);
+                                deploymentModel.setDeploymentTrigger("");
+                            }
+                            else {
                                 btSocket.getOutputStream().write("6".toString().getBytes());
                                 navigate = new Intent(DeviceList.this, NavigateBin.class);
                                 startActivity(navigate);
                             }
 
                         } catch (IOException e) {
-                            globalData.msg("Bin Disconnected");
+                            MDToast.makeText(getApplicationContext(),"Bin Disconnected", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                         }
                     }
             }

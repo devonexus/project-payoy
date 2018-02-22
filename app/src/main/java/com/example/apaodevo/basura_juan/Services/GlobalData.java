@@ -16,21 +16,24 @@ import com.joanzapata.iconify.fonts.SimpleLineIconsModule;
 import com.joanzapata.iconify.fonts.TypiconsModule;
 import com.joanzapata.iconify.fonts.WeathericonsModule;
 
+<<<<<<< HEAD
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 
+=======
+>>>>>>> b25167ab6a98c63ab05e0d8db19d8b6924fd34e3
 /**
  * Created by apaodevo on 11/15/2017.
  */
 
 public class GlobalData extends Application {
-    private String       fullname;
-    private String       image_url;
-    private String       userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
-    public  String        address  = "";
-    public  String        intentAddress="";
-    public  String        name;
-    private String        binId;
+    private String   fullname;
+    private String   image_url;
+    private String   userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
+    public  String   address  = "";
+    public  String   intentAddress="";
+    public  String   name;
+    private String   binId;
 
     public void setBinId(String binId) {
         this.binId = binId;
@@ -51,8 +54,13 @@ public class GlobalData extends Application {
         return userid;
     }
 
+    public void setIntentAddress(String intentAddress) {
+        this.intentAddress = intentAddress;
+    }
 
-
+    public String getIntentAddress() {
+        return intentAddress;
+    }
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
@@ -122,7 +130,4 @@ public class GlobalData extends Application {
                 .build());
 
     }
-
-
-
 }
