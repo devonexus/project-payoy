@@ -99,13 +99,13 @@
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/btnAutomationPause"
         android:gravity="center"
-        android:text="Stop"
+        android:text="PAUSE"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.44"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.356"
-        app:layout_constraintHorizontal_bias="0.44" />
+        app:layout_constraintVertical_bias="0.356" />
 
     <Button
         android:id="@+id/btnRight"

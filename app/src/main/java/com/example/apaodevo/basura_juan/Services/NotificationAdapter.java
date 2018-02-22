@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Activities.BinListActivity;
+import com.example.apaodevo.basura_juan.Activities.DeviceList;
 import com.example.apaodevo.basura_juan.Activities.NavigationDrawerActivity;
 import com.example.apaodevo.basura_juan.Activities.NotificationActivity;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
@@ -68,12 +69,10 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
             imageView       = (ImageView) view.findViewById(R.id.notification_marker);
             btnMarkAsRead   = (Button) view.findViewById(R.id.btnNotifRead);
         }
-
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.notification_list_item, parent, false);
         userModel = UserModel.getInstance();
@@ -93,7 +92,6 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
             holder.imageView.setImageResource(R.drawable.bin_full);
         }
 
-
         holder.notificationDateTime.setText(notificationModel.getNotificationDate()+" "+notificationModel.getNotificationTime());
         if(notificationModel.getNotificationTitle().equals("Battery Status")){
             holder.imageView.setImageResource(R.drawable.low_battery);
@@ -106,15 +104,18 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
             @Override
             public void onClick(View v) {
                // sendIntent = new Intent(context, NotificationActivity.class);
+<<<<<<< HEAD
                 //updateNotificationStatusToRead(notificationId, userId);
 
 
+=======
+                context.startActivity(new Intent(context, BinListActivity.class));
+                updateNotificationStatusToRead(notificationId, userId);
+>>>>>>> dafed7481e5ffb2f53d736fc82c93c990f0a4ee3
                 Refresher.recreateActivityCompat(((NotificationActivity)context));
             }
         });
     }
-
-
 
     @Override
     public int getItemCount() {

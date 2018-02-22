@@ -141,7 +141,7 @@ public class RegisterBin extends NavigationDrawerActivity implements View.OnClic
             public void onClick(View v) {
                 if(DeviceList.btSocket != null)
                 {
-                    globalData.msg("Please disconnect connected bluetooth");
+                    globalData.msg("Please disconnect currently connected bin");
                 }
                 else {
                     startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));

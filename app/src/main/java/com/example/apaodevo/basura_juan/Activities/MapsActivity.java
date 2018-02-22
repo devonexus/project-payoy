@@ -113,7 +113,7 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
             public void onClick(View v) {
                 if(DeviceList.btSocket != null)
                 {
-                    globalData.msg("Please disconnect connected bluetooth");
+                    globalData.msg("Please disconnect currently connected bin");
                 }
                 else {
                     startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
@@ -171,20 +171,6 @@ public class MapsActivity extends NavigationDrawerActivity implements OnMapReady
                 .setPosition(FloatingActionButton.POSITION_TOP_RIGHT)
                 .setLayoutParams(starParams)
                 .build();
-
-        // Set up customized SubActionButtons for the right center menu
-        //SubActionButton.Builder lCSubBuilder = new SubActionButton.Builder(this);
-       // lCSubBuilder.setBackgroundDrawable(getResources().getDrawable(R.drawable.basurajuan_logo));
-
-       /* FrameLayout.LayoutParams blueContentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        blueContentParams.setMargins(blueSubActionButtonContentMargin,
-                blueSubActionButtonContentMargin,
-                blueSubActionButtonContentMargin,
-                blueSubActionButtonContentMargin);
-        lCSubBuilder.setLayoutParams(blueContentParams);
-        // Set custom layout params
-        FrameLayout.LayoutParams blueParams = new FrameLayout.LayoutParams(blueSubActionButtonSize, blueSubActionButtonSize);
-        lCSubBuilder.setLayoutParams(blueParams);*/
 
         SubActionButton.Builder itemBuilder1 = new SubActionButton.Builder(this);
         FrameLayout.LayoutParams blueContentParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);

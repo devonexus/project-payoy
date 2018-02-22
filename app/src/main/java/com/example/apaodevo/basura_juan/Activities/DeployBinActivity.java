@@ -94,7 +94,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         simpleLocation   = new SimpleLocation(this);
         if(DeviceList.btSocket != null)
         {
-            globalData.msg("Please disconnect connected bluetooth!!!");
+            globalData.msg("Please disconnect currently connected bin.");
             naviagtenin = new Intent(DeployBinActivity.this, NavigateBin.class);
             startActivity(naviagtenin);
         }
@@ -251,8 +251,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         btnDeploy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if(!validateDeploymentFields()){
                    return;
                 }

@@ -47,7 +47,6 @@ public class BinListActivity extends NavigationDrawerActivity{
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         buttonClick = new AlphaAnimation(1F, 0.2F);
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -56,7 +55,6 @@ public class BinListActivity extends NavigationDrawerActivity{
         adapter.addFragment(new UndeployedBinFragment(), "Undeployed Bins");
 
         viewPager.setAdapter(adapter);
-
     }
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -70,8 +68,6 @@ public class BinListActivity extends NavigationDrawerActivity{
             return mFragmentList.get(position);
         }
 
-
-
         @Override
         public int getCount() {
             return mFragmentList.size();
@@ -83,16 +79,11 @@ public class BinListActivity extends NavigationDrawerActivity{
             mFragmentTitleList.add(title);
         }
 
-
-
         @Override
         public CharSequence getPageTitle(int    position) {
             return mFragmentTitleList.get(position);
         }
     }
-
-
-
 
     @Override
     public void onBackPressed() {

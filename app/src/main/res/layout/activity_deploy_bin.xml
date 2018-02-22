@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_edittext"
         android:layout_marginTop="39dp"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorWhite"
         android:text="Connect to Bin"
         android:backgroundTint="@color/colorDeepSkyblueButton"
         android:layout_below="@+id/etActualLocation"

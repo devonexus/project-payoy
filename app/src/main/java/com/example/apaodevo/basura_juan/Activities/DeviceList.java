@@ -153,36 +153,25 @@ public class DeviceList extends NavigationDrawerActivity {
             } else {
                 isBtConnected = true;
                 // Make an intent to start next activity.
-                if (btSocket != null) {
-                    try {
-                        if (globalData.intentAddress == "DEPLOY") {
-
-                            btSocket.getOutputStream().write("6".toString().getBytes());
-                            deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
-                            startActivity(deploy);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
                     if (btSocket != null) {
                         try {
-                            btSocket.getOutputStream().write("6".toString().getBytes());
                             if (globalData.intentAddress == "DEPLOY") {
+                                btSocket.getOutputStream().write("6".toString().getBytes());
+                                btSocket.getOutputStream().write("0".toString().getBytes());
                                 deploy = new Intent(getApplicationContext(), DeployBinActivity.class);
                                 startActivity(deploy);
-                            } else if (globalData.intentAddress == "NAVIGATE") {
+                            } else {
+                                btSocket.getOutputStream().write("6".toString().getBytes());
                                 navigate = new Intent(DeviceList.this, NavigateBin.class);
                                 startActivity(navigate);
                             }
 
                         } catch (IOException e) {
-                            globalData.msg("Bluetooth Disconnected");
+                            globalData.msg("Bin Disconnected");
                         }
                     }
-                }
-                progress.dismiss();
             }
+            progress.dismiss();
         }
     }
 }

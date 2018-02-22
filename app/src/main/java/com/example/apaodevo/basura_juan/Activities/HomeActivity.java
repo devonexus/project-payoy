@@ -86,7 +86,7 @@ public class HomeActivity extends NavigationDrawerActivity{
             public void onClick(View v) {
                 if(DeviceList.btSocket != null)
                 {
-                    globalData.msg("Please disconnect connected bluetooth");
+                    globalData.msg("Please disconnect currently connected bin");
                 }
                 else {
                     startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
@@ -109,7 +109,6 @@ public class HomeActivity extends NavigationDrawerActivity{
             @Override
             public void onClick(View v) {
                 if(DeviceList.btSocket == null) {
-                    globalData.intentAddress = "NAVIGATE";
                     startActivity(new Intent(getApplicationContext(), DeviceList.class));
                 } else
                 {
@@ -254,7 +253,7 @@ public class HomeActivity extends NavigationDrawerActivity{
                 DeviceList.btSocket = null;
             }
             catch (IOException e)
-            { globalData.msg("Error");}
+            { globalData.msg("Bin Disconnected");}
         }
         finish(); //return to the first layout
     }

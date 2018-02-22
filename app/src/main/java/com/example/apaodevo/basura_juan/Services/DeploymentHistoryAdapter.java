@@ -47,17 +47,13 @@ public class DeploymentHistoryAdapter extends RecyclerView.Adapter<DeploymentHis
             tvLocation  = (TextView) view.findViewById(R.id.binLocation);
             thumbNail      = (ImageView) view.findViewById(R.id.deployment_bin_pic);
             viewDeploymentLayout = (RelativeLayout) view.findViewById(R.id.deployment_container);
-
         }
-
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.deployment_history_item, parent, false);
-
-
         return new MyViewHolder(itemView);
     }
     @Override
