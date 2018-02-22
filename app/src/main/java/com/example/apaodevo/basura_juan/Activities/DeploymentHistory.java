@@ -46,7 +46,6 @@ public class DeploymentHistory extends NavigationDrawerActivity{
     private CoordinatorLayout coordinatorLayout;
     private EditText deploymentSearch;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -120,20 +120,20 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
                         builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                               /* if (DeviceList.btSocket!=null) {
+                                if (DeviceList.btSocket != null) {
                                     try {
                                         DeviceList.btSocket.getOutputStream().write("5".toString().getBytes());
                                         DeviceList.btSocket = null;
                                         removeItem(holder.getAdapterPosition());
                                         stopBinDeployment(Integer.parseInt(binModel.getBinId()));
                                         notifyItemRangeRemoved(position, binList.size());
-                                        Toast.makeText(context, "Deploying chu chu", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, "Deployment stopped", Toast.LENGTH_SHORT).show();
                                     }
                                     catch (IOException e) {
-                                        Toast.makeText(context,"Bluetooth Disconnected, Please bluetooth", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(context,"Bin Disconnected, Please reconnect to bin", Toast.LENGTH_SHORT).show();
                                         DeviceList.btSocket = null;
                                     }
-                                }*/
+                                }
                                 //removeItem(holder.getAdapterPosition());
                                 //notifyItemRangeRemoved(position, binList.size());
                                 stopBinDeployment(Integer.parseInt(binModel.getBinId()));
@@ -143,8 +143,6 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
                                 ((BinListActivity)context).overridePendingTransition(0, 0);
                                 context.startActivity(sendIntent);
                                 ((BinListActivity) context).overridePendingTransition(0, 0);
-
-
                             }
                         });
                         builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
