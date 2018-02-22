@@ -55,7 +55,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     private ActionBarDrawerToggle toggle;
     private int mNotifCount = 0;
     public static NotificationModel notifModel;
-    private Intent binListIntent, deploymentHistoryIntent, userProfileIntent, homeIntent;
+    private Intent binListIntent, deploymentHistoryIntent, userProfileIntent, homeIntent, notificationIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +100,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         userProfileIntent = new Intent(getApplicationContext(), UserProfileActivity.class);
         deploymentHistoryIntent = new Intent(getApplicationContext(), DeploymentHistory.class);
         homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
+        notificationIntent = new Intent(getApplicationContext(), NotificationActivity.class);
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -158,7 +159,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
     private void loadNavHeader() {
         globalData = (GlobalData) getApplicationContext();
         fullName = globalData.getFullname()+".";
-        imageUrl = globalData.getImageUrl().trim();
+        imageUrl = globalData.getImageUrl();
         emailAddress = globalData.getEmailAddress();
         tv_fullname.setText(fullName);
         tv_email.setText(emailAddress);
@@ -214,8 +215,10 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
             @Override
             public void onClick(View v) {
                 v.startAnimation(buttonClick);
-
-                startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                overridePendingTransition(0, 0);
+                startActivity(notificationIntent);
+                overridePendingTransition(0, 0);
             }
         });
         homeButton.setOnClickListener(new View.OnClickListener() {
@@ -252,10 +255,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (id == R.id.nav_account) {
-            userProfileIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            overridePendingTransition(0, 0);
             startActivity(userProfileIntent);
-            overridePendingTransition(0, 0);
             drawer.closeDrawers();
             // Handle the camera action
         } else if (id == R.id.nav_bin_list) {

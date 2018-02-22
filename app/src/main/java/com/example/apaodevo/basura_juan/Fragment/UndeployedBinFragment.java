@@ -186,7 +186,7 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
             // backup of removed item for undo purpose
             final BinModel deletedBin = binList.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
-
+            Toast.makeText(getContext(), ""+binId, Toast.LENGTH_SHORT).show();
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle);
             builder.setCancelable(true);
             builder.setTitle("Delete Bin");
@@ -195,8 +195,7 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
-                    showBinListItem();
-                    //binListAdapter.restoreItem(deletedBin, deletedIndex);
+                    binListAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
                 }
             });
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -207,6 +206,7 @@ public class UndeployedBinFragment extends Fragment implements RecyclerItemTouch
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
+                                    Toast.makeText(getContext(), ""+response.toString(), Toast.LENGTH_SHORT).show();
                                     try {
                                         if(response.getString(Keys.TAG_BIN_UNDEPLOYED).equals("0")){
                                             imageLabel.setVisibility(View.VISIBLE);

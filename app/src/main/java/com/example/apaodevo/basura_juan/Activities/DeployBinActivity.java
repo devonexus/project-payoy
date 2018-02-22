@@ -304,6 +304,8 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 etActualLocation.setText(address.getAdminArea());
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch(NullPointerException e){
+                e.printStackTrace();
             }
         }
     }
