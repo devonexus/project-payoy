@@ -103,10 +103,16 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
         holder.btnMarkAsRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+<<<<<<< HEAD
                // sendIntent = new Intent(context, NotificationActivity.class);
 
                 //updateNotificationStatusToRead(notificationId, userId);
 
+=======
+                //sendIntent = new Intent(context, NotificationActivity.class);
+                //updateNotificationStatusToRead(notificationId, userId);
+                context.startActivity(new Intent(context, BinListActivity.class));
+>>>>>>> b6cb5f32c23adedc30f3357b5862d54227dcd60f
                 updateNotificationStatusToRead(notificationId, userId);
                 Refresher.recreateActivityCompat(((NotificationActivity)context));
             }
