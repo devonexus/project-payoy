@@ -57,6 +57,18 @@
         android:layout_alignStart="@+id/textView4"
         android:layout_marginTop="16dp"
         android:layout_alignEnd="@+id/btn_deploy" />
+    <Button
+        android:id="@+id/btn_connect_bin"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_edittext"
+        android:layout_marginTop="39dp"
+        android:textColor="@color/colorBlack"
+        android:text="Connect to Bin"
+        android:backgroundTint="@color/colorDeepSkyblueButton"
+        android:layout_below="@+id/etActualLocation"
+        android:layout_centerInParent="true"
+       />
 
     <Button
         android:id="@+id/btn_deploy"
@@ -66,8 +78,8 @@
         android:background="@drawable/rounded_edittext"
         android:layout_height="wrap_content"
         android:text="Deploy Bin"
-        android:layout_marginTop="143dp"
-        android:layout_below="@+id/textView5"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/btn_connect_bin"
         android:layout_centerHorizontal="true" />
 
     <Spinner
@@ -89,15 +101,6 @@
         android:layout_alignStart="@+id/textView4"
         android:layout_alignEnd="@+id/etActualLocation" />
 
-    <Button
-        android:id="@+id/btn_connect_bin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="39dp"
-        android:text="Connect to Bin"
-        android:layout_below="@+id/etActualLocation"
-        android:layout_alignEnd="@+id/btn_deploy"
-        android:layout_alignStart="@+id/etActualLocation" />
 
 
 </RelativeLayout>
