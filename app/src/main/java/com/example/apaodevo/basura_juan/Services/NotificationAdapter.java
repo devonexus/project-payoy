@@ -1,10 +1,8 @@
 package com.example.apaodevo.basura_juan.Services;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,21 +17,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.apaodevo.basura_juan.Activities.BinListActivity;
-import com.example.apaodevo.basura_juan.Activities.DeviceList;
-import com.example.apaodevo.basura_juan.Activities.NavigationDrawerActivity;
 import com.example.apaodevo.basura_juan.Activities.NotificationActivity;
 import com.example.apaodevo.basura_juan.Configuration.Keys;
 import com.example.apaodevo.basura_juan.Configuration.WebServiceUrl;
-import com.example.apaodevo.basura_juan.Models.BinModel;
 import com.example.apaodevo.basura_juan.Models.NotificationModel;
 import com.example.apaodevo.basura_juan.Models.UserModel;
 import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Utils.Refresher;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -103,16 +93,13 @@ public class NotificationAdapter  extends RecyclerView.Adapter<NotificationAdapt
         holder.btnMarkAsRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-<<<<<<< HEAD
                // sendIntent = new Intent(context, NotificationActivity.class);
 
                 //updateNotificationStatusToRead(notificationId, userId);
 
-=======
                 //sendIntent = new Intent(context, NotificationActivity.class);
                 //updateNotificationStatusToRead(notificationId, userId);
                 context.startActivity(new Intent(context, BinListActivity.class));
->>>>>>> b6cb5f32c23adedc30f3357b5862d54227dcd60f
                 updateNotificationStatusToRead(notificationId, userId);
                 Refresher.recreateActivityCompat(((NotificationActivity)context));
             }

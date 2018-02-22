@@ -285,48 +285,28 @@ public class DeployBinActivity extends NavigationDrawerActivity {
     }
 
     private void getLocationName(double lat, double longi){
-<<<<<<< HEAD
+
         Geocoder geocoder = new Geocoder(this, Locale.ENGLISH);
 
+        List<Address> addresses = null;
         try {
-            List<Address> addresses = geocoder.getFromLocation(lat, longi, 1);
+            addresses = geocoder.getFromLocation(lat, longi, 1);
 
-            if(addresses != null && addresses.size() > 0) {
+
+            if (addresses != null && addresses.size() > 0) {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder("Address:\n");
 
-                Log.d("RESULT",strReturnedAddress.toString());
+                Log.d("RESULT", strReturnedAddress.toString());
                 etActualLocation.setText(returnedAddress.getAddressLine(0));
-=======
-        Geocoder gc = new Geocoder(getApplicationContext());
-        if(gc.isPresent()){
-            List<Address> list = null;
-            try {
-                list = gc.getFromLocation(lat, longi,1);
-                Address address = list.get(0);
-              /*  str.append("Name: " + address.getLocality() + "\n");
-                str.append("Sub-Admin Ares: " + address.getSubAdminArea() + "\n");
-                str.append("Admin Area: " + address.getAdminArea() + "\n");
-                str.append("Admin Area: " + address.getAddressLine(0) + "\n");
-                str.append("Admin Area: " + address + "\n");
-                str.append("Country: " + address.getCountryName() + "\n");str.append("Country Code: " + address.getCountryCode() + "\n");
-                str.append("Country Code: " + address.getCountryCode() + "\n");*/
 
-                etActualLocation.setText(""+address.getAddressLine(0));
-                etActualLocation.setText(strAddress);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch(NullPointerException e){
-                e.printStackTrace();
->>>>>>> b6cb5f32c23adedc30f3357b5862d54227dcd60f
+            } else {
+                Log.d("NO-RESULT", "NO-RESULT");
+
             }
-            else{
-                Log.d("NO-RESULT","NO-RESULT");
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Log.d("NO-RESULT","NO-RESULT");
+        }
+        catch (IOException e) {
+                e.printStackTrace();
         }
 
     }
@@ -490,4 +470,4 @@ public class DeployBinActivity extends NavigationDrawerActivity {
         return true;
     }//Validate lastname
 
-                }
+}
