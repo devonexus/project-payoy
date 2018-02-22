@@ -11,7 +11,7 @@ public class DeploymentModel {
     private String timeStart;
     private String timeEnd;
     private String location;
-
+    private String deploymentTrigger;
 
 
     private String stopDeployment;
@@ -23,6 +23,14 @@ public class DeploymentModel {
             return deploymentModelInstance = new DeploymentModel();
         }
         return deploymentModelInstance;
+    }
+
+    public void setDeploymentTrigger(String deploymentTrigger) {
+        this.deploymentTrigger = deploymentTrigger;
+    }
+
+    public String getDeploymentTrigger() {
+        return deploymentTrigger;
     }
 
     public String getStopDeployment() {

@@ -21,13 +21,13 @@ import com.joanzapata.iconify.fonts.WeathericonsModule;
  */
 
 public class GlobalData extends Application {
-    private String       fullname;
-    private String       image_url;
-    private String       userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
-    public  String        address  = "";
-    public  String        intentAddress="";
-    public  String        name;
-    private String        binId;
+    private String   fullname;
+    private String   image_url;
+    private String   userid,email_address, username,  password, firstname, login_status, lastname, middleInitial;
+    public  String   address  = "";
+    public  String   intentAddress="";
+    public  String   name;
+    private String   binId;
 
     public void setBinId(String binId) {
         this.binId = binId;
@@ -48,8 +48,13 @@ public class GlobalData extends Application {
         return userid;
     }
 
+    public void setIntentAddress(String intentAddress) {
+        this.intentAddress = intentAddress;
+    }
 
-
+    public String getIntentAddress() {
+        return intentAddress;
+    }
 
     public void setFullname(String fullname) {
         this.fullname = fullname;

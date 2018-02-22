@@ -23,6 +23,7 @@ import com.example.apaodevo.basura_juan.R;
 import com.example.apaodevo.basura_juan.Services.CustomJSONRequest;
 import com.example.apaodevo.basura_juan.Services.GlobalData;
 import com.example.apaodevo.basura_juan.Services.VolleySingleton;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,7 +87,7 @@ public class HomeActivity extends NavigationDrawerActivity{
             public void onClick(View v) {
                 if(DeviceList.btSocket != null)
                 {
-                    globalData.msg("Please disconnect currently connected bin");
+                    MDToast.makeText(getApplicationContext(), "Please disconnect currently connected bin", MDToast.LENGTH_SHORT,MDToast.TYPE_ERROR).show();
                 }
                 else {
                     startActivity(new Intent(getApplicationContext(), DeployBinActivity.class));
@@ -110,7 +111,8 @@ public class HomeActivity extends NavigationDrawerActivity{
             public void onClick(View v) {
                 if(DeviceList.btSocket == null) {
                     startActivity(new Intent(getApplicationContext(), DeviceList.class));
-                } else
+                }
+                else
                 {
                     startActivity(new Intent(getApplicationContext(), NavigateBin.class));
                 }

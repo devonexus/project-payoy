@@ -63,6 +63,7 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
     private Context context;
     private List<BinModel> binList;
     private Intent sendIntent,home;
+    public static DeploymentModel deploymentModel;
     GlobalData globalData;
 
     public BinListAdapter(Context context, List<BinModel> binList) {
@@ -92,6 +93,7 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.bin_list_items, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(itemView);
+        deploymentModel = DeploymentModel.getInstance();
         return viewHolder;
     }
     @Override
@@ -120,29 +122,30 @@ public class BinListAdapter extends RecyclerView.Adapter<BinListAdapter.MyViewHo
                         builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (DeviceList.btSocket != null) {
+                                if(DeviceList.btSocket == null)
+                                {
+                                    deploymentModel.setDeploymentTrigger("STOP DEPLOYMENT");
+                                    MDToast.makeText(context, "Bin Disconnected, Please reconnect to bin" , MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
+                                    context.startActivity(new Intent(context, DeviceList.class));
+                                }
+                                else if (DeviceList.btSocket != null) {
                                     try {
-                                        DeviceList.btSocket.getOutputStream().write("5".toString().getBytes());
-                                        DeviceList.btSocket = null;
-                                        removeItem(holder.getAdapterPosition());
+                                        DeviceList.btSocket.getOutputStream().write("1".toString().getBytes());
                                         stopBinDeployment(Integer.parseInt(binModel.getBinId()));
-                                        notifyItemRangeRemoved(position, binList.size());
-                                        Toast.makeText(context, "Deployment stopped", Toast.LENGTH_SHORT).show();
+                                        MDToast.makeText(context, "Deployment stopped" , MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
+
+                                        sendIntent = new Intent(context, BinListActivity.class);
+                                        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        ((BinListActivity)context).finish();
+                                        ((BinListActivity)context).overridePendingTransition(0, 0);
+                                        context.startActivity(sendIntent);
+                                        ((BinListActivity) context).overridePendingTransition(0, 0);
                                     }
                                     catch (IOException e) {
-                                        Toast.makeText(context,"Bin Disconnected, Please reconnect to bin", Toast.LENGTH_SHORT).show();
+                                        MDToast.makeText(context, "Bin Disconnected, Please reconnect to bin" , MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                                         DeviceList.btSocket = null;
                                     }
                                 }
-                                //removeItem(holder.getAdapterPosition());
-                                //notifyItemRangeRemoved(position, binList.size());
-                                stopBinDeployment(Integer.parseInt(binModel.getBinId()));
-                                sendIntent = new Intent(context, BinListActivity.class);
-                                sendIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                ((BinListActivity)context).finish();
-                                ((BinListActivity)context).overridePendingTransition(0, 0);
-                                context.startActivity(sendIntent);
-                                ((BinListActivity) context).overridePendingTransition(0, 0);
                             }
                         });
                         builder.setPositiveButton("No", new DialogInterface.OnClickListener() {

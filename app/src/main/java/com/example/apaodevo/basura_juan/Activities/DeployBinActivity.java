@@ -38,6 +38,7 @@ import com.example.apaodevo.basura_juan.Services.VolleySingleton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,10 +64,8 @@ public class DeployBinActivity extends NavigationDrawerActivity {
     GlobalData                globalData;
     private String            strAddress;
     private ProgressDialog    pDialog;
-    Intent                    devicelist,naviagtenin;
     public static String      deploy = "", server_response = "";
     private SimpleLocation    simpleLocation;
-    private double            latitude, longitude;
     private static String     selectedBinId = "";
     private String             binId;
     private String             cancelIdRequests = "ID";
@@ -95,12 +94,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
 
         // construct a new instance of SimpleLocation
         simpleLocation   = new SimpleLocation(this);
-        if(DeviceList.btSocket != null)
-        {
-            globalData.msg("Please disconnect currently connected bin.");
-            naviagtenin = new Intent(DeployBinActivity.this, NavigateBin.class);
-            startActivity(naviagtenin);
-        }
         if(shouldAskPermissions()){
             askPermissions();
         }
@@ -133,7 +126,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-
                                     getLocationName(locationModel.getLatitude(), locationModel.getLongitude());
                                 }
                             });
@@ -144,7 +136,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-                    Toast.makeText(getApplicationContext(), "No registered bins yet!!!", Toast.LENGTH_SHORT).show();
+                    MDToast.makeText(getApplicationContext(),"No registered bins yet!!!", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 }
             });
         }
@@ -237,17 +229,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
             public void onClick(View v) {
                 if(DeviceList.btSocket == null) {
                     globalData.intentAddress = "DEPLOY";
-                    startActivity(new Intent(getApplicationContext(), DeviceList.class));
-                } else
-                {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            devicelist = new Intent(DeployBinActivity.this, DeviceList.class);
-                            finish();
-                            startActivity(devicelist);
-                        }
-                    });
+                    startActivity(new Intent(DeployBinActivity.this, DeviceList.class));
                 }
             }
         });
@@ -260,7 +242,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 }
                 if(DeviceList.btSocket == null)
                 {
-                    globalData.msg("Please Connect to Bin!");
+                    MDToast.makeText(getApplicationContext(),"Please Connect to Bin!", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
                 }
                 else {
                     //Toast.makeText(getApplicationContext(), ""+globalData.getBinId(), Toast.LENGTH_SHORT).show();
@@ -275,10 +257,20 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                                 e.printStackTrace();
                             }
                             // After sleep finished blocking, create a Runnable to run on the UI Thread.
-
                         }
                     };
-                   thread.start();
+                    thread.start();
+                    try
+                    {
+                        MDToast.makeText(getApplicationContext(), "Bin succesfully deployed.", MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
+                        DeviceList.btSocket.getOutputStream().write("6".toString().getBytes());
+                        DeviceList.btSocket.getOutputStream().write("0".toString().getBytes());
+                    }
+                    catch (Exception io)
+                    {
+                        MDToast.makeText(getApplicationContext(), "Bin Disconnected",MDToast.LENGTH_SHORT , MDToast.TYPE_ERROR).show();
+                    }
+                    startActivity(new Intent(DeployBinActivity.this, HomeActivity.class));
                 }
             }
         });
@@ -352,7 +344,6 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getApplicationContext(), "Bin succesfully deployed.", Toast.LENGTH_LONG).show();
                                         hidepDialog();
                                     }
                                 });
