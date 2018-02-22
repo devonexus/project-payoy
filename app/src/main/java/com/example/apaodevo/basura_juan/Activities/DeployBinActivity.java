@@ -301,7 +301,7 @@ public class DeployBinActivity extends NavigationDrawerActivity {
                 str.append("Country Code: " + address.getCountryCode() + "\n");*/
                 strAddress = address.getAddressLine(0);
 
-                etActualLocation.setText(address.getAdminArea());
+                etActualLocation.setText(strAddress);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch(NullPointerException e){
