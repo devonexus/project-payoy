@@ -38,6 +38,6 @@ Basura Juan is a robotic garbage collector built on top of Android and Arduino b
 - mysql - database provider of android application.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
 
 
