@@ -3,7 +3,7 @@
 Basura Juan is a robotic garbage collector built on top of Android and Arduino based technology.
 
 <p align="center">
-  ![](images/login.png)
+    <img src="images/login.png" >
 </p>
 
 ## Getting Started
